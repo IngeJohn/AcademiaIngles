@@ -3,7 +3,7 @@ Proyecto de Residencias
 
 Autores: Jonathan Martínez López y David Macias Martínez
 
-Descrupcion: 
+Descripción: 
 
 Proyecto de Residencias Profecionales de 9° semestre en el Instituto Tecnológico Superior de Loreto.
 Este proyecto tiene como proposito el facilitar el manejo de la información a través de una interfaz WEB
