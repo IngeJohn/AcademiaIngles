@@ -1,7 +1,7 @@
 # AcademiaIngles
 Proyecto de Residencias
 
-Autores: Jonathan Martínez López y David Macias Martínez
+Autores: Jonathan Martínez López y David Macías Martínez
 
 Descripción: 
 
