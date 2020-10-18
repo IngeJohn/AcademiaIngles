@@ -341,12 +341,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <div class="form-group <?php echo (!empty($numeroControl_err)) ? 'has-error' : ''; ?>">
                                 <p>Consulta de calificaciones</p>
                                 <label><br>Número de Control</label>
-                                <input type="text" name="numeroControl" class="form-control" value="<?php echo $numeroControl; ?>" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" name="numeroControl" class="form-control" value="<?php echo $numeroControl; ?>" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                                 <span class="help-block"><?php echo $numeroControl_err; ?></span>
                             </div>    
                             <div class="form-group <?php echo (!empty($curp_err)) ? 'has-error' : ''; ?>">
                                 <label>CURP</label>
-                                <input type="password" name="curp" class="form-control" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                                <input type="text" name="curp" onkeydown="upperCaseF(this)" maxlength="18" class="form-control" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                                 <span class="help-block"><?php echo $curp_err; ?></span>
                             </div>
                             <div class="form-group">
@@ -405,26 +405,35 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
 
-<footer>
-        <div class="container-fluid">
-         <div class="row" style="background: black; color:white; text-align:center; ">
-            <div class="col-md-3 bordes ">
-                <p><img src="../imagenes/itslnobreLargo.png" style="width:60%; height:auto; padding-top:20px; "></p>
-                <p class="pie-letras">© 2020 ITSL - English Academy</p>
+    <footer>
+            <div class="container-fluid">
+             <div class="row" style="background: black; color:white; text-align:center; ">
+                <div class="col-md-3 bordes ">
+                    <p><img src="../imagenes/itslnobreLargo.png" style="width:60%; height:auto; padding-top:20px; "></p>
+                    <p class="pie-letras">© 2020 ITSL - English Academy</p>
+                </div>
+                <div class="col-md-6 bordes">
+                    <p><br><br><br><br><br></p>
+                </div>
+                <div class="col-md-3 ">
+                    <p></p>
+                </div>
             </div>
-            <div class="col-md-6 bordes">
-                <p><br><br><br><br><br></p>
-            </div>
-            <div class="col-md-3 ">
-                <p></p>
-            </div>
+
+
         </div>
 
 
-    </div>
-
-
-</footer>
+    </footer>
+    
+    <script>
+        function upperCaseF(a){
+            setTimeout(function(){
+            a.value = a.value.toUpperCase();
+            }, 1);
+        }
+    </script>
+    
 
 </body>
 </html>

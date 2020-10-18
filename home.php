@@ -132,10 +132,10 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
         }
         
         
-        
+        /*para pantallas de PC*/
         @media (max-width: 992px){
             .logo{
-                width: 100%;
+                width: 50%;
                 height: auto;
 
             }
@@ -163,6 +163,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
             
             
         }
+        /* Para tablets*/
         @media screen and (max-width: 768px) {
             .logo{
                 width: 80%;
@@ -281,8 +282,8 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item" href="Alumnos/registerAlumnos.php" "dropdown-item">Inscripción</a>
-                                    <a class="dropdown-item" href="home.php" "dropdown-item">Reinscripción</a>
+                                    <a class="dropdown-item" href="Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                    <a class="dropdown-item" href="Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
                                     <a class="dropdown-item" href="Alumnos/alumnos.php" "dropdown-item">Consulta calificaciones</a>
                                 </div>
 
