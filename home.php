@@ -310,7 +310,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
-                                    <button class="dropdown-item" type="button">Action</button>
+                                    <a class="dropdown-item" href="Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
                                     <button class="dropdown-item" type="button">Another action</button>
                                     <button class="dropdown-item" type="button">Something else here</button>
                                 </div>
