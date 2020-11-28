@@ -23,6 +23,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     <link rel="icon" href="imagenes/itsl2.png">
     <style type="text/css">
         body{
+            display: none;
             background-image: linear-gradient(to bottom, #0a6d7a 580px, white  30%);
             background-size: cover;
             background-repeat: no-repeat;
@@ -245,6 +246,12 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
 
     </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+                $("body").css("display", "none");
+                $("body").fadeIn(1000);
+        });
+    </script>
 </head>
 
 
@@ -283,7 +290,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <a class="dropdown-item" href="Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
-                                    <a class="dropdown-item" href="Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
+                                    <a class="dropdown-item" href="Alumnos/reinscripcionVeri.php" "dropdown-item">Reinscripción</a>
                                     <a class="dropdown-item" href="Alumnos/alumnos.php" "dropdown-item">Consulta calificaciones</a>
                                 </div>
 
@@ -296,9 +303,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <button class="dropdown-item" type="button">Action</button>
-                                    <button class="dropdown-item" type="button">Another action</button>
-                                    <button class="dropdown-item" type="button">Something else here</button>
+                                    <a class="dropdown-item" href="Docentes/IniciarSesionDo.php" "dropdown-item">Docentes</a>
                                 </div>
 
                             </div >
@@ -311,8 +316,6 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
                                     <a class="dropdown-item" href="Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
-                                    <button class="dropdown-item" type="button">Another action</button>
-                                    <button class="dropdown-item" type="button">Something else here</button>
                                 </div>
 
                             </div >

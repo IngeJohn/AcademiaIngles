@@ -1,7 +1,5 @@
 <?php
-// Initialize the session
-session_start();
- 
+
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: ../Alumnos/logoutAl.php");
@@ -10,7 +8,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 require_once "../Require/config.php";
  
 // Define variables and initialize with empty values
-$numeroControl = $curp = $category =  $nivelActual = $idmaestroActual =  "";
+$numeroControl = $curp = $nivelActual = "";
 $numeroControl_err = $curp_err = "";
  
 // Processing form data when form is submitted
@@ -33,7 +31,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($numeroControl_err) && empty($curp_err)){
         // Prepare a select statement
-        $sql = "SELECT id, numeroControl, curp, category, nivelActual, idmaestroActual FROM alumnos WHERE numeroControl = ?";
+        $sql = "SELECT id, numeroControl, curp, nivelActual FROM alumnos WHERE numeroControl = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -50,48 +48,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if username exists, if yes then verify curp
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp2, $category, $nivelActual, $idmaestroActual );
+                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp2, $nivelActual );
                     if(mysqli_stmt_fetch($stmt)){
                         if($curp == $curp2){
                             // curp is correct, so start a new session
-                            //session_start();
+                            session_start();
                             
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;   
                             $_SESSION["numeroControl"] = $numeroControl;
                             $_SESSION["curp"] = $curp;
-                            $_SESSION["category"] = $category;
 							$_SESSION["nivelActual"] = $nivelActual;
-							$_SESSION["idmaestroActual"] = $idmaestroActual;
                             
                             
-                            static $cate ;
-                            $cate = "yo";
-                            if($_SESSION["category"] == 1){
-                                $cate;
-                                $cate = "Estudiante";
-                                header("location: calificacionesAl.php");
-                            }elseif($_SESSION["category"] == 2){
-                                $cate ;
-                                $cate = "Docente";
-                                header("location: Docentes.php");
-                            }elseif($_SESSION["category"] == 3){
-                                $cate ;
-                                $cate = "Contador";
-                                header("location: Contadores.php");
-                            }elseif($_SESSION["category"] == 4){
-                                $cate ;
-                                $cate = "Administrador";
-                                // Redirect user to welcome page
-                                header("location: Administrador.php");
-                            } 
-                            
-                            
-                            
-                            
-                            
-                            
+                            header("location: calificacionesAl.php");
+   
                             
                         } else{
                             // Display an error message if password is not valid

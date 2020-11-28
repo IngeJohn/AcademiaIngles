@@ -7,6 +7,116 @@ session_start();
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: Require/logout.php");
 }
+// Include config file
+require_once "../Require/config.php";
+ 
+// Define variables and initialize with empty values
+$username = $password = $category = $idmaestro = $nombre = $paterno = $materno = $hashed_password ="";
+$username_err = $password_err = "";
+ 
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+ 
+    // Check if username is empty
+    if(empty(trim($_POST["username"]))){
+        $username_err = "Porfavor introduce tu nombre de usuario.";
+    } else{
+        $username = trim($_POST["username"]);
+    }
+    
+    // Check if password is empty
+    if(empty(trim($_POST["password"]))){
+        $password_err = "Pofavor introduce tu contraseña.";
+    } else{
+        $password = trim($_POST["password"]);
+    }
+    
+    // Validate credentials
+    if(empty($username_err) && empty($password_err)){
+        // Prepare a select statement
+        $sql = "SELECT id, username, password, category, nombre, paterno, materno, idmaestro FROM docentes WHERE username = ?";
+        
+        if($stmt = mysqli_prepare($link, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_username);
+            
+            // Set parameters
+            $param_username = $username;
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                // Store result
+                mysqli_stmt_store_result($stmt);
+                
+                // Check if username exists, if yes then verify password
+                if(mysqli_stmt_num_rows($stmt) == 1){                    
+                    // Bind result variables
+                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password, $category, $nombre, $paterno, $materno, $idmaestro);
+                    if(mysqli_stmt_fetch($stmt)){
+                        if(password_verify($password, $hashed_password)){
+                            // Password is correct, so start a new session
+                            session_start();
+                            
+                            // Store data in session variables
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["username"] = $username;   
+                            $_SESSION["category"] = $category;
+                            $_SESSION["nombre"] = $nombre;
+                            $_SESSION["paterno"] = $paterno;
+                            $_SESSION["materno"] = $materno;
+							$_SESSION["idmaestro"] = $idmaestro;
+                            $_SESSION["contraseña"] = $hashed_password;
+							
+                            
+                            static $cate ;
+                            $cate = "yo";
+                            if($_SESSION["category"] == 1){
+                                $cate;
+                                $cate = "Estudiante";
+                                header("location: Estudiantes.php");
+                            }elseif($_SESSION["category"] == 2){
+                                $cate ;
+                                $cate = "Docente";
+                                header("location: Docentes.php");
+                            }elseif($_SESSION["category"] == 3){
+                                $cate ;
+                                $cate = "Contador";
+                                header("location: Contadores.php");
+                            }elseif($_SESSION["category"] == 4){
+                                $cate ;
+                                $cate = "Administrador";
+                                // Redirect user to welcome page
+                                header("location: Administrador.php");
+                            } 
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        } else{
+                            // Display an error message if password is not valid
+                            $password_err = "La contraseña que ingresaste no es valida.";
+                        }
+                    }
+                } else{
+                    // Display an error message if username doesn't exist
+                    $username_err = "No se encontro una cuenta con ese nombre.";
+                }
+            } else{
+                echo "Oops! Algo salio mal. Por favor intenta más tarde.";
+            }
+        }
+        
+        // Close statement
+        mysqli_stmt_close($stmt);
+    }
+    
+    // Close connection
+    mysqli_close($link);
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,17 +125,15 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ITSL - Academia de Inglés</title>
     
-    <link rel="stylesheet" href="bootstrap/4.5.2/css/bootstrap.css">
-    <link rel="stylesheet" href="bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="icon" href="imagenes/itsl2.png">
+    <link rel="stylesheet" href="../bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="../bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="../npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="../ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="icon" href="../imagenes/itsl2.png">
     <style type="text/css">
         body{
-            background-image: linear-gradient(to bottom, #0a6d7a 580px, white  30%);
-            background-size: cover;
-            background-repeat: no-repeat;
+            background-color: #0a6d7a;
             font-size: 16px;
             }
         header{
@@ -132,6 +240,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
         }
         
         
+        
         /*para pantallas de PC*/
         @media (max-width: 992px){
             .logo{
@@ -160,9 +269,12 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                 text-align:center; 
                 transform: scale(.9, 1);
             }
+            .caja{
+                background: #ffffff;
+            }
             
             
-        }
+        
         /* Para tablets*/
         @media screen and (max-width: 768px) {
             .logo{
@@ -258,7 +370,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                 <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
 
 
-                    <img class="logo" src="imagenes/itslnobreLargo.png" >
+                    <img class="logo" src="../imagenes/itslnobreLargo.png" >
 
 
 
@@ -273,7 +385,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
                         <div class="btn-group dropdown" role="group">
 
-                            <a href="home.php" class="btn btn-outline-light active" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
+                            <a href="../home.php" class="btn btn-outline-light " role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
 
                             <div class=" btn-group dropdown " role="group" > 
 
@@ -282,23 +394,21 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item" href="Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
-                                    <a class="dropdown-item" href="Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
-                                    <a class="dropdown-item" href="Alumnos/alumnos.php" "dropdown-item">Consulta calificaciones</a>
+                                    <a class="dropdown-item" href="../Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                    <a class="dropdown-item" href="../Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
+                                    <a class="dropdown-item" href="../Alumnos/alumnos.php" "dropdown-item">Consulta calificaciones</a>
                                 </div>
 
                             </div >
 
                             <div class=" btn-group dropdown " role="group" > 
 
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                <button class="btn btn-outline-light dropdown-toggle active" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                                     Docentes
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <button class="dropdown-item" type="button">Action</button>
-                                    <button class="dropdown-item" type="button">Another action</button>
-                                    <button class="dropdown-item" type="button">Something else here</button>
+                                    <a class="dropdown-item active" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Acceso Docentes</a>
                                 </div>
 
                             </div >
@@ -310,9 +420,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
-                                    <button class="dropdown-item" type="button">Administración</button>
-                                    <button class="dropdown-item" type="button">Another action</button>
-                                    <button class="dropdown-item" type="button">Something else here</button>
+                                    <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
                                 </div>
 
                             </div >
@@ -323,12 +431,6 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                 
                 </div>
 
-                    
-
-
-
-
-
 
 
 
@@ -338,78 +440,49 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     </header>
 
 
+
+
     <div class="container-fluid">
-        <div class="row" style="padding-bottom: 10px; padding-top: 20px; background:#0a6d7a">
-            <div class="col-sm-4" style="text-align:center; padding-bottom:20px; ">
-                <img src="imagenes/TecNMwhite.png" width="200px" height="auto" >
+        <div class="row ">
+            <div class="col-sm-4" style="text-align:center; padding:100px 0 0 90px; ">
+                <img src="../imagenes/teacher.png" width="200px" height="auto" >
 
             </div>
-
-            <div class="col-sm-2" >
-
-
-            </div>
-
-            <!-- inicio de las listas -->
-
-            <div class="col-sm-3">
-                <div class="lista">
-                        <p  style="line-height: 2;">
-                            > &nbsp; Superación personal<br>
-                            > &nbsp; Mejores oportunidades<br>
-                            > &nbsp; Profesionales de calidad<br>
-                            > &nbsp; Bolsa de trabajo<br>
-                            > &nbsp; Al alcance de tu mano
-                        </p>
-                </div>
-
-            </div>
-             <div class="col-sm-3" >
-                <div class="lista">
-                        <p  style="line-height: 2;">
-                            > &nbsp; Clases dinamicas<br>
-                            > &nbsp; Desarrollo artistico<br>
-                            > &nbsp; Evaluación TOEFL<br>
-                            > &nbsp; Viajes educativos<br>
-                            > &nbsp; Becas
-                        </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="container contenedor">
-        <div class="row " >
-            <div class="col-sm-12 ">
-                <div class="row">
-                    <div class="col-sm-12 col-md-8 remove-padding">
-                            <img class="mainfoto" src="imagenes/study.jpg" >
-                    </div>
-                    <div class="col-sm-12 col-md-4" style=" background-color:#15859A; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
-                        <div >
-                            <p id="inf"><br>"English is a universal language used in many countries, including México. ITSL English Academy is offering classes as part of your curriculum"<br></p>
+            
+            <div class="col-sm-4" style="padding: 50px 0 100px 0; font-size: 14px;">
+                <div class="p-4 mb-2 bg-light text-dark">
+                    <p><a href="../home.php"><u>Inicio</u></a> > Acceso Docentes</p>
+                    <p style="font-size:24px;">Acceso Docentes</p>
+                    <p>Por favor ingrese sus credenciales para inicar sesión.</p>
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                        <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
+                            <label>Nombre de Usuario</label>
+                            <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
+                            <span class="help-block"><?php echo $username_err; ?></span>
+                        </div>    
+                        <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
+                            <label>Contraseña</label>
+                            <input type="password" name="password" class="form-control">
+                            <span class="help-block"><?php echo $password_err; ?></span>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Iniciar Sesión">
+                        </div>
+                    </form>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12" style="text-align: left; ">
-                        <p class="subtitulo" style="font-zise: 22px;">ITSL - Academia de Inglés</p>
-                    </div>
-                </div>
+                
             </div>
+            <div class="col-sm-4" style="text-align:center; padding:100px 0 0 0; ">
+                <img src="../imagenes/TecNMwhite.png" width="300px" height="auto" >
+
+            </div>
+            
         </div>
+        
     </div>
 
-    <div class="container-fluid">
-        <div class="row" >
-                      <div class="col-sm-12" >
-                            <img src="imagenes/itslnobreLargo.png" width="100%" height="auto" style="padding-left:80px; padding-right:20px; padding-top:5px;">
-                      </div>
-        </div>
-    </div>
-
+    
+<hr>
 
      <div class="container-fluid">
          <div class="row" style="background:#0a6d7a; ">
@@ -426,10 +499,10 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                     <div class="col-md-6 " >
                          <p class="tituloRedes">Siguenos en redes sociales</p>
                          <p class="redes">
-                            <img class="iconos" src="imagenes/face.png">&emsp;Facebook<br>
-                            <img class="iconos" src="imagenes/insta.png">&emsp;Instagram<br>
-                            <img class="iconos" src="imagenes/twi.png">&emsp;Twitter<br>
-                            <img class="iconos" src="imagenes/yt.png">&emsp;YouTube<br>
+                            <img class="iconos" src="../imagenes/face.png">&emsp;Facebook<br>
+                            <img class="iconos" src="../imagenes/insta.png">&emsp;Instagram<br>
+                            <img class="iconos" src="../imagenes/twi.png">&emsp;Twitter<br>
+                            <img class="iconos" src="../imagenes/yt.png">&emsp;YouTube<br>
                         </p>
                     </div>
                 </div>
@@ -458,7 +531,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
         <div class="container-fluid">
          <div class="row" style="background: black; color:white; text-align:center; ">
             <div class="col-md-3 bordes ">
-                <p><img src="imagenes/itslnobreLargo.png" style="width:60%; height:auto; padding-top:20px; "></p>
+                <p><img src="../imagenes/itslnobreLargo.png" style="width:60%; height:auto; padding-top:20px; "></p>
                 <p class="pie-letras">© 2020 ITSL - English Academy</p>
             </div>
             <div class="col-md-6 bordes">

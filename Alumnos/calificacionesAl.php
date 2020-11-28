@@ -4,41 +4,24 @@ session_start();
  
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: ../home.php");
+    header("location: alumnos.php");
     exit;
 }
 
-isset($_SESSION["category"]);
-static $cate ;
-$cate = "yo";
-if($_SESSION["category"] == 1){
-    $cate;
-    $cate = "Estudiante";
-}elseif($_SESSION["category"] == 2){
-    $cate ;
-    $cate = "Docente";
-}elseif($_SESSION["category"] == 3){
-    $cate ;
-    $cate = "Contador";
-}elseif($_SESSION["category"] == 4){
-    $cate ;
-    $cate = "Administrador";
-}
+// Include config file
+require_once "../Require/config.php";
+
+
 // php populate html table from mysql database
 
-$hostname = "localhost";
-$username = "root";
-$password = "master";
-$databaseName = "academia_ingles";
 
-// connect to mysql
-$connect = mysqli_connect($hostname, $username, $password, $databaseName);
-// mysql select query
-if (!$connect) {
-    die("Connection failed: " . mysqli_connect_error());
-}
 
 $querypa1 = "SELECT  parcial FROM `calificaciones` WHERE numeroControl = {$_SESSION["numeroControl"]} AND nivel = '1'";
+$querypa2 = "SELECT  parcial FROM `calificaciones` WHERE numeroControl = {$_SESSION["numeroControl"]} AND nivel = '2'";
+$querypa3 = "SELECT  parcial FROM `calificaciones` WHERE numeroControl = {$_SESSION["numeroControl"]} AND nivel = '3'";
+$querypa4 = "SELECT  parcial FROM `calificaciones` WHERE numeroControl = {$_SESSION["numeroControl"]} AND nivel = '4'";
+$querypa5 = "SELECT  parcial FROM `calificaciones` WHERE numeroControl = {$_SESSION["numeroControl"]} AND nivel = '5'";
+$querypa6 = "SELECT  parcial FROM `calificaciones` WHERE numeroControl = {$_SESSION["numeroControl"]} AND nivel = '6'";
 
 
 $query1 = "SELECT  calificacion FROM `calificaciones` WHERE numeroControl = {$_SESSION["numeroControl"]} AND nivel = '1'";
@@ -56,7 +39,12 @@ $queryp5 = "SELECT  round(AVG(calificacion),2) 'Promedio' FROM calificaciones WH
 $queryp6 = "SELECT  round(AVG(calificacion),2) 'Promedio' FROM calificaciones WHERE  numeroControl = {$_SESSION["numeroControl"]} AND nivel = '6'";
 
 // resultpa1 
-$resultpa1 = mysqli_query($connect, $querypa1);
+$resultpa1 = mysqli_query($link, $querypa1);
+$resultpa2 = mysqli_query($link, $querypa2);
+$resultpa3 = mysqli_query($link, $querypa3);
+$resultpa4 = mysqli_query($link, $querypa4);
+$resultpa5 = mysqli_query($link, $querypa5);
+$resultpa6 = mysqli_query($link, $querypa6);
 
 
 if (!$resultpa1) {
@@ -65,12 +53,43 @@ if (!$resultpa1) {
     die($message);
 }
 
+if (!$resultpa2) {
+    $message  = 'Invalid query: ' . mysqli_error() . "\n";
+    $message .= 'Whole query: ' . $querypa2;
+    die($message);
+}
+
+if (!$resultpa3) {
+    $message  = 'Invalid query: ' . mysqli_error() . "\n";
+    $message .= 'Whole query: ' . $querypa3;
+    die($message);
+}
+
+if (!$resultpa4) {
+    $message  = 'Invalid query: ' . mysqli_error() . "\n";
+    $message .= 'Whole query: ' . $querypa4;
+    die($message);
+}
+
+if (!$resultpa5) {
+    $message  = 'Invalid query: ' . mysqli_error() . "\n";
+    $message .= 'Whole query: ' . $querypa5;
+    die($message);
+}
+
+if (!$resultpa6) {
+    $message  = 'Invalid query: ' . mysqli_error() . "\n";
+    $message .= 'Whole query: ' . $querypa6;
+    die($message);
+}
+
+
 
 
 $display="";
 $displaymensaje="";
 // result1 
-$result1 = mysqli_query($connect, $query1);
+$result1 = mysqli_query($link, $query1);
 if ($result1->num_rows === 0){
     $display="visibility: hidden;";
     $displaymensaje="<p>No se encontraron calificaciones del nivel 1.</p>";
@@ -83,7 +102,7 @@ if (!$result1) {
     
 }
 // result2 
-$result2 = mysqli_query($connect, $query2);
+$result2 = mysqli_query($link, $query2);
 
 if (!$result2) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -91,7 +110,7 @@ if (!$result2) {
     die($message);
 }
 // result3 
-$result3 = mysqli_query($connect, $query3);
+$result3 = mysqli_query($link, $query3);
 
 if (!$result3) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -99,7 +118,7 @@ if (!$result3) {
     die($message);
 }
 // result4 
-$result4 = mysqli_query($connect, $query4);
+$result4 = mysqli_query($link, $query4);
 
 if (!$result4) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -107,7 +126,7 @@ if (!$result4) {
     die($message);
 }
 // result5 
-$result5 = mysqli_query($connect, $query5);
+$result5 = mysqli_query($link, $query5);
 
 if (!$result5) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -115,7 +134,7 @@ if (!$result5) {
     die($message);
 }
 // result6 
-$result6 = mysqli_query($connect, $query6);
+$result6 = mysqli_query($link, $query6);
 
 if (!$result6) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -123,7 +142,7 @@ if (!$result6) {
     die($message);
 }
 // resultp1
-$resultp1 = mysqli_query($connect, $queryp1);
+$resultp1 = mysqli_query($link, $queryp1);
 
 if (!$resultp1) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -131,7 +150,7 @@ if (!$resultp1) {
     die($message);
 }
 // resultp2 
-$resultp2 = mysqli_query($connect, $queryp2);
+$resultp2 = mysqli_query($link, $queryp2);
 
 if (!$resultp2) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -139,7 +158,7 @@ if (!$resultp2) {
     die($message);
 }
 // resultp3 
-$resultp3 = mysqli_query($connect, $queryp3);
+$resultp3 = mysqli_query($link, $queryp3);
 
 if (!$resultp3) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -147,7 +166,7 @@ if (!$resultp3) {
     die($message);
 }
 // resultp4 
-$resultp4 = mysqli_query($connect, $queryp4);
+$resultp4 = mysqli_query($link, $queryp4);
 
 if (!$resultp4) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -155,7 +174,7 @@ if (!$resultp4) {
     die($message);
 }
 // resultp5
-$resultp5 = mysqli_query($connect, $queryp5);
+$resultp5 = mysqli_query($link, $queryp5);
 
 if (!$resultp5) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -163,7 +182,7 @@ if (!$resultp5) {
     die($message);
 }
 // resultp6 
-$resultp6 = mysqli_query($connect, $queryp6);
+$resultp6 = mysqli_query($link, $queryp6);
 
 if (!$resultp6) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
@@ -172,6 +191,11 @@ if (!$resultp6) {
 }
 
 $dataRowpa1 = "";
+$dataRowpa2 = "";
+$dataRowpa3 = "";
+$dataRowpa4 = "";
+$dataRowpa5 = "";
+$dataRowpa6 = "";
 
 $dataRow1 = "";
 $dataRow2 = "";
@@ -179,6 +203,7 @@ $dataRow3 = "";
 $dataRow4 = "";
 $dataRow5 = "";
 $dataRow6 = "";
+
 $dataRowp1 = "";
 $dataRowp2 = "";
 $dataRowp3 = "";
@@ -186,41 +211,200 @@ $dataRowp4 = "";
 $dataRowp5 = "";
 $dataRowp6 = "";
 
+$color = "";
+$td = "</td>";
+
+$counter1 = 0;
+$counter2 = 0;
+$counter3 = 0;
+$counter4 = 0;
+$counter5 = 0;
+$counter6 = 0;
+
+$color1 = "";
+$color2 = "";
+$color3 = "";
+$color4 = "";
+$color5 = "";
+$color6 = "";
+
+$est1 = "";
+$est2 = "";
+$est3 = "";
+$est4 = "";
+$est5 = "";
+$est6 = "";
 
 
 
 while($rowpa1 = mysqli_fetch_array($resultpa1))
 {
-
+    
     $dataRowpa1 = $dataRowpa1."<th>&nbsp;$rowpa1[0]</th>";
     
 }
 
 while($row1 = mysqli_fetch_array($result1))
 {
+    if ($row1[0] >= 70){
+        $color = '<td style="color:#66F60E;font-weight: bold;">';
+            
+    }else{
+        $color = '<td style="color:red;font-weight: bold;">';
+            
+        $counter1++;
+    }
     
-    $dataRow1 = $dataRow1."<td>$row1[0]</td>";
+    $dataRow1 = $dataRow1.$color.$row1[0].$td;
+    if ($counter1 > 0 ){
+        $color1 = 'style="color:red;"';
+        $est1 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel No acreditado";
+    }else{
+        $color1 = 'style="color:#66F60E;"';
+        $est1 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel Acreditado";
+    }
     
 }
+
+while($rowpa2 = mysqli_fetch_array($resultpa2))
+{
+    
+    $dataRowpa2 = $dataRowpa2."<th>&nbsp;$rowpa2[0]</th>";
+    
+}
+
+
 while($row2 = mysqli_fetch_array($result2))
 {
-    $dataRow2 = $dataRow2."<td>$row2[0]</td>";
+    if ($row2[0] >= 70){
+        $color = '<td style="color:#66F60E;font-weight: bold;">';
+            
+    }else{
+        $color = '<td style="color:red;font-weight: bold;">';
+        $counter2++;
+            
+    }
+    
+    $dataRow2 = $dataRow2.$color.$row2[0].$td;
+    if ($counter2 > 0 ){
+        $color2 = 'style="color:red;"';
+        $est2 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel No acreditado";
+    }else{
+        $color2 = 'style="color:#66F60E;"';
+        $est2 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel Acreditado";
+    }
+    
 }
+
+while($rowpa3 = mysqli_fetch_array($resultpa3))
+{
+    
+    $dataRowpa3 = $dataRowpa3."<th>&nbsp;$rowpa3[0]</th>";
+    
+}
+
+
 while($row3 = mysqli_fetch_array($result3))
 {
-    $dataRow3 = $dataRow3."<td>$row3[0]</td>";
+    if ($row3[0] >= 70){
+        $color = '<td style="color:#66F60E;font-weight: bold;">';
+            
+    }else{
+        $color = '<td style="color:red;font-weight: bold;">';
+        $counter3++;
+            
+    }
+    
+    $dataRow3 = $dataRow3.$color.$row3[0].$td;
+    if ($counter3 > 0 ){
+        $color3 = 'style="color:red;"';
+        $est3 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel No acreditado";
+    }else{
+        $color3 = 'style="color:#66F60E;"';
+        $est3 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel Acreditado";
+    }
 }
+
+while($rowpa4 = mysqli_fetch_array($resultpa4))
+{
+    
+    $dataRowpa4 = $dataRowpa4."<th>&nbsp;$rowpa4[0]</th>";
+    
+}
+
 while($row4 = mysqli_fetch_array($result4))
 {
-    $dataRow4 = $dataRow4."<td>$row4[0]</td>";
+    if ($row4[0] >= 70){
+        $color = '<td style="color:#66F60E;font-weight: bold;">';
+            
+    }else{
+        $color = '<td style="color:red;font-weight: bold;">';
+        $counter4++;
+            
+    }
+    
+    $dataRow4 = $dataRow4.$color.$row4[0].$td;
+    if ($counter4 > 0 ){
+        $color4 = 'style="color:red;"';
+        $est4 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel No acreditado";
+    }else{
+        $color4 = 'style="color:#66F60E;"';
+        $est4 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel Acreditado";
+    }
+}
+
+while($rowpa5 = mysqli_fetch_array($resultpa5))
+{
+    
+    $dataRowpa5 = $dataRowpa5."<th>&nbsp;$rowpa5[0]</th>";
+    
 }
 while($row5 = mysqli_fetch_array($result5))
 {
-    $dataRow5 = $dataRow5."<td>$row5[0]</td>";
+    if ($row5[0] >= 70){
+        $color = '<td style="color:#66F60E;font-weight: bold;">';
+            
+    }else{
+        $color = '<td style="color:red;font-weight: bold;">';
+        $counter5++;
+            
+    }
+    
+    $dataRow5 = $dataRow5.$color.$row5[0].$td;
+    if ($counter5 > 0 ){
+        $color5 = 'style="color:red;"';
+        $est5 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel No acreditado";
+    }else{
+        $color5 = 'style="color:#66F60E;"';
+        $est5 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel Acreditado";
+    }
+    
+}
+while($rowpa6 = mysqli_fetch_array($resultpa6))
+{
+    
+    $dataRowpa6 = $dataRowpa6."<th>&nbsp;$rowpa6[0]</th>";
+    
 }
 while($row6 = mysqli_fetch_array($result6))
 {
-    $dataRow6 = $dataRow6."<td>$row6[0]</td>";
+    if ($row6[0] >= 70){
+        $color = '<td style="color:#66F60E;font-weight: bold;">';
+            
+    }else{
+        $color = '<td style="color:red;font-weight: bold;">';
+        $counter6++;
+            
+    }
+    
+    $dataRow6 = $dataRow6.$color.$row6[0].$td;
+    if ($counter6 > 0 ){
+        $color6 = 'style="color:red;"';
+        $est6 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel No acreditado";
+    }else{
+        $color6 = 'style="color:#66F60E;"';
+        $est6 = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel Acreditado";
+    }
 }
 
 $rowp1 = mysqli_fetch_array($resultp1);
@@ -248,15 +432,8 @@ $rowp6 = mysqli_fetch_array($resultp6);
 $dataRowp6 = $rowp6["Promedio"];
 
 
-//echo htmlspecialchars($_SESSION["username"]);
-//echo $cate;
-//echo htmlspecialchars($_SESSION["idmaestroActual"]);
-//echo $_SESSION["category"];
-//echo $_SESSION["numeroControl"];
-//echo "hola";
 
-
-mysqli_close($connect);
+mysqli_close($link);
 
 
 ?>
@@ -273,7 +450,7 @@ mysqli_close($connect);
     <link rel="icon" href="../imagenes/itsl2.png">
     <style type="text/css">
         body{
-            background-image: linear-gradient(to bottom, #0a6d7a 200px, white  20%);
+            background-image: linear-gradient(to bottom, #0a6d7a 200px, white  10%);
             background-size: cover;
             background-repeat: no-repeat;
             font-size: 16px;
@@ -395,6 +572,13 @@ mysqli_close($connect);
         div#tabla1 {
             display: none;
         }
+        hr {
+            border: none;
+            height: 1px;
+            /* Set the hr color */
+            color: darkslategrey; /* old IE */
+            background-color: darkgrey; /* Modern Browsers */
+        }
 
 
 
@@ -423,14 +607,14 @@ mysqli_close($connect);
                              <div class="col-sm-4" >
 
                                     <p class="menu">
-                                      <a href="../" >Inicio</a>
+                                      <a href="../Require/logout.php" >Inicio</a>
                                       </p>
 
                               </div>
                               <div class="col-sm-4">
 
                                     <p class="menu">
-                                      
+                                      <a href="../Alumnos/logoutAlcalifi.php">Consultar otro alumno</a>
                                      </p>
 
                               </div>
@@ -457,7 +641,7 @@ mysqli_close($connect);
 
     <div class="container-fluid">
             <div class="row" style="padding-bottom: 10px; padding-top: 20px; background:#0a6d7a">
-                <div class="col-sm-4" style="text-align:center; padding-bottom:20px; ">
+                <div class="col-sm-3" style="text-align:center; padding-bottom:20px; ">
                     <img src="../imagenes/TecNMwhite.png" width="200px" height="auto" >
 
                 </div>
@@ -467,7 +651,7 @@ mysqli_close($connect);
                 <div class="col-sm-6">
                     <div class="lista">
                             <p  style="line-height: 2; font-size: 30px;">
-                                <br>Ingresa tus datos
+                                <br>Calificaciones por parcial y promedio final
 
                             </p>
                     </div>
@@ -481,7 +665,7 @@ mysqli_close($connect);
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <p>hola</p>
+                
             </div>
         </div>
     </div>
@@ -490,11 +674,11 @@ mysqli_close($connect);
     
     
     
-    <div class="container" >
+    <div class="container-fluid" style="margin: 100px; 0 0 0">
 
-        <div class="row" >
-            <div class = "col-sm-4" style="<?php echo $display;?>">
-                <p style="font-size:28px;">Tabla Calificaciones nivel 1</p>
+        <div class="row">
+            <div class = "col-sm-7" style="<?php echo $display;?>">
+                <p style="font-size:20px;">Nivel 1</p>
                 <div class="table-responsive">  
                     
                     <table class="table">
@@ -511,124 +695,110 @@ mysqli_close($connect);
                         </tbody>
                     </table>
                   </div>
-                <p><strong>Promedio: </strong><?php echo $dataRowp1;?></p> 
+                <p ><strong>Promedio: </strong><strong <?php echo $color1; ?>><?php echo $dataRowp1; echo $est1;?></strong></p> 
+                <hr>
             </div>
 
-            <div class = "col-sm-4">
-                <p style="font-size:28px;">Tabla Calificaciones nivel 2</p>
-                <p>Calificaciones por parcial y promedio</p> 	  
+            <div class = "col-sm-7">
+                <p style="font-size:20px;">Nivel 2</p>  
                 <div class="table-responsive">          
                     <table class="table" >
                         <thead>
                             <tr>
-                                <th>P1</th>
-                                <th>P2</th>
-                                <th>P3</th>
-                                <th>P4</th>
-                                <th>P5</th>
-                                <th>P6</th>
+                                <th>Parcial</th>
+                                <?php echo $dataRowpa2;?>
                             </tr>
                         </thead>
                         <tbody>
+                            <th>Puntaje</th>
                             <?php echo $dataRow2;?>
                         </tbody>
                     </table>
               </div>
-              <p>Promedio: <?php echo $dataRowp2;?></p> 
+              <p ><strong>Promedio: </strong><strong <?php echo $color2; ?>><?php echo $dataRowp2; echo $est2;?></strong></p> 
+              <hr>
             </div>
 
-            <div class = "col-sm-4">
-                <p style="font-size:28px;">Tabla Calificaciones nivel 3</p>
-                <p>Calificaciones por parcial y promedio</p> 	  
+            <div class = "col-sm-7">
+                <p style="font-size:20px;">Nivel 3</p>  
                 <div class="table-responsive">          
                     <table class="table" >
                         <thead>
                             <tr>
-                                <th>P1</th>
-                                <th>P2</th>
-                                <th>P3</th>
-                                <th>P4</th>
-                                <th>P5</th>
-                                <th>P6</th>
+                                <th>Parcial</th>
+                                <?php echo $dataRowpa3;?>
                             </tr>
                         </thead>
                         <tbody>
+                            <th>Puntaje</th>
                             <?php echo $dataRow3;?>
                         </tbody>
                     </table>
                 </div>
-                <p>Promedio: <?php echo $dataRowp3;?></p> 
+                <p ><strong>Promedio: </strong><strong <?php echo $color3; ?>><?php echo $dataRowp3; echo $est3;?></strong></p> 
+                <hr>
             </div>
-        </div>
+        
 
-        <div class="row"  >
-            <div class = "col-sm-4">
-                <p style="font-size:28px;">Tabla Calificaciones nivel 4</p>
-                <p>Calificaciones por parcial y promedio</p> 
+        
+            <div class = "col-sm-7">
+                <p style="font-size:20px;">Nivel 4</p>
                 <div class="table-responsive">          
                     <table class="table" >
                         <thead>
                             <tr>
-                                <th>P1</th>
-                                <th>P2</th>
-                                <th>P3</th>
-                                <th>P4</th>
-                                <th>P5</th>
-                                <th>P6</th>
+                                <th>Parcial</th>
+                                <?php echo $dataRowpa4;?>
                             </tr>
                         </thead>
                         <tbody>
+                            <th>Puntaje</th>
                             <?php echo $dataRow4;?>
                         </tbody>
                     </table>
                 </div>
-                <p>Promedio: <?php echo $dataRowp4;?></p> 
+                <p ><strong>Promedio: </strong><strong <?php echo $color4; ?>><?php echo $dataRowp4; echo $est4;?></strong></p> 
+                <hr>
             </div>
 
-            <div class = "col-sm-4">
-                <p style="font-size:28px;">Tabla Calificaciones nivel 5</p>
-                <p>Calificaciones por parcial y promedio</p> 	  
+            <div class = "col-sm-7">
+                <p style="font-size:20px;">Nivel 5</p> 	  
                 <div class="table-responsive">          
                     <table class="table" >
                         <thead>
                             <tr>
-                                <th>P1</th>
-                                <th>P2</th>
-                                <th>P3</th>
-                                <th>P4</th>
-                                <th>P5</th>
-                                <th>P6</th>
+                                <th>Parcial</th>
+                                <?php echo $dataRowpa5;?>
                             </tr>
                         </thead>
                         <tbody>
+                            <th>Puntaje</th>
                             <?php echo $dataRow5;?>
                         </tbody>
                     </table>
                 </div>
-                <p>Promedio: <?php echo $dataRowp5;?></p> 
+                <p ><strong>Promedio: </strong><strong <?php echo $color5; ?>><?php echo $dataRowp5; echo $est5;?></strong></p> 
+                <hr>
             </div>
 
-            <div class = "col-sm-4">
-                <p style="font-size:28px;">Tabla Calificaciones nivel 6</p>
-                <p>Calificaciones por parcial y promedio</p> 	  
+            <div class = "col-sm-7">
+                <p style="font-size:20px;">Nivel 6</p> 	  
                 <div class="table-responsive">          
                     <table class="table" >
                         <thead>
                             <tr>
-                                <th>P1</th>
-                                <th>P2</th>
-                                <th>P3</th>
-                                <th>P4</th>
-                                <th>P5</th>
-                                <th>P6</th>
+                                <th>Parcial</th>
+                                <?php echo $dataRowpa6;?>
                             </tr>
                         </thead>
                         <tbody>
+                            <th>Puntaje</th>
                             <?php echo $dataRow6;?>
                         </tbody>
                     </table>
                 </div>
-                <p>Promedio: <?php echo $dataRowp6;?></p> 
+                <p ><strong>Promedio: </strong><strong <?php echo $color6; ?>><?php echo $dataRowp6; echo $est6;?></strong></p> 
+                <hr>
             </div>
         </div>
 

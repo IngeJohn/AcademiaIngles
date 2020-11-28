@@ -391,9 +391,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item" href="Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
-                                    <a class="dropdown-item" href="Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
-                                    <a class="dropdown-item" href="Alumnos/alumnos.php" "dropdown-item">Consulta calificaciones</a>
+                                    <a class="dropdown-item" href="../Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                    <a class="dropdown-item" href="../Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
+                                    <a class="dropdown-item" href="../Alumnos/alumnos.php" "dropdown-item">Consulta calificaciones</a>
                                 </div>
 
                             </div >
@@ -405,9 +405,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                 </button>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <button class="dropdown-item" type="button">Action</button>
-                                    <button class="dropdown-item" type="button">Another action</button>
-                                    <button class="dropdown-item" type="button">Something else here</button>
+                                    <a class="dropdown-item" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Docentes</a>
                                 </div>
 
                             </div >
@@ -420,8 +418,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
                                     <a class="dropdown-item active" href="IniciarSesionAd.php" "dropdown-item">Administración</a>
-                                    <button class="dropdown-item" type="button">Another action</button>
-                                    <button class="dropdown-item" type="button">Something else here</button>
                                 </div>
 
                             </div >
@@ -495,7 +491,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
             <div class="col-sm-5">
                 <div class="p-3 mb-2 bg-light text-dark">
-                    <p><a href="inicio.php"><u>Inicio</u></a> > Acceso Administradores</p>
+                    <p><a href="../home.php"><u>Inicio</u></a> > Acceso Administradores</p>
                     <h2>Acceso Administradores</h2>
                     <p>Por favor ingrese sus credenciales para inicar sesión.</p>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
