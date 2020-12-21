@@ -8,10 +8,14 @@ class Docente
 	private $materno;
     private $sexo;
     private $direccion;
+    private $estado;
+    private $municipio;
+    private $localidad;
+    private $postal;
     private $telefono;
     private $email;
 	private $idmaestro;
-    private $n_issste;
+    private $rfc;
 
 
 	public function __GET($k){ return $this->$k; }

@@ -11,7 +11,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 // Include config file
 require_once "../Require/config.php";
 
-date_default_timezone_set('UTC');
+date_default_timezone_set('America/Mexico_City');
 
     $peri = "";  
     $per = "";  
@@ -19,13 +19,13 @@ date_default_timezone_set('UTC');
     $year = date("Y"); 
 
 if ($mes >= 1 && $mes <= 6){
-    $per = 2;
-    $peri = "Periodo: ".$per."-".$year;
-}else if($mes >= 8 && $mes <= 12){
     $per = 1;
     $peri = "Periodo: ".$per."-".$year;
+}else if($mes >= 8 && $mes <= 12){
+    $per = 2;
+    $peri = "Periodo: ".$per."-".$year;
 }
-//echo $peri;
+
 
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -36,25 +36,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         
     }
     
-    echo("<p><script>alert('¡Te ha inscrito exitosamente!');</script></p>");
-    //echo $_SESSION["numeroControl"];
+    echo("<p><script>alert('¡Te has inscrito exitosamente!');</script></p>");
+
 }
 
 
 
 
 
-$numeroControl = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $telefono =$nivelActual = $idmaestroActual = $estado = $modalidad = " ";
+$numeroControl = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $telefono = $nivelActual = $idmaestroActual = $estado = $modalidad = $numeroNivel = " ";
 
 
 
 // Prepare a select statement, checks for the las level.
-        $sql = "SELECT alumnos.id, alumnos.numeroControl, alumnos.curp, alumnos.nombre, alumnos.paterno, 
-	alumnos.materno, alumnos.sexo, alumnos.direccion, alumnos.telefono, alumnos.nivelActual, alumnos.idmaestroActual, niveles.estado, niveles.modalidad FROM alumnos, niveles WHERE alumnos.numeroControl = ? AND niveles.numeroControl = ? AND alumnos.nivelActual = niveles.numeroNivel";
+        $sql = "SELECT id, numeroControl, curp, nombre, paterno, materno, sexo, direccion, telefono, nivelActual, idmaestroActual FROM alumnos WHERE numeroControl = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_numeroControl, $param_numeroControl);
+            mysqli_stmt_bind_param($stmt, "s", $param_numeroControl);
             
             // Set parameters
             $param_numeroControl = $_SESSION["numeroControl"];
@@ -65,11 +64,11 @@ $numeroControl = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $t
                 // Store result
                 mysqli_stmt_store_result($stmt);
                 
-                // Check if username exists, if yes then verify curp
+                // Check if data exists
                 if(mysqli_stmt_num_rows($stmt) == 1){ 
                     
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp, $nombre, $paterno, $materno, $sexo, $direccion, $telefono, $nivelActual, $idmaestroActual, $estado, $modalidad );
+                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp, $nombre, $paterno, $materno, $sexo, $direccion, $telefono, $nivelActual, $idmaestroActual);
                     if(mysqli_stmt_fetch($stmt)){
                             // Store data in session variables  
                             $_SESSION["nombre"] = $nombre;
@@ -78,12 +77,13 @@ $numeroControl = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $t
                             $_SESSION["sexo"] = $sexo;
                             $_SESSION["direccion"] = $direccion;
                             $_SESSION["telefono"] = $telefono;
-                            $_SESSION["estado"] = $estado;
                             $_SESSION["nivelActual"] = $nivelActual;
                         
-                        
+                        //echo "si entro\n";
                         } 
-                    }
+                    }else {
+                          // echo "no se encontro nada";
+                      }
                 } 
             } else{
                 echo "Oops! Algo salio mal. Por favor intenta más tarde.";
@@ -99,6 +99,7 @@ $query = "SELECT  numeroNivel, estado, modalidad FROM `niveles` WHERE numeroCont
 // resultNiv
 $result = mysqli_query($link, $query);
 
+
 if (!$result) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
     $message .= 'Whole query: ' . $query;
@@ -111,15 +112,45 @@ $dataRow = "";
 while($row1 = mysqli_fetch_array($result)){
     $dataRow = $dataRow."<tr><td>&nbsp;&nbsp;&nbsp;$row1[0]</td><td>$row1[1]</td><td>$row1[2]</td><tr>"; 
 }
-//echo $per;
 
-mysqli_close($link);
+
+
+
+// Close statement
+$result->close();
+
+
+
+if ($stmt2 = $link->prepare("SELECT  numeroNivel, estado, modalidad FROM `niveles` WHERE numeroControl = {$_SESSION["numeroControl"]} AND numeroNivel = {$nivelActual}")) {
+    $stmt2->execute();
+
+    /* bind variables to prepared statement */
+    $stmt2->bind_result($numeroNivel, $estado, $modalidad);
+
+    /* fetch values */
+$stmt2->fetch();
+
+    
+    
+
+
+    /* close statement */
+    $stmt2->close();
+}
+/* close connection */
+$link->close();
+
+
+
+
 
 $mensaje = "";
 $color1 = "white";
 $accion = "";
 $mas1 = $_SESSION["nivelActual"];
 
+$_SESSION["estado"] = $estado;
+//$per = 1;
 if(strcmp($_SESSION["estado"], 'En curso') === 0 ){
     
     $mensaje = $mensaje." ya estas inscrito en el nivel ".$_SESSION["nivelActual"]." del periodo ".$peri;
@@ -132,7 +163,7 @@ if(strcmp($_SESSION["estado"], 'En curso') === 0 ){
         $mensaje = ' No acreditaste el nivel '.$_SESSION["nivelActual"].', deberas repetir el mismo nivel.';
         if ($_SESSION["nivelActual"] & 1 ){
             //odd
-            if (strcmp($per, '1') === 0 ){
+            if (strcmp($per, '2') === 0 ){
                 
                  $mensaje = $mensaje." El nivel ".$_SESSION["nivelActual"]." Si se oferta en este periodo.";
 
@@ -142,7 +173,7 @@ if(strcmp($_SESSION["estado"], 'En curso') === 0 ){
             }
         }else{
             //even
-            if ( strcmp($per, '2') === 0){
+            if ( strcmp($per, '1') === 0){
                 $color1 = "lightgreen";
                  $mensaje = $mensaje." El nivel ".$_SESSION["nivelActual"]." Si se oferta en este periodo.";
             }else{
@@ -156,10 +187,10 @@ if(strcmp($_SESSION["estado"], 'En curso') === 0 ){
         
         if(($mas1+1) & 1){
             //Odd
-            if(strcmp($per, '1') === 0 ){
+            if(strcmp($per, '2') === 0 ){
                 $color1 = "lightgreen";
                 $mas1++;
-                $mensaje =  "Acreditaste el nivel ".$_SESSION["nivelActual"].", podras inscribirte en el nivel ".$mas1++;
+                $mensaje =  "Acreditaste el nivel ".$_SESSION["nivelActual"].", si podrás inscribirte en el nivel ".$mas1++;
             }else{
                 $mas1++;
                 $color1 = "red";
@@ -169,7 +200,7 @@ if(strcmp($_SESSION["estado"], 'En curso') === 0 ){
             
             
         }else{
-            if(strcmp($per, '2') === 0 ){
+            if(strcmp($per, '1') === 0 ){
                 $color1 = "lightgreen";
                 $mas1++;
                 $mensaje =  "Te puedes registrar en el nivel ".$mas1;
@@ -183,9 +214,13 @@ if(strcmp($_SESSION["estado"], 'En curso') === 0 ){
         }
         
 
-    }else{
+    }elseif(strcmp($_SESSION["estado"], 'Acreditado') === 0 && strcmp($_SESSION["nivelActual"], '6') === 0  ){
         $color1 = "lightgreen";
         $mensaje = 'Has acreditado todos los niveles.';
+        $accion = "disabled";
+    }else{
+        $color1 = "black";
+        $mensaje = 'Nada que mostrar.';
         $accion = "disabled";
     }
 
@@ -227,18 +262,33 @@ if(isset($_REQUEST['action']))
     <head>
         <meta charset="UTF-8">
         <title>Reinscripción Alumnos</title>
-        <link rel="stylesheet" href="../pure/0.5.0/pure-min.css">
-        <link rel="stylesheet" href="../bootstrap/3.3.7/css/bootstrap.css">
+        
+        <link rel="stylesheet" href="../bootstrap/4.5.3/dist/css/bootstrap.min.css" 
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
+          crossorigin="anonymous">
+    
+        <script src="../jquery/3.5.1/jquery-3.5.1.slim.min.js" 
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+            crossorigin="anonymous"></script>
+    
+        <script src="../bootstrap/4.5.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" 
+            crossorigin="anonymous"></script>
+    
+    <link rel="icon" href="../imagenes/itsl2.png">
         <style type="text/css">
-            body{ 
-                font: 14px sans-serif; 
-                }
+            		body{
+            background-color: lightslategray;
+            
+            }
+        .logo{
+            width: 50%;
+            height: auto;
+            padding-top: 30px;
+        }
             header {
                   background-color: #000000;
-                  padding: 3px;
-                  text-align: center;
-                  font-size: 30px;
-                  color: white;
+
                    }
             .demo-content{
                 background: #ffffff;
@@ -323,15 +373,49 @@ if(isset($_REQUEST['action']))
     </head>
 <body>
     <header>
-  <h2>Academia de Inglés del Instituto Tecnológico Superior de Loreto</h2>
+          <div class="container-fluid">
+
+            <div class="row">
+                
+                
+                <div class="col-lg-8 col-xs-12 col-sm-12 col-md-12">
+                    <img class="logo" src="../imagenes/itslnobreLargo.png" >
+                </div>
+                <div class="col-sm-4" style="text-align:center; padding-top:20px; ">
+                    <img src="../imagenes/TecNMwhite.png" width="150px" height="auto" >
+                </div>
+                
+                
+                
+                
+               
+                    
+                    <div class="col-sm-12" style="text-align: center;">
+
+
+                        <div class="btn-group" role="group">
+
+                            <a href="../home.php" class="btn btn-outline-light" role="button" >Ir al inicio</a>
+                            
+                            <a href="reinscripcionAlumn.php" class="btn btn-outline-light active" role="button">Reinscripción Alumnos</a>
+
+                            <a href="reinscripcionVeri.php" class="btn btn-outline-light" role="button">&nbsp;Pulsa para salir&nbsp;</a>
+
+                        </div>    
+                    </div>
+                
+                
+                
+
+
+            </div>
+        </div>
 </header>
     <div class="container demo-content">
         
         <div class="pure-g">
             <div class="pure-u-1-1">
         
-                <p><a href="../Alumnos/logoutAl.php"><u>Atras</u></a> > Datos del alumno y reinscripción</p>
-
                 <h2><br>Datos del Alumno</h2>
                 <hr>
                 
@@ -363,7 +447,7 @@ if(isset($_REQUEST['action']))
                     <p><b>Número de Control: </b><?php echo $r->__GET('numeroControl'); ?></p>
                     <p><b>Último nivel inscrito: </b><?php echo $r->__GET('nivelActual'); ?></p>
                     <p><b>Grupo: </b><?php echo $r->__GET('grupoActual'); ?></p>
-                    <p><b>Maestro id: </b><?php echo $r->__GET('idmaestroActual'); ?></p>
+                    <p><b>Maestro id: </b><?php echo $r->__GET('idmaestroActual'); ?>Pendiente</p>
                     <p><b>Carrera: </b><?php echo $r->__GET('carrera'); ?></p>
                     <p><b>Modalidad: </b><?php echo $r->__GET('modalidad'); ?></p>
                 <br>
@@ -440,8 +524,8 @@ if(isset($_REQUEST['action']))
                                     </tr>
                                 </table>
                                 <hr>
-                                <button id="myBtn2" type="submit" class="pure-button pure-button-primary">Guardar</button>
-                                <button id="myBtn3" type="button" class="pure-button pure-button-secundary">Cancelar</button>
+                                <button id="myBtn2" type="submit" class="btn btn-primary">Guardar</button>
+                                <button id="myBtn3" type="button" class="btn btn-secondary">Cancelar</button>
                             </form>
                          </div>
                          
@@ -458,7 +542,7 @@ if(isset($_REQUEST['action']))
         
         <hr>
         <div class="container-fluid">
-            <p style="font-size:26px;">Reinscripción</p>
+            <p style="font-size:26px;">Reinscripción &nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<?php echo $peri; ?></p>
             <p>Toma en cuenta que para reinscribirte ya debes haber pagado tu cuota de reinscripción.</p>
             <p><b>Según la información registrada en el sistema: </b></p>
                 
@@ -471,7 +555,7 @@ if(isset($_REQUEST['action']))
                 
                 <form method="POST">
                     <br><label>Presiona para reinscribirte</label><br><br>
-                    <button type="submit" class="btn btn-primary" <?php echo $accion; ?>>Reinscripcion</button>
+                    <button type="submit" class="btn btn-primary" <?php echo $accion; ?>>Reinscripción</button>
                 </form>
         
             <br><br><br>
@@ -594,9 +678,9 @@ if(isset($_REQUEST['action']))
                             'El Carreño (Las Palmas)',
                             'El Carreño',
                             'El Chaparral',
-                            'El Crucero [Rancho]',
+                            'El Crucero',
                             'El Durazno',
-                            'El Forastero (Raymundo Chavarría O.) [Rancho]',
+                            'El Forastero',
                             'El Gordillo',
                             'El Hinojo',
                             'El Lobo',
@@ -615,7 +699,7 @@ if(isset($_REQUEST['action']))
                             'El Rocío',
                             'El Salitre (El Bajío)',
                             'El Socorro',
-                            'El Solitario (El Injerto) [Rancho]',
+                            'El Solitario (El Injerto)',
                             'El Tecolote (El Dormido)',
                             'El Tepetate',
                             'El Verde',
@@ -712,34 +796,34 @@ if(isset($_REQUEST['action']))
                             'El Lagunero',
                             'El Llano',
                             'El Mezquital',
-                            'El Mezquite Largo [Rancho]',
+                            'El Mezquite Largo',
                             'El Milagro [Viñedos]',
-                            'El Retiro [Rancho]',
+                            'El Retiro',
                             'Enfriadora de Leche',
                             'Esteban S. Castorena (Casas Coloradas)',
-                            'Flor del Valle [Rancho]',
+                            'Flor del Valle',
                             'Gemelo',
                             'Kalúa [Balneario y Restaurante]',
                             'La Esperanza',
                             'La Loma',
                             'La Loma',
-                            'La Loma [Rancho]',
+                            'La Loma',
                             'La Loma Dos',
                             'La Manga (Las Mangas)',
-                            'La Mojina [Rancho]',
+                            'La Mojina',
                             'La Palmita',
                             'La Pila',
                             'La Primavera',
                             'La Purísima',
                             'La Raya',
-                            'La Soledad [Rancho]',
+                            'La Soledad',
                             'Las Carmelitas (Jesús Betancourt) [Granja]',
-                            'Las Liebres [Rancho]',
+                            'Las Liebres',
                             'Las Palomas',
                             'Las Palomas (Jorge Ortiz Luévano)',
-                            'Leyva [Granja]',
+                            'Leyva',
                             'Los Alacranes',
-                            'Los Badillo [Rancho]',
+                            'Los Badillo',
                             'Los Conejos (Arturo Adame)',
                             'Los Conejos (Jorge Adame)',
                             'Los Griegos (Griegos)',
@@ -748,7 +832,7 @@ if(isset($_REQUEST['action']))
                             'Luis Moya',
                             'Maluz [Granja]',
                             'María Guadalupe Ramírez Diosdado',
-                            'Milpa Alta [Rancho]',
+                            'Milpa Alta',
                             'Nicasio Cardona Luévano',
                             'Ninguno',
                             'Noria de Molinos',
@@ -762,9 +846,9 @@ if(isset($_REQUEST['action']))
                             'Rancho Marcelita',
                             'Rancho Matanuzka (Alberto Guerrero)',
                             'San Ángel',
-                            'San Antonio [Rancho]',
+                            'San Antonio',
                             'San Diego',
-                            'San Felipe [Rancho]',
+                            'San Felipe',
                             'San Isidro',
                             'San Jorge',
                             'San José (El Huarache) [Rancho]',
@@ -772,8 +856,8 @@ if(isset($_REQUEST['action']))
                             'San Miguel (Salvador Alba Gómez)',
                             'San Rafael',
                             'Santa Fe',
-                            'Santa María [Rancho]',
-                            'Santa Rita [Rancho]',
+                            'Santa María',
+                            'Santa Rita',
                             'Sociedad Reyes (Pozo Diez)',
                             'Teresita [Viñedos]'];
         

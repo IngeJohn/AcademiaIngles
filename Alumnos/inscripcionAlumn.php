@@ -1,10 +1,50 @@
 <?php
-// Include config file
+
+session_start();
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+
+    // Unset all of the session variables
+    $_SESSION = array();
+    
+    // Destroy the session.
+    session_destroy();
+    
+}
+
 require_once "../Require/config.php";
+
+
+
+date_default_timezone_set('UTC');
+
+    $peri = "";  
+    $per = "";  
+    $mes = date("n"); 
+    $year = date("Y"); 
+
+if ($mes >= 1 && $mes <= 6){
+    $per = 1;
+    $peri = "Periodo: ".$per."-".$year;
+}else if($mes >= 8 && $mes <= 12){
+    $per = 2;
+    $peri = "Periodo: ".$per."-".$year;
+}
+
+
+if($per == 2){//camviar para avilitar o denegar acceso
+    
+}else{
+    $message = "¡Las inscripciones esta cerradas por el momento!";
+    echo "<script type='text/javascript'>alert('$message'); location.href='../home.php';</script>";
+    
+}
+
+
  
 // Define variables and initialize with empty values
-$numeroControl = $confirm_numeroControl = $curp = $confirm_curp = $nombre = $paterno = $materno = $sexo = $direccion = $telefono = $grupo = $nivelActual = $estado = $municipio = $localidad = $fnacimiento = $modalidad = $carrera = $periodoactual = "";
-$numeroControl_err = $confirm_numeroControl_err = $curp_err = $confirm_curp_err = $category_err = $nombre_err = $paterno_err = $materno_err = $sexo_err = $direccion_err = $telefono_err = $grupo_err = $nivelActual_err = $estado_err =$municipio_err =$localidad_err = $fnacimiento_err = $modalidad_err = $carrera_err = $periodoactual_err = "";
+$numeroControl = $confirm_numeroControl = $curp = $confirm_curp = $nombre = $paterno = $materno = $sexo = $direccion = $telefono = $grupo = $nivelActual = $estado = $municipio = $localidad = $fnacimiento = $modalidad = $carrera = $periodoactual = $email = $postal = $contrase = $confirm_contrase = "";
+$numeroControl_err = $confirm_numeroControl_err = $curp_err = $confirm_curp_err = $category_err = $nombre_err = $paterno_err = $materno_err = $sexo_err = $direccion_err = $telefono_err = $grupo_err = $nivelActual_err = $estado_err =$municipio_err =$localidad_err = $fnacimiento_err = $modalidad_err = $carrera_err = $periodoactual_err = $email_err = $postal_err = $contrase_err = $confirm_contrase_err = "";
 
 
 
@@ -38,7 +78,7 @@ $numeroControl_err = $confirm_numeroControl_err = $curp_err = $confirm_curp_err 
                     }
                 } else{
                     // Display an error message if username doesn't exist
-                    $periodoactual_err = "No se encontro información con de el periodo actual.";
+                    $periodoactual_err = "No se encontro información del periodo actual.";
                 }
             } else{
                 echo "Ooops! Algo salio mal. Por favor intenta más tarde.";
@@ -55,7 +95,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
         //_________________
     
-      
+     if(empty(trim($_POST["email"]))){
+        $email_err = "Selecciona tu grupo.";
+    } else{
+         $email = trim($_POST["email"]);
+            }         
+    //_________________
+    
+     if(empty(trim($_POST["postal"]))){
+        $postal_err = "Introduce tu código postal.";
+    } else{
+         $postal = trim($_POST["postal"]);
+            } 
         //_________________
     
      if(empty(trim($_POST["grupo"]))){
@@ -228,16 +279,36 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $confirm_curp_err = "Las CURPs no coinciden";
         }
     }
+    
+        // Validate contrase
+    if(empty(trim($_POST["contrase"]))){
+        $password_err = "Introduce una contraseña.";     
+    } elseif(strlen(trim($_POST["contrase"])) < 6){
+        $contrase_err = "LA contraseña debe ser de por lo menos 6 caracteres.";
+    } else{
+        $contrase = trim($_POST["contrase"]);
+    }
+    
+    // Validate confirm contrase
+    if(empty(trim($_POST["confirm_contrase"]))){
+        $confirm_contrase_err = "Confirma la contraseña.";     
+    } else{
+        $confirm_contrase = trim($_POST["confirm_contrase"]);
+        if(empty($contrase_err) && ($contrase != $confirm_contrase)){
+            $confirm_contrase_err = "¡Las contraseñas no coinciden!.";
+        }
+    }
+    
 
     // Check input errors before inserting in database
-    if(empty($numeroControl_err) && empty($confirm_numeroControl_err) && empty($curp_err) && empty($confirm_curp_err) && empty($nombre_err) && empty($paterno_err) && empty($materno_err) && empty($sexo_err) && empty($direccion_err) && empty($estado_err) && empty($municipio_err) && empty($loclidad_err) && empty($telefono_err) && empty($grupo_err) && empty($nivelActual_err) && empty($fnacimiento_err) && empty($modalidad_err) && empty($carrera_err)){
+    if(empty($numeroControl_err) && empty($confirm_numeroControl_err) && empty($curp_err) && empty($confirm_curp_err) && empty($nombre_err) && empty($paterno_err) && empty($materno_err) && empty($sexo_err) && empty($direccion_err) && empty($estado_err) && empty($municipio_err) && empty($loclidad_err) && empty($telefono_err) && empty($grupo_err) && empty($nivelActual_err) && empty($fnacimiento_err) && empty($modalidad_err) && empty($carrera_err) && empty($email_err) && empty($postal_err) && empty($contrase_err) && empty($confirm_contrase_err)){
         
         // Prepare an insert statement
-        $sql = "INSERT INTO alumnos (numeroControl, curp, nombre, paterno, materno, sexo, direccion, telefono, grupoActual, nivelActual, estadoAcademico, estado, municipio, localidad, fnacimiento, modalidad, carrera, periodoActual) VALUES (?,?,?,?,?,?,?,?,?,?,'1',?,?,?,?,?,?,'{$periodoactual}')";
+        $sql = "INSERT INTO alumnos (numeroControl, curp, nombre, paterno, materno, sexo, direccion, telefono, grupoActual, nivelActual, estadoAcademico, estado, municipio, localidad, fnacimiento, modalidad, carrera, periodoActual, email, postal, contrase) VALUES (?,?,?,?,?,?,?,?,?,?,'1',?,?,?,?,?,?,'{$periodoactual}',?,?,?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ssssssssssssssss", $param_numeroControl, $param_curp, $param_nombre, $param_paterno, $param_materno, $param_sexo, $param_direccion, $param_telefono, $param_grupo, $param_nivelActual, $param_estado, $param_municipio, $param_localidad, $param_fnacimiento, $param_modalidad, $param_carrera);
+            mysqli_stmt_bind_param($stmt, "sssssssssssssssssss", $param_numeroControl, $param_curp, $param_nombre, $param_paterno, $param_materno, $param_sexo, $param_direccion, $param_telefono, $param_grupo, $param_nivelActual, $param_estado, $param_municipio, $param_localidad, $param_fnacimiento, $param_modalidad, $param_carrera, $param_email, $param_postal, $param_contrase);
             
             // Set parameters
             $param_numeroControl = $numeroControl;
@@ -256,19 +327,38 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_fnacimiento = $fnacimiento;
             $param_modalidad = $modalidad;
             $param_carrera = $carrera;
+            $param_email = $email;
+            $param_postal = $postal;
+            $param_contrase = password_hash($contrase, PASSWORD_DEFAULT);
+            
+            
 			
-            echo "si preparo el statement";
+            //echo "si preparo el statement";
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
-                // Redirect to home page
-				$message = "¡Te has inscrito con exito! Volver al inicio.";
-                echo "<script type='text/javascript'>alert('$message'); location.href='../home.php';</script>";
+                
+                $sql2 = "INSERT INTO niveles (numeroControl, numeroNivel, grupo, estado, modalidad, periodo) VALUES ('{$numeroControl}','{$nivelActual}','{$grupo}','En curso','{$modalidad}','{$periodoactual}')";
+                
+                if($stmt2 = mysqli_prepare($link, $sql2)){
+                    
+                    
+                    
+                   if(mysqli_stmt_execute($stmt2)){
+                       
+                       // Redirect to home page
+                        $message = "¡Te has inscrito con exito! Volver al inicio.";
+                        echo "<script type='text/javascript'>alert('$message'); location.href='../home.php';</script>";
+                       
+                   }
+                }
+                
                 
             } else{
                 echo "Algo salio mal, intentalo más tarde."."Error: %s.\n", $stmt->error;
             }
         }
         // Close statement
+        mysqli_stmt_close($stmt2);
         mysqli_stmt_close($stmt);
     }
     // Close connection
@@ -282,32 +372,49 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="UTF-8">
     <title>Inscripción alumnos de nuevo ingreso</title>
     
-    <script src="../jquery/3.3.1/jquery-3.3.1.min.js"></script>
     
-    <link rel="stylesheet" 
-          href="../bootstrap/4.0.0/css/bootstrap.min.css" 
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+    
+    
+    <link rel="stylesheet" href="../bootstrap/4.5.3/dist/css/bootstrap.min.css" 
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
           crossorigin="anonymous">
+    
+    <script src="../jquery/3.5.1/jquery-3.5.1.slim.min.js" 
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+            crossorigin="anonymous"></script>
+    
+    <script src="../bootstrap/4.5.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" 
+            crossorigin="anonymous"></script>
+    
+    <link rel="icon" href="../imagenes/itsl2.png">
     
     <script src="../gijgo/1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="../gijgo/1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <script src="../gijgo/1.9.13/js/messages/messages.es-es.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/Alumnos/css/ex.css" type="text/css" />
+    <link rel="stylesheet" href="/ex/css/ex.css" type="text/css" />
+    
+    <script type="text/javascript" src="../direcciones/localidadesAlta.js"></script>
     
     <style type="text/css">
-        body{ font: 14px sans-serif; }
+        body{
+            background-color: slategray;
+        }
 		header {
               background-color: #000000;
-              padding: 3px;
-              text-align: center;
-              font-size: 30px;
-              color: white;
+              
                }
-		.demo-content{
-        background: #ffffff;
-		padding-top: 40px;
-        padding-left: 40px;
-        padding-right: 100px;
+		.diviciones{
+            background: #ffffff;
+            padding: 40px 20px 20px 20px;
+        }
+        .centered{
+            text-align:center;
+        }
+        .logo{
+            width: 50%;
+            height: auto;
+            padding-top: 30px;
         }
         .redes{
             padding-left: 10px;
@@ -344,67 +451,177 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             margin: 20px 0 20px 0;
             height: 150px;
         }
+        /*para pantallas de PC*/
+        @media (max-width: 992px){
+            .logo{
+                width: 50%;
+                height: auto;
+
+            }
+            
+            
+        }
+        /* Para tablets*/
+        @media screen and (max-width: 768px) {
+            .logo{
+                width: 80%;
+                height: auto;
+                padding: 10px 0 10px 0;
+                
+            }
+          .btn{
+                
+                width:auto;
+                height:30px;
+                font-size: 11px;
+                
+            }
+
+        }
+        
+        /*Para dispositivos moviles*/
+        @media screen and (max-width: 400px) {
+            
+            .logo{
+                width: 80%;
+                height: auto;
+                padding: 10px 0 10px 0;
+                
+            }
+            
+            .btn{
+                
+                width:auto;
+                height:30px;
+                font-size: 11px;
+                
+            }
+            
+            
+            
+        }
         
         
-        body {
-    font: 14px/1.3 verdana, arial, helvetica, sans-serif;
-    }
-h1 {
-    font-size:1.3em;
-    margin: 1em 0 1.4em;
-    }
-a:link {
-    color:#33c;
-    }
-a:visited {
-    color:#339;
-    }
-ul {
-    margin:1.4em 0 2em;
-    }
-ul li {
-    margin-bottom:.8em;
-    }
+
     </style>
 </head>
 <body>
     <header>
-        <h2>Academia de Inglés del Instituto Tecnológico Superior de Loreto</h2>
+        
+        
+        
+        <div class="container-fluid">
+
+            <div class="row">
+                
+                
+                <div class="col-lg-8 col-xs-12 col-sm-12 col-md-12">
+                    <img class="logo" src="../imagenes/itslnobreLargo.png" >
+                </div>
+                <div class="col-sm-4" style="text-align:center; padding-top:20px; ">
+                    <img src="../imagenes/TecNMwhite.png" width="150px" height="auto" >
+                </div>
+                
+                
+                
+                
+                <div class="row">
+                    <div class="col-lg-10">
+                    
+                    </div>
+                    <div class="col-lg-2" >
+
+
+                        <div class="btn-group dropdown" role="group">
+
+                            <a href="../home.php" class="btn btn-outline-light" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
+
+                            <div class=" btn-group dropdown" role="group" > 
+
+                                <button class="btn btn-outline-light dropdown-toggle active" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                    Estudiantes
+                                </button>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <a class="dropdown-item active" href="inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                    <a class="dropdown-item" href="reinscripcionVeri.php" "dropdown-item">Reinscripción</a>
+                                    <a class="dropdown-item" href="califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                </div>
+
+                            </div >
+
+                            <div class=" btn-group dropdown " role="group" > 
+
+                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                    Docentes
+                                </button>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                    <a class="dropdown-item" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Docentes</a>
+                                </div>
+
+                            </div >
+
+                            <div class=" btn-group dropdown " role="group" > 
+
+                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                    Administración
+                                </button>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                    <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
+                                </div>
+
+                            </div >
+
+                        </div>    
+                    </div>
+                
+                
+                </div>
+
+
+            </div>
+        </div>
+
+        
+        
     </header>
-    <div class="container-fluid demo-content">
-	    <p><a href="../home.php"><u>Inicio</u></a> > Registrar Alumnos</p>
-        <h2>Registro de Alumnos de Nuevo Ingreso del periodo <?php  echo $periodoactual; ?></h2>
-        <p>Llena esta forma para inscribirte en el curso de Inglés</p>
+    <div class="container diviciones">
+	    
+        <h2 class="centered">Registro de Alumnos de Nuevo Ingreso del periodo <?php  echo $periodoactual; ?></h2>
+        <h3 class="centered">Lengua Extranjera Inglés I</h3>
+        <p style="padding-top:30px">Los campos marcados con * son campos obligatorios.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <hr>
             <p>Datos Personales</p>
             <div class= "row">
 				
-					<div class="form-group <?php echo (!empty($nombre_err)) ? 'has-error' : ''; ?> col-sm-3">
-						<label>Nombre(s)</label>
-						<input type="text" name="nombre" class="form-control" value="<?php echo $nombre; ?>">
+					<div class="form-group <?php echo (!empty($nombre_err)) ? 'has-error' : ''; ?> col-sm-4">
+						<label>Nombre(s)*</label>
+						<input type="text" name="nombre" class="form-control" value="<?php echo $nombre; ?>" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 						<span class="text-danger"><?php echo $nombre_err; ?></span>
 					</div> 
-					<div class="form-group <?php echo (!empty($paterno_err)) ? 'has-error' : ''; ?> col-sm-3">
-						<label>Apellido paterno</label>
+					<div class="form-group <?php echo (!empty($paterno_err)) ? 'has-error' : ''; ?> col-sm-4">
+						<label>Apellido paterno*</label>
 						<input type="text" name="paterno" class="form-control" value="<?php echo $paterno; ?>">
 						<span class="text-danger"><?php echo $paterno_err; ?></span>
 					</div> 
-					<div class="form-group <?php echo (!empty($materno_err)) ? 'has-error' : ''; ?> col-sm-3">
-						<label>Apellido materno</label>
+					<div class="form-group <?php echo (!empty($materno_err)) ? 'has-error' : ''; ?> col-sm-4">
+						<label>Apellido materno*</label>
 						<input type="text" name="materno" class="form-control" value="<?php echo $materno; ?>">
 						<span class="text-danger"><?php echo $materno_err; ?></span>
 					</div> 
                     
-                    <div class="form-group <?php echo (!empty($fnacimiento_err)) ? 'has-error' : ''; ?> col-sm-3">
-                        <label>Fecha de nacimiento (Año-mes-día)</label>
+                    <div class="form-group <?php echo (!empty($fnacimiento_err)) ? 'has-error' : ''; ?> col-sm-4">
+                        <label>Fecha de nacimiento (Año-mes-día)*</label>
                         <input id="datepicker" width="276" name="fnacimiento" class="form-control" value="<?php echo $fnacimiento; ?>"/>
                         <span class="text-danger"><?php echo $fnacimiento_err; ?></span>
                     </div>
                     
                 
-                    <div class="form-group col-md-2">
-						<label>Sexo</label>
+                    <div class="form-group col-md-3">
+						<label>Sexo*</label>
 						<select class="form-control" name= "sexo" >
                             <option value =" "> </option>
 							<option value ="H">Hombre</option>
@@ -413,17 +630,19 @@ ul li {
 						</select> 
                         
 					</div>
-                
-                    <div class="form-group <?php echo (!empty($curp_err)) ? 'has-error' : ''; ?> col-sm-3">
-						<label>CURP</label>
-						<input type="text" name="curp" class="form-control" value="<?php echo $curp; ?>">
-						<span class="text-danger"><?php echo $curp_err; ?></span>
-					</div>
-					<div class="form-group <?php echo (!empty($confirm_curp_err)) ? 'has-error' : ''; ?> col-sm-3">
-						<label>Confirmar CURP</label>
-						<input type="text" name="confirm_curp" class="form-control" value="<?php echo $confirm_curp; ?>">
-						<span class="text-danger"><?php echo $confirm_curp_err; ?></span>
-					</div>
+                    <div class="form-group col-md-6">
+                        <div class="form-group <?php echo (!empty($curp_err)) ? 'has-error' : ''; ?> col-sm-12">
+                            <label>CURP*</label>
+                            <input type="text" name="curp" class="form-control" value="<?php echo $curp; ?>">
+                            <span class="text-danger"><?php echo $curp_err; ?></span>
+                        </div>
+                        <div class="form-group <?php echo (!empty($confirm_curp_err)) ? 'has-error' : ''; ?> col-sm-12">
+                            <label>Confirmar CURP*</label>
+                            <input type="text" name="confirm_curp" class="form-control" value="<?php echo $confirm_curp; ?>">
+                            <span class="text-danger"><?php echo $confirm_curp_err; ?></span>
+                        </div>
+                    </div>
+                    
                     
 				</div>	
             <hr>
@@ -431,20 +650,20 @@ ul li {
                 <div class= "row">
                 
                     <div class="form-group <?php echo (!empty($numeroControl_err)) ? 'has-error' : ''; ?> col-sm-3">
-						<label>Número de control</label>
+						<label>Número de control*</label>
 						<input type="text" name="numeroControl" class="form-control" value="<?php echo $numeroControl; ?>">
 						<span class="text-danger"><?php echo $numeroControl_err; ?></span>
 					</div>   
                     
                     <div class="form-group <?php echo (!empty($confirm_numeroControl_err)) ? 'has-error' : ''; ?> col-sm-3">
-						<label>Confirma Número de Control</label>
+						<label>Confirma Número de Control*</label>
 						<input type="text" name="confirm_numeroControl" class="form-control" value="<?php echo $confirm_numeroControl; ?>">
 						<span class="text-danger"><?php echo $confirm_numeroControl_err; ?></span>
 					</div>  
                 
                 
                     <div class="form-group col-md-3"> 
-                            <label>&nbsp;&nbsp;Carrera   </label>
+                            <label>&nbsp;&nbsp;Carrera*</label>
 
 
                             <select class="form-control" name= "carrera" >
@@ -457,7 +676,7 @@ ul li {
                             </select> 
                     </div>
                     <div class="form-group col-md-3"> 
-                            <label>&nbsp;&nbsp;Modalidad   </label>
+                            <label>&nbsp;&nbsp;Modalidad*</label>
 
 
                             <select class="form-control" name= "modalidad" >
@@ -474,7 +693,7 @@ ul li {
                 
                 
 					<div class="form-group col-md-1">
-						<label>Nivel  </label>
+						<label>Nivel</label>
 						<select class="form-control" name= "nivelActual" >
 							<option value ="1" selected>1</option>
 							
@@ -484,7 +703,7 @@ ul li {
                         
 						
 				    <div class="form-group col-md-1">
-                        <label>&nbsp;&nbsp;Grupo   </label>
+                        <label>&nbsp;&nbsp;Grupo*</label>
 						<select class="form-control" name= "grupo" >
                             <option value =" "> </option>
 							<option value ="A">A</option>
@@ -507,26 +726,26 @@ ul li {
                 
 				
 				    <div class="form-group <?php echo (!empty($direccion_err)) ? 'has-error' : ''; ?> col-sm-4">
-						<label>Domicilio</label>
+						<label>Domicilio*</label>
 						<input type="text" name="direccion" class="form-control" value="<?php echo $direccion; ?>">
 						<span class="text-danger"><?php echo $direccion_err; ?></span>
 					</div>
                 
                 
                   <div class="col-sm-3 form-group">
-                        <label for="validationCustom03">Estado:</label>
+                        <label for="validationCustom03">Estado*:</label>
                           <select class="form-control" name="estado" id="validationCustom03" onchange="ChangeEstList()" required>
-                            <option value="">Elige una opción... </option>
-                            <option value="Zacatecas">Zacatecas</option>
+                            <option value="Elige una opción...">Elige una opción... </option>
                             <option value="Aguascalientes">Aguascalientes</option>
+                            <option value="Zacatecas">Zacatecas</option>
                           </select>
                         <div class="invalid-feedback">
                             Elige un Estado.
                         </div>
                       </div>
                       <div class="col-sm-3 form-group">
-                        <label for="validationCustom04">Municipio:</label>
-                         <select class="form-control" id="validationCustom04" name="municipio" onchange="ChangeMuniList()" required></select>
+                        <label for="validationCustom04">Municipio*:</label>
+                         <select class="form-control" id="validationCustom04" name="municipio" onchange="ChangeMuniList()" required><option value ="">Cargando...</option></select>
                         <div class="invalid-feedback">
                             Elige un Municipio.
                         </div>
@@ -534,47 +753,54 @@ ul li {
                 
                 
                         <div class="col-sm-4 form-group">
-                        <label for="validationCustom05">Localidad:</label>
-                         <select class="form-control" id="validationCustom05" name="localidad" required></select>
+                        <label for="validationCustom05">Localidad*:</label>
+                         <select class="form-control" id="validationCustom05" name="localidad" required><option value ="">Cargando...</option></select>
                         <div class="invalid-feedback">
                             Elige una Locaidad...
                         </div>
                       </div>
+                    
+                    <div class="form-group <?php echo (!empty($postal_err)) ? 'has-error' : ''; ?> col-sm-2">
+						<label>Código Postal*</label>
+						<input type="text" name="postal" class="form-control" value="<?php echo $postal; ?>">
+						<span class="text-danger"><?php echo $postal_err; ?></span>
+					</div>    
                 
 					<div class="form-group <?php echo (!empty($telefono_err)) ? 'has-error' : ''; ?> col-sm-2">
-						<label>Teléfono</label>
+						<label>Teléfono*</label>
 						<input type="text" name="telefono" class="form-control" value="<?php echo $telefono; ?>">
 						<span class="text-danger"><?php echo $telefono_err; ?></span>
 					</div>    
+                    
+                    <div class="form-group <?php echo (!empty($email_err)) ? 'has-error' : ''; ?> col-sm-3">
+						<label>Correo electrónico*</label>
+						<input type="email" name="email" class="form-control" value="<?php echo $email; ?>">
+						<span class="text-danger"><?php echo $email_err; ?></span>
+					</div>   
 				
 				
 			</div> 
             <hr>
+            <p>Seguridad de cuenta</p>
+            
+            <div class="form-group <?php echo (!empty($contrase_err)) ? 'has-error' : ''; ?> col-sm-3">
+						<label>Crea una contraseña*</label>
+						<input type="password" name="contrase" class="form-control" value="<?php echo $contrase; ?>">
+						<span class="text-danger"><?php echo $contrase_err; ?></span>
+					</div>
+					<div class="form-group <?php echo (!empty($confirm_ccontrase_err)) ? 'has-error' : ''; ?> col-sm-3">
+						<label>Confirma contraseña*</label>
+						<input type="password" name="confirm_contrase" class="form-control" value="<?php echo $confirm_contrase; ?>">
+						<span class="text-danger"><?php echo $confirm_contrase_err; ?></span>
+					</div>
+            <hr>
             <div class="form-group col-sm-4">
                         <br>
-						<input type="submit" class="btn btn-primary" value="Guardar">
-						<input type="reset" class="btn btn-danger" value="Limpiar campos">
+						<input type="submit" class="btn btn-primary" value="Guardar cambios">
 					</div>
 
         </form>
     </div>  
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -643,316 +869,7 @@ ul li {
 
 
 </footer>
-    <script type="text/javascript">
-        var estYmuni = {};
-        estYmuni['Zacatecas'] = ['Elige...','Loreto', 'Luis Moya', 'Noria de Ángles', 'Ojocaliente', 'Pinos', 'Villa González Ortega', 'Villa Gracía'];
-        estYmuni['Aguascalientes'] = ['Elige...','Rincón de Romos', 'Cosío', 'Tepezalá', 'Asientos','Pavellón de Arteaga','San francisdo de los Romos','El Llano'];
-        
-
-        function ChangeEstList() {
-            var estList = document.getElementById("validationCustom03");
-            var muniList = document.getElementById("validationCustom04");
-            var selEst = estList.options[estList.selectedIndex].value;
-            //alert("si entro en la función ChangeMunList()".concat(selEst));
-            while (muniList.options.length) {
-                muniList.remove(0);
-            }
-            var ests = estYmuni[selEst];
-            //alert("si entro en la función ChangeMunList()  ".concat(estYmuni[selEst]));
-            if (ests) {
-                var i;
-                for (i = 0; i < ests.length; i++) {
-                    var est = new Option(ests[i], ests[i]);
-                    muniList.options.add(est);
-                }
-            }
-            localStorage.setItem("ests", ests);
-            //alert(ests);
-        } 
-
-    </script>
     
-    
-    <script type="text/javascript">
-        
-        
-        var muniYloca = {};
-        muniYloca['Loreto'] = ['Elige...',
-                          'Bimbaletes',
-                            'Carboneras (Los Lobos)',
-                            'Charco Largo (San Jacinto)',
-                            'Colonia Agrícola Vicente Guerrero',
-                            'Colonia Hidalgo (El Tecolote)',
-                            'Colonia Victoria (El Cuije)',
-                            'Crisóstomos',
-                            'Ejido Hidalgo',
-                            'El Álamo',
-                            'El Bajío (El Rosal)',
-                            'El Becerro',
-                            'El Cajetillo',
-                            'El Carreño (Las Palmas)',
-                            'El Carreño',
-                            'El Chaparral',
-                            'El Crucero [Rancho]',
-                            'El Durazno',
-                            'El Forastero (Raymundo Chavarría O.) [Rancho]',
-                            'El Gordillo',
-                            'El Hinojo',
-                            'El Lobo',
-                            'El Maguey',
-                            'El Mastranto',
-                            'El Matorral',
-                            'El Mezquite',
-                            'El Montoro',
-                            'El Paraíso',
-                            'El Prieto',
-                            'El Puente (La Alamedita)',
-                            'El Ranchito',
-                            'El Refugio',
-                            'El Rincón (José Rodríguez Carrera)',
-                            'El Rincón (Luis Acevedo Sagredo)',
-                            'El Rocío',
-                            'El Salitre (El Bajío)',
-                            'El Socorro',
-                            'El Solitario (El Injerto) [Rancho]',
-                            'El Tecolote (El Dormido)',
-                            'El Tepetate',
-                            'El Verde',
-                            'El Vergel',
-                            'Emilio Carranza (Arenal del Picacho)',
-                            'Ezequiel Martínez',
-                            'Felipe Carrillo Puerto (Carrillo Puerto)',
-                            'Jesús González Montañez',
-                            'Jesús María',
-                            'La Alquería',
-                            'La Amapola',
-                            'La Biznaga',
-                            'La Cascarona',
-                            'La Concepción',
-                            'La Embarcación (El Paraíso)',
-                            'La Florida',
-                            'La Huerta',
-                            'La Lagunita',
-                            'La Loma (El Bajío)',
-                            'La Luz',
-                            'La Mesita (Ojo de Agua de la Mesita)',
-                            'La Presita (El Paraíso)',
-                            'La Providencia (El Milagro)',
-                            'La Puerta de la Mesa (María Santos Cruz R.)',
-                            'La Salita (Guadalupe Moreno)',
-                            'La Soledad (El Borrado)',
-                            'La Soledad',
-                            'La Ternera (Zenón Hernández)',
-                            'La Tinaja',
-                            'La Victoria',
-                            'Larrañaga (Jorge Martínez)',
-                            'Las Agujas (Monte de las Burras)',
-                            'Las Canteritas (Manuel Rodríguez Hernández)',
-                            'Las Estacas',
-                            'Las Floridas (Gómez de Palacio)',
-                            'Las Pintas',
-                            'Las Playas',
-                            'Linares',
-                            'Loc. sin Nombre (Guadalupe Zacarías Aréchiga)',
-                            'Lomas del Paraíso',
-                            'Loreto',
-                            'Los Cedros (Francisco Acevedo)',
-                            'Los Cuates',
-                            'Los Patos (El Dormido)',
-                            'Los Rosarios (El Rosario)',
-                            'Monte Grande',
-                            'Norias de Guadalupe',
-                            'Norias de la Venta',
-                            'Norias de San Miguel',
-                            'Ojo de Agua',
-                            'Pozo San Matías',
-                            'Rancho Dos Arbolitos',
-                            'Rancho el Nogal',
-                            'Rancho Zamora (David López Trinidad)',
-                            'Salvador Salas Velázquez',
-                            'San Blas',
-                            'San Cayetano',
-                            'San Isidro (El Salitrillo)',
-                            'San Isidro (La Soledad)',
-                            'San Isidro',
-                            'San José de la Lechuguilla (El Calvario)',
-                            'San José',
-                            'San Marcos',
-                            'San Matías',
-                            'San Pedro',
-                            'San Ramón',
-                            'Santa Ana (Motor Amarillo)',
-                            'Santa Cruz de las Palomas (Jesús Salas Elías)',
-                            'Santa Elena',
-                            'Santa María de los Ángeles',
-                            'Santa Teresa (David López Trinidad) [Rancho]',
-                            'Tanque de la Joya',
-                            'Tanque de la Venada',
-                            'Tierra Blanca',
-                            'Unidad de Riego el Pajonal',
-                            'Valle de San Francisco'];
-        
-        muniYloca['Luis Moya'] = ['Elige...',
-                            'Acuña [Granja]',
-                            'Barranquillas (Barranquilla)',
-                            'Coecillo',
-                            'Colonia Hidalgo',
-                            'Colonia Julián Adame (Charco de la Gallina)',
-                            'Colonia Lázaro Cárdenas',
-                            'Colonia Ricardo Flores Magón (Anexo de Casas Coloradas)',
-                            'Colonia Veinte de Noviembre',
-                            'Domecq (Invido) [Industrias Vinícolas]',
-                            'El Alazán (Roberto Franco)',
-                            'El Cenizo',
-                            'El Coecillo [Viñedos]',
-                            'El Duraznillo',
-                            'El Fresno',
-                            'El Gran Chaparral',
-                            'El Lagunero',
-                            'El Llano',
-                            'El Mezquital',
-                            'El Mezquite Largo [Rancho]',
-                            'El Milagro [Viñedos]',
-                            'El Retiro [Rancho]',
-                            'Enfriadora de Leche',
-                            'Esteban S. Castorena (Casas Coloradas)',
-                            'Flor del Valle [Rancho]',
-                            'Gemelo',
-                            'Kalúa [Balneario y Restaurante]',
-                            'La Esperanza',
-                            'La Loma',
-                            'La Loma',
-                            'La Loma [Rancho]',
-                            'La Loma Dos',
-                            'La Manga (Las Mangas)',
-                            'La Mojina [Rancho]',
-                            'La Palmita',
-                            'La Pila',
-                            'La Primavera',
-                            'La Purísima',
-                            'La Raya',
-                            'La Soledad [Rancho]',
-                            'Las Carmelitas (Jesús Betancourt) [Granja]',
-                            'Las Liebres [Rancho]',
-                            'Las Palomas',
-                            'Las Palomas (Jorge Ortiz Luévano)',
-                            'Leyva [Granja]',
-                            'Los Alacranes',
-                            'Los Badillo [Rancho]',
-                            'Los Conejos (Arturo Adame)',
-                            'Los Conejos (Jorge Adame)',
-                            'Los Griegos (Griegos)',
-                            'Los Pocitos',
-                            'Los Sauces (Miguel Cardona)',
-                            'Luis Moya',
-                            'Maluz [Granja]',
-                            'María Guadalupe Ramírez Diosdado',
-                            'Milpa Alta [Rancho]',
-                            'Nicasio Cardona Luévano',
-                            'Ninguno',
-                            'Noria de Molinos',
-                            'Nuestra Señora de la Soledad [Viñedos]',
-                            'Paty [Viñedos]',
-                            'Pozo San Dimas (José García)',
-                            'Rancho Casillas',
-                            'Rancho del Padre',
-                            'Rancho Dolores',
-                            'Rancho Flores',
-                            'Rancho Marcelita',
-                            'Rancho Matanuzka (Alberto Guerrero)',
-                            'San Ángel',
-                            'San Antonio [Rancho]',
-                            'San Diego',
-                            'San Felipe [Rancho]',
-                            'San Isidro',
-                            'San Jorge',
-                            'San José (El Huarache) [Rancho]',
-                            'San José de Buenavista [Viñedo]',
-                            'San Miguel (Salvador Alba Gómez)',
-                            'San Rafael',
-                            'Santa Fe',
-                            'Santa María [Rancho]',
-                            'Santa Rita [Rancho]',
-                            'Sociedad Reyes (Pozo Diez)',
-                            'Teresita [Viñedos]'];
-        
-        muniYloca['Noria de Ángles'] = ['Elige...', 
-                            'Ampliación la Honda',
-                            'Antártida Chilena',
-                            'Bella Vista',
-                            'Colonia Alvarado (El Gallinero)',
-                            'Colonia Benito Juárez (Coyotes)',
-                            'Colonia Francisco I. Madero',
-                            'Colonia Independencia (La Soledad)',
-                            'Colonia Lázaro Cárdenas',
-                            'Colonia Madero (Madero)',
-                            'Colonia Pozo Colorado',
-                            'Colonia San Francisco (San Francisco)',
-                            'De Guadalupe [Granjas]',
-                            'El Blanquito',
-                            'El Chaparral',
-                            'El Lucero (San Carlos)',
-                            'El Matorral',
-                            'El Palmarito',
-                            'El Salado',
-                            'El Salvador',
-                            'El Samaritano (Pozo Número Nueve)',
-                            'El Socorro [Granja]',
-                            'El Tepozán',
-                            'Genaro [Estación]',
-                            'General Guadalupe Victoria (Estación la Honda)',
-                            'General Lauro G. Caloca (El Rascón)',
-                            'Ignacio Zaragoza (San Diego)',
-                            'La Curva [Rancho]',
-                            'La Grulla',
-                            'La Larga',
-                            'La Puerta de la Venta',
-                            'La Trinidad',
-                            'Las Hondillas',
-                            'Las Huertas',
-                            'Loma Bonita',
-                            'Loma de San Antonio',
-                            'Los Cortés',
-                            'Los Reyes [Rancho]',
-                            'Maravillas',
-                            'Noria de Ángeles',
-                            'Norias de San Juan (San Juan)',
-                            'Playas del Refugio (Huertas de Maravillas)',
-                            'Pozo el Huizache (Rubén Serna)',
-                            'Puerta de Puebla',
-                            'Puerto de Juan Alberto',
-                            'Rancho Dávila',
-                            'Rancho Nuevo de Morelos (De Guadalupe)',
-                            'Rancho Nuevo de Morelos (El Sagrado Corazón)',
-                            'Real de Ángeles',
-                            'San Agustín de las Cuevas',
-                            'San Antonio de la Mula',
-                            'San Juan',
-                            'Santa Rosa'];
-
-
-
-        function ChangeMuniList() {
-            
-            var munList = document.getElementById("validationCustom04");
-            var locList = document.getElementById("validationCustom05");
-            var selMun= munList.options[munList.selectedIndex].value;
-            //alert("si entro en la función ChangeMunList()".concat(selMun));
-            while (locList.options.length) {
-                locList.remove(0);
-            }
-            var locs = muniYloca[selMun];
-            if (locs) {
-                var j;
-                for (j = 0; j < locs.length; j++) {
-                    var loc = new Option(locs[j], locs[j]);
-                    locList.options.add(loc);
-                }
-            }
-            //alert("si entro en la función ChangeMunList()".concat(locs));
-        } 
-
-    </script>
     
     <script>
         $('#datepicker').datepicker({

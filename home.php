@@ -2,110 +2,122 @@
 
 // Initialize the session
 session_start();
- 
+
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: Require/logout.php");
+    
+    // Unset all of the session variables
+    $_SESSION = array();
+
+    // Destroy the session.
+    session_destroy();
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ITSL - Academia de Inglés</title>
     
-    <link rel="stylesheet" href="bootstrap/4.5.2/css/bootstrap.css">
-    <link rel="stylesheet" href="bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    
+    <link rel="stylesheet" href="bootstrap/4.5.3/dist/css/bootstrap.min.css" 
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
+          crossorigin="anonymous">
+    
+    <script src="jquery/3.5.1/jquery-3.5.1.slim.min.js" 
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+            crossorigin="anonymous"></script>
+    
+    <script src="bootstrap/4.5.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" 
+            crossorigin="anonymous"></script>
+    
     <script src="ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="bootstrap/4.5.2/js/bootstrap.min.js"></script>
+   
+    
     <link rel="icon" href="imagenes/itsl2.png">
+    
+    
     <style type="text/css">
+        
+        html {
+                /*If you had a black or close to black background*/
+                background-color: #000000;
+            }
+        
         body{
             display: none;
             background-image: linear-gradient(to bottom, #0a6d7a 580px, white  30%);
-            background-size: cover;
-            background-repeat: no-repeat;
-            font-size: 16px;
+
             }
+        
         header{
             background-color: #000000;
                }
-
+        
         footer{
             background: #000000;
               }
-
-        .baner{
-        background: #15859A;
-        color: white;
-
-
-              }
-
-        .foto{
-             background: #15859A;
-
-             }
         
-        
-        
+        .logo{
+            width: 50%;
+            height: auto;
+            padding-top: 30px;
+        }
+
         .lista{
-            padding-left: 10px;
             color: white;
-            font-size: 13px;
+            font-size: 15px;
             text-align: left;
+            font-weight: 600;
               }
-        .contenedor{
-            position: relative;
-            width: 85%;
-              }
+
         .mainfoto{
             border-top-left-radius: 8px;
             border-bottom-left-radius: 8px;
             width: 100%;
             height: auto;
                  }
-        .subtitulo{
-            position: relative;
-            left:15px;
-            bottom: 49px;
-            padding: 13px 20px 13px 20px;
-            width: 96%;
-            color: white;
-            background: black;
-            opacity: .75;
-            border-radius: 8px;
-                 }
+        
+        .remove-padding{
+            padding:  0;
+            margin:  0;
+        }
+        
         .redes{
             padding-left: 10px;
             color: white;
             font-size: 13px;
             line-height: 2;
                  }
+        
         .tituloRedes{
             color: lightgray;
             padding-left: 10px;
             font-size: 16px;
         }
+        
         .acerca{
             color: white;
             font-size: 13px;
             padding-left: 10px;
             line-height: 1.7;
                }
+        
         .pie-letras{
             color: white;
             font-size: 13px;
             line-height: 1.7;
             padding-bottom: 20px;
          }
+        
         .iconos{
             width: 18px;
             height: auto;
             padding-bottom: 3px;
         }
+        
         .bordes{
             border-right-style:dotted;
             border-right-color:lightgray;
@@ -113,33 +125,16 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
             margin: 20px 0 20px 0;
             height: 150px;
         }
-        .remove-padding{
-            padding:  0;
-            margin:  0;
-        }
         
-        .logo{
-            width: 40%;
-            height: auto;
-            
-        }
-        
-        #inf{
-            color:white; 
-            font-size: 2vw;  
-            font-family:Verdana; 
-            text-align:center; 
-            transform: scale(.9, 1);
-        }
-        
-        
-        /*para pantallas de PC*/
-        @media (max-width: 992px){
-            .logo{
-                width: 50%;
-                height: auto;
 
-            }
+        
+        
+
+        
+
+/*===================================================================================================*/
+                /* Extra small devices (phones, 600px and down) col-xs white */
+        @media only screen and (max-width: 600px) {
             .subtitulo{
                 position: relative;
                 left:15px;
@@ -152,93 +147,163 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                 border-radius: 8px;
             }
             .lista{
-                margin-left: 30px;
+                font-size: 12px;
+                padding:0 0 0 40px;
             }
             #inf{
                 color:white; 
-                font-size: 1.8vw;  
-                font-family:Verdana; 
+                font-size: 17px;
                 text-align:center; 
-                transform: scale(.9, 1);
+                padding: 20px 8px;
             }
-            
             
         }
-        /* Para tablets*/
-        @media screen and (max-width: 768px) {
-            .logo{
-                width: 80%;
-                height: auto;
-                padding: 10px 0 10px 0;
+
+        /* Small devices (portrait tablets and large phones, 600px and up) col-sm yellow */
+        @media only screen and (min-width: 600px) {
+            
+            
+            body{
+
+                background-image: linear-gradient(to bottom, #0a6d7a 860px, white  20%);
                 
             }
-          .btn{
-                
-                width:auto;
-                height:30px;
-                font-size: 11px;
-                
-            }
+            
             .subtitulo{
                 position: relative;
                 left:15px;
-                bottom: 135px;
+                bottom: 34px;
                 padding: 5px 0px 5px 20px;
                 width: 96%;
                 color: white;
                 background: black;
-                opacity: 0.75;
+                opacity: .75;
                 border-radius: 8px;
+            }
+            .lista{
+                font-size: 12px;
+                padding: 0 0 0 40px;
             }
             #inf{
                 color:white; 
-                font-size: 2vw;  
-                font-family:Verdana; 
+                font-size: 17px;
                 text-align:center; 
-                transform: scale(.9, 1);
+                padding: 20px 8px;
             }
-        }
-        
-        /*Para dispositivos moviles*/
-        @media screen and (max-width: 400px) {
-            
-            .logo{
-                width: 80%;
-                height: auto;
-                padding: 10px 0 10px 0;
-                
-            }
-            
-            .btn{
-                
-                width:auto;
-                height:30px;
-                font-size: 11px;
-                
-            }
-            .subtitulo{
-                position: relative;
-                left:15px;
-                bottom: 250px;
-                padding: 5px 0px 5px 20px;
-                width: 96%;
-                color: white;
-                background: black;
-                opacity: 0.75;
-                border-radius: 8px;
-            }
-            #inf{
-                color:white; 
-                font-size: 6vw;  
-                font-family:Verdana; 
-                text-align:center; 
-                transform: scale(.9, 1);
-            }
-            
             
             
         }
 
+        /* Medium devices (landscape tablets, big phones, NOTE 4, 768px and up) col-md pink */
+        @media only screen and (min-width: 768px) {
+            
+            body{
+
+                background-image: linear-gradient(to bottom, #0a6d7a 560px, white  20%);
+                
+            }
+
+            .subtitulo{
+                position: relative;
+                left:15px;
+                bottom: 34px;
+                padding: 5px 0px 5px 20px;
+                width: 96%;
+                color: white;
+                background: black;
+                opacity: .75;
+                border-radius: 8px;
+            }
+            .lista{
+                font-size: 12px;
+                padding: 0 0 0 0;
+            }
+            #inf{
+                color:white; 
+                font-size: 17px;
+                text-align:center; 
+                padding: 20px 8px;
+            }
+            
+            
+        }
+
+        /* Large devices (laptops/desktops, 992px and up)  col-lg purple */
+        @media only screen and (min-width: 992px) {
+            
+            body{
+
+                background-image: linear-gradient(to bottom, #0a6d7a 630px, white  20%);
+                
+            }
+
+            
+            .subtitulo{
+                position: relative;
+                left:15px;
+                bottom: 34px;
+                padding: 5px 0px 5px 20px;
+                width: 96%;
+                color: white;
+                background: black;
+                opacity: .75;
+                border-radius: 8px;
+            }
+            .lista{
+                font-size: 12px;
+            }
+            #inf{
+                color:white; 
+                font-size: 23px;
+                text-align:center; 
+                padding: 30px 10px;
+            }
+            
+            
+        }
+
+        /* Extra large devices, my laptop, (large laptops and desktops, 1200px and up) col-xl red */
+        @media only screen and (min-width: 1200px) {
+            
+            body{
+
+                background-image: linear-gradient(to bottom, #0a6d7a 700px, white  20%);
+                
+            }
+
+            
+
+            .subtitulo{
+                position: relative;
+                left:15px;
+                bottom: 34px;
+                padding: 5px 0px 5px 20px;
+                width: 96%;
+                color: white;
+                background: black;
+                opacity: .75;
+                border-radius: 8px;
+            }
+            
+            .lista{
+                font-size: 15px;
+            }
+            
+            #inf{
+                color:white; 
+                font-size: 28px;
+                text-align:center; 
+                padding: 30px 10px;
+            }
+            
+        }
+            
+        /* Extra large devices, my monitor (large laptops and desktops, 1200px and up) col-xl green */
+        @media only screen and (min-width: 1600px) {
+            
+           
+            
+        }
             
         
         
@@ -246,117 +311,178 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
 
     </style>
-    <script type="text/javascript">
-        $(document).ready(function() {
-                $("body").css("display", "none");
-                $("body").fadeIn(1000);
-        });
-    </script>
-</head>
+    
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+                    $("body").css("display", "none");
+                    $("body").fadeIn(1000);
+            });
+
+        </script>
+    
+    </head>
 
 
-<body>
+    <body>
 
-    <header>
-        
-        <div class="container-fluid">
+        <header>
 
-            <div class="row">
-                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
+            <div class="container-fluid">
 
-
-                    <img class="logo" src="imagenes/itslnobreLargo.png" >
-
-
-
-                </div>
-                
                 <div class="row">
-                    <div class="col-lg-10">
-                    
+
+                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-8">
+                        <img class="logo" src="imagenes/itslnobreLargo.png" >
                     </div>
-                    <div class="col-lg-2" >
-
-
-                        <div class="btn-group dropdown" role="group">
-
-                            <a href="home.php" class="btn btn-outline-light active" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Estudiantes
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item" href="Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
-                                    <a class="dropdown-item" href="Alumnos/reinscripcionVeri.php" "dropdown-item">Reinscripción</a>
-                                    <a class="dropdown-item" href="Alumnos/alumnos.php" "dropdown-item">Consulta calificaciones</a>
-                                </div>
-
-                            </div >
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Docentes
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <a class="dropdown-item" href="Docentes/IniciarSesionDo.php" "dropdown-item">Docentes</a>
-                                </div>
-
-                            </div >
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Administración
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
-                                    <a class="dropdown-item" href="Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
-                                </div>
-
-                            </div >
-
-                        </div>    
+                    <div class="col-sm-4 col-md-3" style="text-align:center; padding-top:20px; ">
+                        <img src="imagenes/TecNMwhite.png" width="150px" height="auto" >
                     </div>
-                
-                
+
                 </div>
+                
+                
+                
+                
+                
 
-                    
+                    <div class="row justify-content-md-center">
+
+                        <div class="col-md-12 d-none d-sm-block" style="text-align:center; background:red">
 
 
+                            <div class="btn-group dropdown" role="group">
+
+                                <a href="home.php" class="btn btn-outline-light active" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Estudiantes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <a class="dropdown-item" href="Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                        <a class="dropdown-item" href="Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
+                                        <a class="dropdown-item" href="Alumnos/califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Docentes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                        <a class="dropdown-item" href="Docentes/IniciarSesionDo.php" "dropdown-item">Acceso Docentes</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Administración
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                        <a class="dropdown-item" href="Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
+                                    </div>
+
+                                </div >
+
+                            </div>    
+                        </div>
 
 
+                    </div>
+                
+                
+                
+                
+                
+                
+                <div class="row justify-content-md-center collapse" id="navbarToggleExternalContent" >
+
+                        <div class="col-xs-12 col-sm-12 d-block d-sm-none" style="text-align:center;" >
+
+
+                            <div class="btn-group-vertical btn-block dropdown" role="group">
+
+                                <a href="home.php" class="btn btn-outline-light btn-block active" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Estudiantes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <a class="dropdown-item" href="Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                        <a class="dropdown-item" href="Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
+                                        <a class="dropdown-item" href="Alumnos/califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light btn-block dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Docentes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                        <a class="dropdown-item" href="Docentes/IniciarSesionDo.php" "dropdown-item">Acceso Docentes</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Administración
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                        <a class="dropdown-item" href="Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
+                                    </div>
+
+                                </div >
+
+                            </div>   
+                            
+                        </div>
+
+
+                    </div>
+                  
 
 
 
 
             </div>
-        </div>
+            
+            <nav class="navbar navbar-expnad-lg navbar-light bg-light d-block d-sm-none">
+                <button class="navbar-toggler d-block d-sm-none" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
 
-    </header>
-
-
-    <div class="container-fluid">
-        <div class="row" style="padding-bottom: 10px; padding-top: 20px; background:#0a6d7a">
-            <div class="col-sm-4" style="text-align:center; padding-bottom:20px; ">
-                <img src="imagenes/TecNMwhite.png" width="200px" height="auto" >
-
-            </div>
-
-            <div class="col-sm-2" >
+        </header>
 
 
-            </div>
+    <div class="container" style="padding: 20px 0 20px 0; background:#0a6d7a; overflow: hidden">
+           <div class="row justify-content-between">
+                <div class="col-sm-12 col-md-4 col-lg-3" style="text-align:center; padding: 20px 0; background:red;">
+                    <img src="imagenes/TecNMwhite.png" width="200px" height="auto" >
 
-            <!-- inicio de las listas -->
-
-            <div class="col-sm-3">
-                <div class="lista">
+                </div>
+               
+               <div class="col-sm-12 col-md-6 col-lg-5" style="padding:20px 0">
+                   <div class="row">
+                    <div class="col-8 col-xs-9 col-sm-5 col-md-6 col-lg-6 lista" style="background:red">
                         <p  style="line-height: 2;">
                             > &nbsp; Superación personal<br>
                             > &nbsp; Mejores oportunidades<br>
@@ -364,21 +490,26 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                             > &nbsp; Bolsa de trabajo<br>
                             > &nbsp; Al alcance de tu mano
                         </p>
-                </div>
-
-            </div>
-             <div class="col-sm-3" >
-                <div class="lista">
+                    
+                    </div>
+                    <div class="col-8 col-xs-9 col-sm-5 col-md-6 col-lg-6 lista" style="background:red">
                         <p  style="line-height: 2;">
-                            > &nbsp; Clases dinamicas<br>
-                            > &nbsp; Desarrollo artistico<br>
-                            > &nbsp; Evaluación TOEFL<br>
-                            > &nbsp; Viajes educativos<br>
-                            > &nbsp; Becas
+                            > &nbsp; Superación personal<br>
+                            > &nbsp; Mejores oportunidades<br>
+                            > &nbsp; Profesionales de calidad<br>
+                            > &nbsp; Bolsa de trabajo<br>
+                            > &nbsp; Al alcance de tu mano
                         </p>
-                </div>
+            
+                    </div>
+               </div>
+               
+               
+               </div>
+            
+                 
             </div>
-        </div>
+
     </div>
 
 
@@ -392,7 +523,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                     </div>
                     <div class="col-sm-12 col-md-4" style=" background-color:#15859A; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
                         <div >
-                            <p id="inf"><br>"English is a universal language used in many countries, including México. ITSL English Academy is offering classes as part of your curriculum"<br></p>
+                            <p id="inf">"English is a universal language used in many countries, including México. ITSL English Academy is offering classes as part of your curriculum"</p>
                         </div>
                     </div>
                 </div>
@@ -416,7 +547,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
      <div class="container-fluid">
          <div class="row" style="background:#0a6d7a; ">
-            <div class="col-md-3 bordes" >
+            <div class="col-md-3 bordes d-none  d-md-block" >
                 
             </div>
             <div class="col-md-6 bordes" >
@@ -457,26 +588,38 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
 
 
-<footer>
-        <div class="container-fluid">
-         <div class="row" style="background: black; color:white; text-align:center; ">
-            <div class="col-md-3 bordes ">
-                <p><img src="imagenes/itslnobreLargo.png" style="width:60%; height:auto; padding-top:20px; "></p>
-                <p class="pie-letras">© 2020 ITSL - English Academy</p>
+        <footer>
+
+            <div class="container-fluid">
+
+                <div class="row" style="background: black; color:white; text-align:center; ">
+
+                    <div class="col-md-3 bordes">
+
+                        <p><img src="imagenes/itslnobreLargo.png" style="width:60%; height:auto; padding-top:20px; "></p>
+
+                        <p class="pie-letras">© 2020 ITSL - English Academy</p>
+
+                    </div>
+
+                    <div class="col-md-6 bordes d-none  d-md-block">
+
+                    </div>
+
+                    <div class="col-md-3 d-none  d-md-block">
+
+                        <p></p>
+
+                    </div>
+
+                </div>
+
+
             </div>
-            <div class="col-md-6 bordes">
-                
-            </div>
-            <div class="col-md-3 ">
-                <p></p>
-            </div>
-        </div>
 
 
-    </div>
+        </footer>
 
-
-</footer>
-
-</body>
+    </body>
+    
 </html>

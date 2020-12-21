@@ -1,15 +1,22 @@
 <?php
- 
+
+session_start();
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: ../Alumnos/logoutAl.php");
+
+    // Unset all of the session variables
+    $_SESSION = array();
+    
+    // Destroy the session.
+    session_destroy();
+    
 }
 // Include config file
 require_once "../Require/config.php";
  
 // Define variables and initialize with empty values
-$numeroControl = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $telefono =$nivelActual = $idmaestroActual = $estado = $modalidad = "";
-$numeroControl_err = $curp_err = "";
+$numeroControl = $contrase = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $telefono =$nivelActual = $idmaestroActual = $estado = $modalidad = "";
+$numeroControl_err = $curp_err = $contrase_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -21,17 +28,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $numeroControl = trim($_POST["numeroControl"]);
     }
     
-    // Check if curp is empty
-    if(empty(trim($_POST["curp"]))){
-        $curp_err = "* El campo CURP está vacío.";
+    // Check if contrase is empty
+    if(empty(trim($_POST["contrase"]))){
+        $contrase_err = "* ¡Olvidaste introducir tu contraseña!.";
     } else{
-        $curp = trim($_POST["curp"]);
+        $contrase = trim($_POST["contrase"]);
     }
     
     // Validate credentials
     if(empty($numeroControl_err) && empty($curp_err)){
         // Prepare a select statement
-        $sql = "SELECT id, numeroControl, curp FROM alumnos WHERE numeroControl = ? ";
+        $sql = "SELECT id, numeroControl, curp, nivelActual, contrase,nombre, paterno, materno FROM alumnos WHERE numeroControl = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -45,20 +52,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Store result
                 mysqli_stmt_store_result($stmt);
                 
-                // Check if username exists, if yes then verify curp
+                // Check if username exists, if yes then verify contraseña
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp2 );
+                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp, $nivelActual, $hashed_contrase, $nombre, $paterno, $materno);
+                    
                     if(mysqli_stmt_fetch($stmt)){
-                        if($curp == $curp2){
-                            // curp is correct, so start a new session
+                        
+                        if(password_verify($contrase, $hashed_contrase)){
+                           
+                            
+                            //  echo $hashed_contrase;
                             session_start();
-                            echo "se inicio sesion";
+                            
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;   
                             $_SESSION["numeroControl"] = $numeroControl;
                             $_SESSION["curp"] = $curp;
+							$_SESSION["nivelActual"] = $nivelActual;
+                            $_SESSION["nombre"] = $nombre;
+                            $_SESSION["paterno"] = $paterno;
+                            $_SESSION["materno"] = $materno;
                            
                             
                             header("location: reinscripcionAlumn.php");
@@ -66,7 +81,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             
                         } else{
                             // Display an error message if password is not valid
-                            $curp_err = "El número de CURP que ingresaste no es valido.";
+                            $contrase_err = "Contraseña no valida.<br>";
                         }
                     }
                 } else{
@@ -91,86 +106,40 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html lang="en">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITSL - Academia de Inglés</title>
+    <title>Reinscripción ingresar</title>
     
-    <link rel="stylesheet" href="../bootstrap/3.3.7/css/bootstrap.css">
     
+    
+    <link rel="stylesheet" href="../bootstrap/4.5.3/dist/css/bootstrap.min.css" 
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
+          crossorigin="anonymous">
+    
+    <script src="../jquery/3.5.1/jquery-3.5.1.slim.min.js" 
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+            crossorigin="anonymous"></script>
+    
+    <script src="../bootstrap/4.5.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" 
+            crossorigin="anonymous"></script>
     
     <link rel="icon" href="../imagenes/itsl2.png">
+    
+    
+    
     <style type="text/css">
+       
         body{
-            background-image: linear-gradient(to bottom, #0a6d7a 580px, white  30%);
-            background-size: cover;
-            background-repeat: no-repeat;
-            font-size: 16px;
+            background-color: #5499C7;
+            
             }
+        .logo{
+            width: 50%;
+            height: auto;
+            padding-top: 30px;
+        }
         header{
             background-color: #000000;
                }
-
-        footer{
-            background: #000000;
-              }
-
-        .baner{
-        background: #15859A;
-        color: white;
-
-
-              }
-
-        .foto{
-             background: #15859A;
-
-             }
-        a:link{
-            color: white;
-            padding: 16px;
-            padding-top: 20px;
-              }
-        a:visited{
-            color: white;
-
-              }
-        a:hover {
-            color: lightgray;
-            text-decoration: none;
-              }
-        .menu{
-            padding: 15px 0 0 0;
-            text-align: center;
-             }
-        .menuImagen{
-            text-align: center;
-            padding: 3px;
-        }
-        .lista{
-            padding-left: 10px;
-            color: white;
-            font-size: 13px;
-            text-align: left;
-              }
-        .contenedor{
-            position: relative;
-            width: 85%;
-              }
-        .mainfoto{
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 8px;
-            width: 100%;
-            height: auto;
-                 }
-        .subtitulo{
-            position: relative;
-            left:15px;
-            bottom: 48px;
-            padding: 13px 20px 13px 20px;
-            width: 96%;
-            color: white;
-            background: black;
-            opacity: .75;
-            border-radius: 8px;
-                 }
         .redes{
             padding-left: 10px;
             color: white;
@@ -205,20 +174,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             border-right-width: 1px;
             margin: 20px 0 20px 0;
             height: 150px;
-        }
-        .remove-padding{
-            padding:  0;
-            margin:  0;
-        }
+        
         @media (max-width: 980px){
-            .subtitulo{
-                opacity: 1;
-                bottom: 3px;
-                left:10px;
-            }
-            .lista{
-                margin-left: 30px;
-            }
+         
         }
 
 
@@ -232,106 +190,139 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     <header>
         
-            
-        
-        
+<div class="container-fluid">
 
-         <div class="container-fluid" >
-             <div class="row">
-		          <div class="col-sm-4 menuImagen" >
-                        <img src="../imagenes/itslnobreLargo.png" width="70%" height="auto">
-                  </div>
-                  <div class="col-sm-4" >
-                          <div class="row">
-                             <div class="col-sm-4" >
+            <div class="row">
+                
+                
+                <div class="col-lg-8 col-xs-12 col-sm-12 col-md-12">
+                    <img class="logo" src="../imagenes/itslnobreLargo.png" >
+                </div>
+                <div class="col-sm-4" style="text-align:center; padding-top:20px; ">
+                    <img src="../imagenes/TecNMwhite.png" width="150px" height="auto" >
+                </div>
+                
+                
+                
+                
+                <div class="row">
+                    <div class="col-lg-10">
+                    
+                    </div>
+                    <div class="col-lg-2" >
 
-                                    <p class="menu">
-                                      <a href="../home.php" >Inicio</a>
-                                      </p>
 
-                              </div>
-                              <div class="col-sm-4">
+                        <div class="btn-group dropdown" role="group">
 
-                                    <p class="menu">
-                                      
-                                     </p>
+                            <a href="../home.php" class="btn btn-outline-light" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
 
-                              </div>
-                              <div class="col-sm-4">
+                            <div class=" btn-group dropdown" role="group" > 
 
-                                    <p class="menu">
-                                        
-                                     </p>
+                                <button class="btn btn-outline-light dropdown-toggle active" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                    Estudiantes
+                                </button>
 
-                              </div>
-                            </div>
-                  </div>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <a class="dropdown-item" href="inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                    <a class="dropdown-item active" href="reinscripcionVeri.php" "dropdown-item">Reinscripción</a>
+                                    <a class="dropdown-item" href="califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                </div>
 
-                 <div class="col-sm-4" >
+                            </div >
 
-                     <!-- Columna vacia -->
+                            <div class=" btn-group dropdown " role="group" > 
 
-                 </div>
+                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                    Docentes
+                                </button>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                    <a class="dropdown-item" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Docentes</a>
+                                </div>
+
+                            </div >
+
+                            <div class=" btn-group dropdown " role="group" > 
+
+                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                    Administración
+                                </button>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                    <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
+                                </div>
+
+                            </div >
+
+                        </div>    
+                    </div>
+                
+                
+                </div>
+
+
             </div>
         </div>
+
 
     </header>
 
 
-<div class="container-fluid">
-        <div class="row" style="padding-bottom: 10px; padding-top: 20px; background:#0a6d7a">
-            <div class="col-sm-4" style="text-align:center; padding-bottom:20px; ">
-                <img src="../imagenes/TecNMwhite.png" width="200px" height="auto" >
 
-            </div>
-
-            
-
-            <div class="col-sm-6">
-                <div class="lista">
-                        <p  style="line-height: 2; font-size: 30px;">
-                            <br>Reinscripción, ingresa tus datos.
-                            
-                        </p>
-                </div>
-
-            </div>
-             
-        </div>
-</div>
 
     <div class="container-fluid">
-        <div class="row" style="padding-bottom: 10px; padding-top: 20px; background:white">
-            <div class="col-sm-4" style="text-align:center; padding-bottom:20px; "></div>
+        <div class="row ">
+            <div class="col-sm-4" style="text-align:center; padding:50px 0 0 0; ">
+                <img src="../imagenes/studentF.png" width="290px" height="auto" >
+
+            </div>
             
-            <div class="col-sm-4" style="text-align:center; padding-bottom:20px; ">
+            <div class="col-sm-4" style="padding: 50px 0 100px 0; font-size: 14px;">
+                <div class="p-4 mb-2 bg-light text-dark">
                 
-                    <div>
-                        
+                    <p style="font-size:24px;">Acceso Alumnos Reinscripción</p>
+                    <p>Por favor ingresa tus credenciales para inicar sesión.</p>
+                    
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                            
+                            
                             <div class="form-group <?php echo (!empty($numeroControl_err)) ? 'has-error' : ''; ?>">
-                                <p>Ver estado de alumno para reinscripción</p>
+                                
+                                
                                 <label><br>Número de Control</label>
                                 <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" name="numeroControl" class="form-control" value="<?php echo $numeroControl; ?>" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                                 <span class="help-block"><?php echo $numeroControl_err; ?></span>
-                            </div>    
-                            <div class="form-group <?php echo (!empty($curp_err)) ? 'has-error' : ''; ?>">
-                                <label>CURP</label>
-                                <input type="text" name="curp" onkeydown="upperCaseF(this)" maxlength="18" class="form-control" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
-                                <span class="help-block"><?php echo $curp_err; ?></span>
-                            </div>
+                            </div>   
+                            
+                            <div class="form-group <?php echo (!empty($contrase_err)) ? 'has-error' : ''; ?>">
+                            <label>Contraseña</label>
+                            <input type="password" name="contrase" class="form-control">
+                            <span class="text-danger"><?php echo $contrase_err; ?></span>
+                            <a href="recupeContra.php">¿Olvidaste tu contraseña?</a>
+                        </div>
+                            
                             <div class="form-group">
-                                <input type="submit" class="btn btn-primary" value="Enviar">
+                                <input type="submit" class="btn btn-primary btn-block" value="Enviar">
                             </div>
                             
-                        </form>
-                    </div>
+                    </form>
+                    
+                    
+                </div>
                 
             </div>
-            <div class="col-sm-4" style="text-align:center; padding-bottom:20px; "></div>
+            <div class="col-sm-4" style="text-align:center; padding:35px 0 0 0; ">
+                <img src="../imagenes/studentM.png" width="300px" height="auto" >
+
+            </div>
             
         </div>
+        
     </div>
+    
+    
+    
+    
 
      <div class="container-fluid">
          <div class="row" style="background:#0a6d7a; ">

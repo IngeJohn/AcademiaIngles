@@ -2,7 +2,7 @@
 /*Databse credentials. Assuming you are running MySQL
 server with default settings (user 'root' with no password)*/
 define('DB_SERVER', 'localhost');
-define('DB_USERNAME', 'root');
+define('DB_USERNAME', 'academia_ingles');
 define('DB_PASSWORD', 'a98450153_-');
 define('BD_NAME', 'academia_ingles');
 

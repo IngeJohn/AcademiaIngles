@@ -41,6 +41,8 @@ while($row = mysqli_fetch_array($result))
 }
 
 
+
+
 $query2 = "SELECT  periodo FROM periodoactual WHERE  idperiodoactual ='1'";
 
 $result2 = mysqli_query($link, $query2);
@@ -56,7 +58,6 @@ $dataRow2 = "";
 $row2 = mysqli_fetch_array($result2);
 
 $dataRow2 = $row2["periodo"];
-
 
 
 
@@ -145,6 +146,10 @@ if(isset($_REQUEST['action']))
 		case 'actualizar':
 			$alm->__SET('id',              $_REQUEST['id']);
             $alm->__SET('direccion',       $_REQUEST['direccion']);
+            $alm->__SET('estado',       $_REQUEST['estado']);
+            $alm->__SET('municipio',       $_REQUEST['municipio']);
+            $alm->__SET('localidad',       $_REQUEST['localidad']);
+            $alm->__SET('postal',       $_REQUEST['postal']);
             $alm->__SET('telefono',        $_REQUEST['telefono']);
             $alm->__SET('email',           $_REQUEST['email']);
 
@@ -166,48 +171,56 @@ if(isset($_REQUEST['action']))
     <meta charset="UTF-8">
     <title>Docentes</title>
     
+    <link rel="stylesheet" href="../bootstrap/4.5.3/dist/css/bootstrap.min.css" 
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
+          crossorigin="anonymous">
     
+        <script src="../jquery/3.5.1/jquery-3.5.1.slim.min.js" 
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+            crossorigin="anonymous"></script>
+    
+        <script src="../bootstrap/4.5.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" 
+            crossorigin="anonymous"></script>
     
     
     <link rel="stylesheet" href="../pure/0.5.0/pure-min.css">
-    <link rel="stylesheet" href="../bootstrap/4.0.0/css/bootstrap.min.css" 
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-          crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
-            crossorigin="anonymous">
-    </script>
-    <script src="../ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
-            crossorigin="anonymous"></script>
-    <script src="../bootstrap/4.0.0/js/bootstrap.min.js" 
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
-            crossorigin="anonymous"></script>
+    
 
+
+    
+    <script type="text/javascript" src="../direcciones/localidadesReins.js"></script>
+
+    
+    
+    
+    
+            
+    
+    <link rel="icon" href="../imagenes/itsl2.png">
+    
+    
+    
+    
+    
+    
     
     <style type="text/css">
         body  { 
-		      font: 14px sans-serif;  
-			  color: white;
-			  background-color: #0a6d7a;
+			  
+			  background-color: ghostwhite;
 			  }
 		header {
               background-color: #000000;
-              padding: 3px;
-              text-align: center;
-              font-size: 30px;
-              color: white;
+
               }
-        .botones {
-            padding:10px 40px 0 0;  
-            text-align:right;
-            
-            
+
+        .logo{
+            width: 50%;
+            height: auto;
+            padding-top: 30px;
         }
-        .bienvenida {
-            padding:10px 0 0 40px;
-            
-        }
+        
         
         .cuadros {
                 width: 100%;
@@ -328,19 +341,47 @@ if(isset($_REQUEST['action']))
 </head>
 <body>
     <header>
-  <h1 style="padding:10px;">Academia de Inglés del Instituto Tecnológico Superior de Loreto</h1>
-</header>
-    <div class="container-fluid">
-        <div class="row justify-content-between">
-            <div class="col-12 col-sm-12 col-md-6 col-lg-7 bienvenida">
-        <p style="font-size:22px;"><b>Bienvenido(a): </b> <?php echo htmlspecialchars("Lic. ".$_SESSION["nombre"]); echo htmlspecialchars(" ".$_SESSION["paterno"]);echo htmlspecialchars(" ".$_SESSION["materno"]);?></p>
-            </div>
-            <div class= "col-12 col-sm-12 col-md-6 col-lg-5 align-self-end botones">
-                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modal1">Cambiar Contraseña</button>
-                <a href="logoutDo.php" class="btn btn-light">Cerrar sesión</a>
+          <div class="container-fluid">
+
+            <div class="row">
+                
+                
+                <div class="col-lg-8 col-xs-12 col-sm-12 col-md-12">
+                    <img class="logo" src="../imagenes/itslnobreLargo.png" >
+                </div>
+                <div class="col-sm-4" style="text-align:center; padding-top:20px; ">
+                    <img src="../imagenes/TecNMwhite.png" width="150px" height="auto" >
+                </div>
+                
+                
+                
+                
+               
+                    
+                    <div class="col-sm-12" style="text-align: center;">
+
+
+                        <div class="btn-group" role="group">
+
+                            <a href="../home.php" class="btn btn-outline-light" role="button" >Inicio</a>
+                            
+                            <a href="Docentes.php" class="btn btn-outline-light active" role="button" >Docentes</a>
+                            
+                            <a href="calificacionesAl.php" class="btn btn-outline-light" role="button" data-toggle="modal" data-target="#modal1">Cambiar contraseña</a>
+
+                            <a href="logoutDo.php" class="btn btn-outline-light" role="button">Cerrar sesión</a>
+
+                        </div>    
+                    </div>
+                
+                
+                
+
+
             </div>
         </div>
-    </div>
+</header>
+
     
     
     
@@ -412,35 +453,68 @@ if(isset($_REQUEST['action']))
         <div class= "container">
                 <div class= "row">
                     <div class="pure-g">
+
+                        
+                        
+                        
                         <div class="pure-u-1-2">
                           <div>  
                             <form action="?action=actualizar&id" method="post" class="pure-form pure-form-stacked" style="margin-bottom:30px;">
                                 <div class="modal-body">
-                                    <input type="hidden" name="id" value="<?php echo $alm->__GET('id'); ?>" />
+                                <input type="hidden" name="id" value="<?php echo $alm->__GET('id'); ?>" />
 
-                                    <table style="width:400px; color:black;" >
-                                        <tr>
-                                            <th style="text-align:left; ">Dirección</th>
-                                            <td><input type="text" name="direccion" value="<?php echo $alm->__GET('direccion'); ?>" style="width:220%;" /></td>
-                                        </tr>
-                                        <tr>
-                                            <th style="text-align:left;">Teléfono</th>
-                                            <td><input type="text" name="telefono" value="<?php echo $alm->__GET('telefono'); ?>" style="width:70%;" /></td>
-                                        </tr>
-                                        <tr>
-                                            <th style="text-align:left;">Email</th>
-                                            <td><input type="text" name="email" value="<?php echo $alm->__GET('email'); ?>" style="width:220%;" /></td>
-                                        </tr>
-                                    </table>
+                                <table style="width:400px; color:black;" >
+                                    <tr>
+                                        <th style="text-align:left;"></th>
+                                        <td><b>Domicilio</b><input type="text" name="direccion" value="<?php echo $alm->__GET('direccion'); ?>"  /></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left;"></th>
+                                        <td><b>Estado</b><select class="form-control" name="estado" id="validationCustom03" onchange="ChangeEstList()" required>
+                                                <option value="">Elige...</option>
+                                                <option value="Aguascalientes">Aguascalientes</option>
+                                                <option value="Zacatecas">Zacatecas</option>
+                                              </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    
+                                        <th style="text-align:left;"></th>
+                                        <td><b>Municipio</b><select class="form-control" id="validationCustom04" name="municipio" onchange="ChangeMuniList()" required ><option value=""><?php echo $alm->__GET('municipio'); ?></option></select></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left;"></th>
+                                        <td><b>Localidad</b><select class="form-control" id="validationCustom05" name="localidad" required ><option value=""><?php echo $alm->__GET('localidad'); ?></option></select></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left;"></th>
+                                        <td><b>Código Postal</b><input type="number" name="postal" value="<?php echo $alm->__GET('postal'); ?>" style="width:auto;" /></td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left;"></th>
+                                        <td><b>Teléfono</b><input type="text" name="telefono" value="<?php echo $alm->__GET('telefono'); ?>" style="width:auto;" /></td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left;"></th>
+                                        <td><b>Email</b><input type="text" name="email" value="<?php echo $alm->__GET('email'); ?>" /></td>
+                                    </tr>
+                                </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <button id="myBtn3" type="submit" class="btn btn-primary">Actualizar</button>
-                                    <button id="myBtn2" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                </div>
+                                <button id="myBtn3" type="submit" class="btn btn-primary">Actualizar</button>
+                                <button id="myBtn2" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                               </div>
                             </form>
                          </div>
                          
                         </div>
+                        
+                        
+                        
+                        
+                        
                     </div>
                 </div>
 			</div>
@@ -451,48 +525,73 @@ if(isset($_REQUEST['action']))
 </div>
 
     
-    <hr>
+
     
-    <div class="container" >
+    
+    
+    
+    
+        <div class="container" style="padding-top:40px;">
             <div class="collapse" id="collapse1">
               <div class="card card-body" style="color:black;">
+            
                   <?php foreach($model->Listar() as $r): ?> 
                   <div class="row">
-                      <div class="col">
+                      <div class="col-sm-6" style="border: 2px solid black; border-radius: 5px; text-align:left; padding: 20px;">
                           
-                              <p style="font-size: 18px;"><b>Información del Docente</b></p>
-                              <p><b>Nombre: </b><?php echo "Lic. ".$r->__GET('nombre'); echo " ".$r->__GET('paterno'); echo " ".$r->__GET('materno'); ?></p>
-                              <p><b>Sexo: </b><?php echo $r->__GET('sexo'); ?></p>
-                              <p><b>No. de Empleado: </b><?php echo $r->__GET('idmaestro'); ?></p>
-                              <p><b>CURP: </b><?php echo $r->__GET('curp'); ?></p>
-                              <p><b>No. del ISSSTE: </b><?php echo $r->__GET('n_issste'); ?></p>
-                              <hr>
-                              <p><b>Información de Contacto</b></p>
-                              <p><b>Dirección: </b><?php echo $r->__GET('direccion'); ?></p>
-                              <p><b>Teléfono: </b><?php echo $r->__GET('telefono'); ?></p>
-                              <p><b>Email: </b><?php echo $r->__GET('email'); ?></p>
+                          <p style="font-size: 18px;"><b>Información Personal</b></p>
                           
+                          <p><b>Nombre: </b><?php echo "Lic. ".$r->__GET('nombre'); echo " ".$r->__GET('paterno'); echo " ".$r->__GET('materno'); ?></p>
+                          <p><b>Sexo: </b><?php echo $r->__GET('sexo'); ?></p>
+                          <p><b>No. de Empleado: </b><?php echo $r->__GET('idmaestro'); ?></p>
+                          <p><b>CURP: </b><?php echo $r->__GET('curp'); ?></p>
+                          <p><b>RFC: </b><?php echo $r->__GET('rfc'); ?></p>
+                          
+                        </div>
+                        <div class="col-sm-6" style="border: 2px solid black; border-radius: 5px; text-align:left; padding: 20px;">
+                          
+                          <p style="font-size: 18px;"><b>Información de Contacto</b></p>
+                          <p><b>Domicilio: </b><?php echo $r->__GET('direccion'); ?></p>
+                          <p><b>Estado: </b><?php echo $r->__GET('estado'); ?></p>
+                          <p><b>Municipio: </b><?php echo $r->__GET('municipio'); ?></p>
+                          <p><b>Localidad: </b><?php echo $r->__GET('localidad'); ?></p>
+                          <p><b>Código postal: </b><?php echo $r->__GET('postal'); ?></p>
+                          <p><b>Teléfono: </b><?php echo $r->__GET('telefono'); ?></p>
+                          <p><b>Email: </b><?php echo $r->__GET('email'); ?></p>
+                          <p><a id="myBtn1" href="?action=editar&id=<?php echo $r->id; ?>" class="btn btn-primary">Actualizar Información</a>
+                          </p>
                       </div>
                   
                   </div >
                   <div class="row">
                       <div class="col">
                           
-                          <p><a id="myBtn1" href="?action=editar&id=<?php echo $r->id; ?>" class="btn btn-primary">Actualizar Información</a>
-                          <button id="myBtn6" type="button" class="btn btn-dark">Cerrar</button>
-                          </p>
+                          
                           
                           
                       </div>
                   </div>
                   
                   <?php endforeach; ?>
-              </div>
-                
-            </div>
+                   </div>
+                  </div>
+              
         </div>
     
+    
+    
+    
+    
+    
+    
+    
     <br>
+    
+    
+    
+    
+    
+
     
     
     
@@ -550,10 +649,12 @@ if(isset($_REQUEST['action']))
     
     
     
+
+    
     
     
 
-	<div class= "container-fluid">
+	<div class= "container">
         <div class= "row justify-content-center">
             <div class="col-sm-4">
                 <p style="text-align:center;">Selecciona una opción</p>
@@ -562,7 +663,7 @@ if(isset($_REQUEST['action']))
 		<div class= "row justify-content-center">
             
 			<div class= "col-7 col-sm-7 col-md-3 col-lg-2">
-				 <p><a id="myBtn5"  role="button">
+				 <p><a   role="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
                     <img class="cuadros card"  alt="Grupos Asignados" src="../imagenes/profesores1.png" >
                     </a></p>
                  
@@ -574,7 +675,7 @@ if(isset($_REQUEST['action']))
 			</div>
 			<div class= "col-7 col-sm-7 col-md-3 col-lg-2">
 				 
-				 <p><a id="myBtn7" role="button">
+				 <p><a role="button"  data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
                     <img class="cuadros card"  alt="Subir Documentos" src="../imagenes/grupos.png" >
                     </a></p>
 			</div>
@@ -661,63 +762,7 @@ if(isset($_REQUEST['action']))
 
 
     </footer>
-    
-    
-    
-    
-    
-        
-    <script>
-        var counter2 = -1;
-        $(document).ready(function(){
-              $("#myBtn5").click(function(){
-                $("#collapse1").collapse('toggle');
-                  counter2 = counter2 * -1;
-                  localStorage.setItem("counter2", counter2);
-              });
-              $(".btn-success").click(function(){
-                $("#collapse1").collapse('show');
-              });
-              $("#myBtn6").click(function(){
-                $("#collapse1").collapse('hide');
-                  counter2 = counter2 * -1;
-                  localStorage.setItem("counter2", counter2);
-              });
-            counter2 = localStorage.getItem("counter2");
-            if(counter2 > 0 ){
-                $("#collapse1").collapse('show');
-            }else{
-                $("#collapse1").collapse('hide');
-            }
-        });
-    </script>
-    
-    
-    
-        <script>
-        var counter3 = -1;
-        $(document).ready(function(){
-              $("#myBtn7").click(function(){
-                $("#collapse2").collapse('toggle');
-                  counter3 = counter3 * -1;
-                  localStorage.setItem("counter3", counter3);
-              });
-              $(".btn-success").click(function(){
-                $("#collapse2").collapse('show');
-              });
-              $("#myBtn8").click(function(){
-                $("#collapse2").collapse('hide');
-                  counter3 = counter3 * -1;
-                  localStorage.setItem("counter3", counter3);
-              });
-            counter3 = localStorage.getItem("counter3");
-            if(counter3 > 0 ){
-                $("#collapse2").collapse('show');
-            }else{
-                $("#collapse2").collapse('hide');
-            }
-        });
-    </script>
+
     
     
     

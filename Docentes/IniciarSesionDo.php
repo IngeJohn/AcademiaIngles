@@ -1,11 +1,15 @@
 <?php
 
-// Initialize the session
 session_start();
- 
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: Require/logout.php");
+
+    // Unset all of the session variables
+    $_SESSION = array();
+    
+    // Destroy the session.
+    session_destroy();
+    
 }
 // Include config file
 require_once "../Require/config.php";
@@ -125,16 +129,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ITSL - Academia de Inglés</title>
     
-    <link rel="stylesheet" href="../bootstrap/4.5.2/css/bootstrap.css">
-    <link rel="stylesheet" href="../bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="../npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="../ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="../bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../bootstrap/4.5.3/dist/css/bootstrap.min.css" 
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
+          crossorigin="anonymous">
+    
+    <script src="../jquery/3.5.1/jquery-3.5.1.slim.min.js" 
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+            crossorigin="anonymous"></script>
+    
+    <script src="../bootstrap/4.5.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" 
+            crossorigin="anonymous"></script>
     <link rel="icon" href="../imagenes/itsl2.png">
+    
+    
+
     <style type="text/css">
         body{
-            background-color: #0a6d7a;
-            font-size: 16px;
+            background-color: #2471A3;
+            
             }
         header{
             background-color: #000000;
@@ -144,47 +157,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             background: #000000;
               }
 
-        .baner{
-        background: #15859A;
-        color: white;
 
-
-              }
 
         .foto{
              background: #15859A;
 
              }
         
-        
-        
-        .lista{
-            padding-left: 10px;
-            color: white;
-            font-size: 13px;
-            text-align: left;
-              }
-        .contenedor{
-            position: relative;
-            width: 85%;
-              }
-        .mainfoto{
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 8px;
-            width: 100%;
-            height: auto;
-                 }
-        .subtitulo{
-            position: relative;
-            left:15px;
-            bottom: 49px;
-            padding: 13px 20px 13px 20px;
-            width: 96%;
-            color: white;
-            background: black;
-            opacity: .75;
-            border-radius: 8px;
-                 }
         .redes{
             padding-left: 10px;
             color: white;
@@ -220,61 +199,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             margin: 20px 0 20px 0;
             height: 150px;
         }
-        .remove-padding{
-            padding:  0;
-            margin:  0;
-        }
         
-        .logo{
-            width: 40%;
+       .logo{
+            width: 50%;
             height: auto;
-            
-        }
-        
-        #inf{
-            color:white; 
-            font-size: 2vw;  
-            font-family:Verdana; 
-            text-align:center; 
-            transform: scale(.9, 1);
+            padding-top: 30px;
         }
         
         
         
-        /*para pantallas de PC*/
+     }
+                /*para pantallas de PC*/
         @media (max-width: 992px){
             .logo{
                 width: 50%;
                 height: auto;
 
             }
-            .subtitulo{
-                position: relative;
-                left:15px;
-                bottom: 34px;
-                padding: 5px 0px 5px 20px;
-                width: 96%;
-                color: white;
-                background: black;
-                opacity: .75;
-                border-radius: 8px;
-            }
-            .lista{
-                margin-left: 30px;
-            }
-            #inf{
-                color:white; 
-                font-size: 1.8vw;  
-                font-family:Verdana; 
-                text-align:center; 
-                transform: scale(.9, 1);
-            }
-            .caja{
-                background: #ffffff;
-            }
             
             
-        
+        }
         /* Para tablets*/
         @media screen and (max-width: 768px) {
             .logo{
@@ -283,31 +227,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 padding: 10px 0 10px 0;
                 
             }
-          .btn{
-                
-                width:auto;
-                height:30px;
-                font-size: 11px;
-                
-            }
-            .subtitulo{
-                position: relative;
-                left:15px;
-                bottom: 135px;
-                padding: 5px 0px 5px 20px;
-                width: 96%;
-                color: white;
-                background: black;
-                opacity: 0.75;
-                border-radius: 8px;
-            }
-            #inf{
-                color:white; 
-                font-size: 2vw;  
-                font-family:Verdana; 
-                text-align:center; 
-                transform: scale(.9, 1);
-            }
+
         }
         
         /*Para dispositivos moviles*/
@@ -320,36 +240,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 
             }
             
-            .btn{
-                
-                width:auto;
-                height:30px;
-                font-size: 11px;
-                
-            }
-            .subtitulo{
-                position: relative;
-                left:15px;
-                bottom: 250px;
-                padding: 5px 0px 5px 20px;
-                width: 96%;
-                color: white;
-                background: black;
-                opacity: 0.75;
-                border-radius: 8px;
-            }
-            #inf{
-                color:white; 
-                font-size: 6vw;  
-                font-family:Verdana; 
-                text-align:center; 
-                transform: scale(.9, 1);
-            }
-            
-            
-            
         }
-
             
         
         
@@ -367,14 +258,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
 
 
+
+                <div class="col-lg-8 col-xs-12 col-sm-12 col-md-12">
                     <img class="logo" src="../imagenes/itslnobreLargo.png" >
-
-
-
                 </div>
+                <div class="col-sm-4" style="text-align:center; padding-top:20px; ">
+                    <img src="../imagenes/TecNMwhite.png" width="150px" height="auto" >
+                </div>
+
+
                 
                 <div class="row">
                     <div class="col-lg-10">
@@ -396,7 +290,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <a class="dropdown-item" href="../Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
                                     <a class="dropdown-item" href="../Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
-                                    <a class="dropdown-item" href="../Alumnos/alumnos.php" "dropdown-item">Consulta calificaciones</a>
+                                    <a class="dropdown-item" href="../Alumnos/califiVeri.php" "dropdown-item">Consulta calificaciones</a>
                                 </div>
 
                             </div >
@@ -458,12 +352,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                             <label>Nombre de Usuario</label>
                             <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
-                            <span class="help-block"><?php echo $username_err; ?></span>
+                            <span class="text-danger"><?php echo $username_err; ?></span>
                         </div>    
                         <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                             <label>Contraseña</label>
                             <input type="password" name="password" class="form-control">
-                            <span class="help-block"><?php echo $password_err; ?></span>
+                            <span class="text-danger"><?php echo $password_err; ?></span>
                         </div>
                         <div class="form-group">
                             <input type="submit" class="btn btn-primary" value="Iniciar Sesión">
@@ -473,7 +367,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 
             </div>
             <div class="col-sm-4" style="text-align:center; padding:100px 0 0 0; ">
-                <img src="../imagenes/TecNMwhite.png" width="300px" height="auto" >
+                <img src="../imagenes/teacherMale.png" width="220px" height="auto" >
 
             </div>
             

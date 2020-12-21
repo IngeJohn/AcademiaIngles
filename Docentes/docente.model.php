@@ -8,7 +8,7 @@ class DocenteModel
 	{
 		try
 		{
-			$this->pdo = new PDO('mysql:host=localhost;dbname=academia_ingles', 'root', 'a98450153_-');
+			$this->pdo = new PDO('mysql:host=localhost;dbname=academia_ingles', 'academia_ingles', 'a98450153_-');
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);		        
 		}
 		catch(Exception $e)
@@ -38,9 +38,13 @@ class DocenteModel
 				$alm->__SET('materno', $r->materno);
                 $alm->__SET('sexo', $r->sexo);
                 $alm->__SET('direccion', $r->direccion);
+                $alm->__SET('estado', $r->estado);
+                $alm->__SET('municipio', $r->municipio);
+                $alm->__SET('localidad', $r->localidad);
+                $alm->__SET('postal', $r->postal);
                 $alm->__SET('telefono', $r->telefono);
 				$alm->__SET('email', $r->email);
-				$alm->__SET('n_issste', $r->n_issste);
+				$alm->__SET('rfc', $r->rfc);
 				$alm->__SET('idmaestro', $r->idmaestro);
 
 				$result[] = $alm;
@@ -75,9 +79,13 @@ class DocenteModel
 			$alm->__SET('materno', $r->materno);
             $alm->__SET('sexo', $r->sexo);
             $alm->__SET('direccion', $r->direccion);
+            $alm->__SET('estado', $r->estado);
+            $alm->__SET('municipio', $r->municipio);
+            $alm->__SET('localidad', $r->localidad);
+            $alm->__SET('postal', $r->postal);
             $alm->__SET('telefono', $r->telefono);
 			$alm->__SET('email', $r->email);
-			$alm->__SET('n_issste', $r->n_issste);
+			$alm->__SET('rfc', $r->rfc);
 			$alm->__SET('idmaestro', $r->idmaestro);
 
 			return $alm;
@@ -95,6 +103,10 @@ class DocenteModel
 		{
 			$sql = "UPDATE docentes SET 
                         direccion       = ?, 
+                        estado       = ?, 
+                        municipio       = ?, 
+                        localidad       = ?, 
+                        postal       = ?, 
                         telefono        = ?, 
                         email           = ? 
 				    WHERE username = '".$_SESSION['username']."'";
@@ -103,6 +115,10 @@ class DocenteModel
 			     ->execute(
 				array(
                     $data->__GET('direccion'),
+                    $data->__GET('estado'),
+                    $data->__GET('municipio'),
+                    $data->__GET('localidad'),
+                    $data->__GET('postal'),
                     $data->__GET('telefono'),
                     $data->__GET('email')
 					//$data->__GET('id')
