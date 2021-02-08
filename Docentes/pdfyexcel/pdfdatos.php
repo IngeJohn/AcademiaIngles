@@ -1,23 +1,51 @@
 <?php
-// Initialize the session
-session_start();
- 
-// Check if the user is logged in, if not then redirect him to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: califiVeri.php");
-    exit;
+
+require_once "../../Require/config.php";
+
+
+
+
+date_default_timezone_set('America/Mexico_City');
+
+    $peri = "";  
+    $per = "";  
+    $mes = date("n"); 
+    $year = date("Y"); 
+
+if ($mes >= 1 && $mes <= 6){
+    $per = 1;
+    $peri = "Periodo: ".$per."-".$year;
+}else if($mes >= 8 && $mes <= 12){
+    $per = 2;
+    $peri = "Periodo: ".$per."-".$year;
+    
 }
 
 
+$periodoActu = $per."-".$year;
 
-//require('../fpdf181/fpdf.php');
-require_once "../Require/config.php";
 
+
+
+
+
+if ($stmt3 = $link->prepare("SELECT  periodo FROM periodoactual")) {
+    $stmt3->execute();
+
+    /* bind variables to prepared statement */
+    $stmt3->bind_result($periActuBD);
+
+    /* fetch values */
+$stmt3->fetch();
+
+    /* close statement */
+    $stmt3->close();
+}
 
 //========================================================================================================
 //Grupos
 
-$query = "SELECT gruposasignados.nivel, gruposasignados.grupo, gruposasignados.carrera, gruposasignados.modalidad, periodoactual.periodo FROM academia_ingles.gruposasignados, academia_ingles.periodoactual WHERE gruposasignados.periodo = periodoactual.periodo AND periodoactual.idperiodoactual = '1' AND gruposasignados.idmaestro = {$_SESSION["idmaestro"]};";
+$query = "SELECT nivel, grupo, carrera, modalidad, periodo, idgrupo FROM gruposasignados WHERE idmaestro = {$_SESSION["idmaestro"]} AND periodo = '{$periActuBD}';";
 
 //$query = "SELECT  nivel, grupo, carrera, modalidad FROM `gruposasignados` WHERE idmaestro = {$_SESSION["idmaestro"]}";
 
@@ -48,7 +76,7 @@ while($row = mysqli_fetch_array($result))
 {
     if($contador == 0){
         
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow1[$i] = $row[$i];
             
@@ -56,77 +84,77 @@ while($row = mysqli_fetch_array($result))
         
     }
     if($contador == 1){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow2[$i] = $row[$i];
             
         }
     }
     if($contador == 2){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow3[$i] = $row[$i];
         
         }
     }
     if($contador == 3){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow4[$i] = $row[$i];
         
         }
     }
     if($contador == 4){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow5[$i] = $row[$i];
         
         }
     }
     if($contador == 5){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow6[$i] = $row[$i];
         
         }
     }
     if($contador == 6){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow7[$i] = $row[$i];
         
         }
     }
     if($contador == 7){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow8[$i] = $row[$i];
         
         }
     }
     if($contador == 8){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow9[$i] = $row[$i];
         
         }
     }
     if($contador == 9){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow10[$i] = $row[$i];
         
         }
     }
     if($contador == 10){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow11[$i] = $row[$i];
         
         }
     }
     if($contador == 11){
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 5; $i++) {
             
             $dataRow12[$i] = $row[$i];
         
@@ -145,18 +173,13 @@ while($row = mysqli_fetch_array($result))
 //Listado de números de control
 
 
-function numeros( $nive, $grup, $carr, $idma, $moda, $peri, $link3 ){
+function numeros( $idgrupo, $link3 ){
     
     
     $query3 = "SELECT numeroControl FROM alumnos 
-    WHERE nivelActual = '{$nive}' 
-    AND grupoActual = '{$grup}'
-    AND carrera = '{$carr}'
-    AND idmaestroActual = '{$idma}' 
-    AND modalidad = '{$moda}'
-    AND periodoActual = '{$peri}' ORDER BY paterno ASC;";
+    WHERE idgrupoActual = '{$idgrupo}' 
+    ORDER BY paterno ASC;";
 
-    //$query = "SELECT  nivel, grupo, carrera, modalidad FROM `gruposasignados` WHERE idmaestro = {$_SESSION["idmaestro"]}";
 
     $result3 = mysqli_query($link3, $query3);
 
@@ -191,21 +214,34 @@ $numeros3 = array();
 $numeros4 = array();
 $numeros5 = array();
 $numeros6 = array();
+$numeros7 = array();
+$numeros8 = array();
+$numeros9 = array();
+$numeros10 = array();
+$numeros11 = array();
+$numeros12 = array();
 
-if(isset($dataRow1[0])){$numeros1 = numeros($dataRow1[0],$dataRow1[1],$dataRow1[2],$_SESSION["idmaestro"],$dataRow1[3],$dataRow1[4],$link);}
-if(isset($dataRow2[0])){$numeros2 = numeros($dataRow2[0],$dataRow2[1],$dataRow2[2],$_SESSION["idmaestro"],$dataRow2[3],$dataRow2[4],$link);}
-if(isset($dataRow3[0])){$numeros3 = numeros($dataRow3[0],$dataRow3[1],$dataRow3[2],$_SESSION["idmaestro"],$dataRow3[3],$dataRow3[4],$link);}
-if(isset($dataRow4[0])){$numeros4 = numeros($dataRow4[0],$dataRow4[1],$dataRow4[2],$_SESSION["idmaestro"],$dataRow4[3],$dataRow4[4],$link);}
-if(isset($dataRow5[0])){$numeros5 = numeros($dataRow5[0],$dataRow5[1],$dataRow5[2],$_SESSION["idmaestro"],$dataRow5[3],$dataRow5[4],$link);}
-if(isset($dataRow6[0])){$numeros6 = numeros($dataRow6[0],$dataRow6[1],$dataRow6[2],$_SESSION["idmaestro"],$dataRow6[3],$dataRow6[4],$link);}
+
+if(isset($dataRow1[5])){$numeros1 = numeros($dataRow1[5],$link);}
+if(isset($dataRow2[5])){$numeros2 = numeros($dataRow2[5],$link);}
+if(isset($dataRow3[5])){$numeros3 = numeros($dataRow3[5],$link);}
+if(isset($dataRow4[5])){$numeros4 = numeros($dataRow4[5],$link);}
+if(isset($dataRow5[5])){$numeros5 = numeros($dataRow5[5],$link);}
+if(isset($dataRow6[5])){$numeros6 = numeros($dataRow6[5],$link);}
+if(isset($dataRow7[5])){$numeros7 = numeros($dataRow7[5],$link);}
+if(isset($dataRow8[5])){$numeros8 = numeros($dataRow8[5],$link);}
+if(isset($dataRow9[5])){$numeros9 = numeros($dataRow9[5],$link);}
+if(isset($dataRow10[5])){$numeros10 = numeros($dataRow10[5],$link);}
+if(isset($dataRow11[5])){$numeros11 = numeros($dataRow11[5],$link);}
+if(isset($dataRow12[5])){$numeros12 = numeros($dataRow12[5],$link);}
 
 
 
 //=========================================================================================================
-function alumnos($num, $niv, $link2){   
+function alumnos($num, $idg, $link2){   
 global $j;
     
-$query2 = "SELECT alumnos.nombre, alumnos.paterno, alumnos.materno, calificaciones.calificacion, calificaciones.parcial, calificaciones.id, calificaciones.comentario FROM alumnos, calificaciones WHERE alumnos.numeroControl = calificaciones.numeroControl AND alumnos.numeroControl = '{$num}' AND calificaciones.nivel = '{$niv}';";
+$query2 = "SELECT alumnos.nombre, alumnos.paterno, alumnos.materno, calificaciones.calificacion, calificaciones.unidadTema, calificaciones.id, calificaciones.comentario FROM alumnos, calificaciones WHERE alumnos.numeroControl = calificaciones.numeroControl AND alumnos.numeroControl = '{$num}' AND calificaciones.idgrupo = '{$idg}' AND alumnos.idgrupoActual = calificaciones.idgrupo;";
 
 
 $result2 = mysqli_query($link2, $query2);
@@ -256,7 +292,7 @@ $comentario = "";
 if (mysqli_num_rows($result2)==0) { 
 
     
-    $query2 = "SELECT nombre , paterno, materno FROM alumnos WHERE numeroControl = '{$num}';";
+    $query2 = "SELECT nombre , paterno, materno FROM alumnos WHERE numeroControl = '{$num}' ORDER BY paterno ASC;";
 
 
     $result2 = mysqli_query($link2, $query2);
@@ -343,7 +379,8 @@ if (mysqli_num_rows($result2)==0) {
                 }
 
 
-                $datos = $dataname;
+                $datos = $dataname
+                               ;
 
 
         }
@@ -355,37 +392,6 @@ if (mysqli_num_rows($result2)==0) {
     }
 
 //=========================================================================================================
-date_default_timezone_set('America/Mexico_City');
-
-if(isset($dataRow1[0])){$titulo = $dataRow1[0]."-".$dataRow1[1]."-".$dataRow1[2]."-".$dataRow1[3]."-".$dataRow1[4];
-
-$fileName = date('d-m-Y')."_".$titulo.".xls";
-
-//Set header information to export data in excel format
-header('Content-Type: application/vnd.ms-excel');
-header('Content-Disposition: attachment; filename='.$fileName);
-
-//Set variable to false for heading
-$heading = false;
 
 
-echo utf8_decode("Instituto Tecnológico Superior de Loreto\n");
-
-echo utf8_decode("Academia de Iglés\n");
-
-echo utf8_decode("Ingeniería (en) ".$dataRow1[2]." | ".$dataRow1[3]." | ".$dataRow1[4]." \n");
-
-echo utf8_decode("Lista de Alumos ".$dataRow1[0]." ".$dataRow1[1]. "\n");
-
-    for($i=0; $i <= 60; $i++){
-                                
-        if(isset($numeros1[$i])){
-
-            echo alumnos($numeros1[$i],$dataRow1[0], $link). "\n";
-
-        } 
-    }
-    
-exit();
-}
 ?>

@@ -30,7 +30,6 @@ class DocenteModel
 			{
 				$alm = new Docente();
 				
-				$alm->__SET('id', $r->id);
 				$alm->__SET('username', $r->username);
                 $alm->__SET('curp', $r->curp);
 				$alm->__SET('nombre', $r->nombre);
@@ -46,6 +45,11 @@ class DocenteModel
 				$alm->__SET('email', $r->email);
 				$alm->__SET('rfc', $r->rfc);
 				$alm->__SET('idmaestro', $r->idmaestro);
+                $alm->__SET('fnacimiento',    $r->fnacimiento);
+                $alm->__SET('nivelAcademico', $r->nivelAcademico);
+                $alm->__SET('altaBaja', $r->altaBaja);
+                $alm->__SET('titulo', $r->titulo);
+                $alm->__SET('certificacion', $r->certificacion);
 
 				$result[] = $alm;
 			}
@@ -57,8 +61,48 @@ class DocenteModel
 			die($e->getMessage());
 		}
 	}
+    
+    
+    
+    	public function Listar2($n,$g,$c,$m,$p)
+	{
+		try
+		{
+			$result = array();
+            
+           // $n = 2;
+         //   $g = "A";
+          //      $c = "Industrial";
+          //      $m = "Escolarizado";
+          //      $p = "1-2021";
+            
+			$stm = $this->pdo->prepare("SELECT nombre, paterno, materno FROM alumnos WHERE idmaestroActual = '".$_SESSION['idmaestro']."' AND nivelActual = '".$n."' AND grupoActual = '".$g."' AND carrera = '".$c."' AND modalidad = '".$m."' AND periodoActual = '".$p."';");
+            
+			$stm->execute();
 
-	public function Obtener($id)
+			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
+			{
+				$alm = new Docente();
+				
+				$alm->__SET('nombre', $r->nombre);
+				$alm->__SET('paterno', $r->paterno);
+				$alm->__SET('materno', $r->materno);
+
+				$result[] = $alm;
+			}
+
+			return $result;
+		}
+		catch(Exception $e)
+		{
+			die($e->getMessage());
+		}
+	}
+    
+    
+    
+
+	public function Obtener($idmaestro)
 	{
 		try 
 		{
@@ -66,12 +110,11 @@ class DocenteModel
 			          ->prepare("SELECT * FROM docentes WHERE username = '".$_SESSION['username']."'");
 			          
 
-			$stm->execute(array($id));
+			$stm->execute(array($idmaestro));
 			$r = $stm->fetch(PDO::FETCH_OBJ);
 
 			$alm = new Docente();
 
-			$alm->__SET('id', $r->id);
 			$alm->__SET('username', $r->username);
             $alm->__SET('curp', $r->curp);
 			$alm->__SET('nombre', $r->nombre);
@@ -87,6 +130,11 @@ class DocenteModel
 			$alm->__SET('email', $r->email);
 			$alm->__SET('rfc', $r->rfc);
 			$alm->__SET('idmaestro', $r->idmaestro);
+            $alm->__SET('fnacimiento',    $r->fnacimiento);
+            $alm->__SET('nivelAcademico', $r->nivelAcademico);
+            $alm->__SET('altaBaja', $r->altaBaja);
+            $alm->__SET('titulo', $r->titulo);
+            $alm->__SET('certificacion', $r->certificacion);
 
 			return $alm;
 		} catch (Exception $e) 
@@ -121,7 +169,6 @@ class DocenteModel
                     $data->__GET('postal'),
                     $data->__GET('telefono'),
                     $data->__GET('email')
-					//$data->__GET('id')
 					)
 				);
 		} catch (Exception $e) 

@@ -4,7 +4,7 @@
 session_start();
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+if(isset($_SESSION["loggedinA"]) && $_SESSION["loggedinA"] === true){
     
     // Unset all of the session variables
     $_SESSION = array();
@@ -12,6 +12,35 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     // Destroy the session.
     session_destroy();
 }
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedinAl"]) && $_SESSION["loggedinAl"] === true){
+    
+    // Unset all of the session variables
+    $_SESSION = array();
+
+    // Destroy the session.
+    session_destroy();
+}
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedinDo"]) && $_SESSION["loggedinDo"] === true){
+    
+    // Unset all of the session variables
+    $_SESSION = array();
+
+    // Destroy the session.
+    session_destroy();
+}
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedinAd"]) && $_SESSION["loggedinAd"] === true){
+    
+    // Unset all of the session variables
+    $_SESSION = array();
+
+    // Destroy the session.
+    session_destroy();
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -348,7 +377,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
                     <div class="row justify-content-md-center">
 
-                        <div class="col-md-12 d-none d-sm-block" style="text-align:center; background:red">
+                        <div class="col-md-12 d-none d-sm-block" style="text-align:center;">
 
 
                             <div class="btn-group dropdown" role="group">
@@ -365,6 +394,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                                         <a class="dropdown-item" href="Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
                                         <a class="dropdown-item" href="Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
                                         <a class="dropdown-item" href="Alumnos/califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                        <a class="dropdown-item" href="Alumnos/horarioAl.php" "dropdown-item">Consultar Horario</a>
                                     </div>
 
                                 </div >
@@ -423,6 +453,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                                         <a class="dropdown-item" href="Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
                                         <a class="dropdown-item" href="Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
                                         <a class="dropdown-item" href="Alumnos/califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                        <a class="dropdown-item" href="Alumnos/horarioAl.php" "dropdown-item">Consultar Horario</a>
                                     </div>
 
                                 </div >
@@ -475,14 +506,14 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 
     <div class="container" style="padding: 20px 0 20px 0; background:#0a6d7a; overflow: hidden">
            <div class="row justify-content-between">
-                <div class="col-sm-12 col-md-4 col-lg-3" style="text-align:center; padding: 20px 0; background:red;">
+                <div class="col-sm-12 col-md-4 col-lg-3" style="text-align:center; padding: 20px 0;">
                     <img src="imagenes/TecNMwhite.png" width="200px" height="auto" >
 
                 </div>
                
                <div class="col-sm-12 col-md-6 col-lg-5" style="padding:20px 0">
                    <div class="row">
-                    <div class="col-8 col-xs-9 col-sm-5 col-md-6 col-lg-6 lista" style="background:red">
+                    <div class="col-8 col-xs-9 col-sm-5 col-md-6 col-lg-6 lista">
                         <p  style="line-height: 2;">
                             > &nbsp; Superación personal<br>
                             > &nbsp; Mejores oportunidades<br>
@@ -492,7 +523,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
                         </p>
                     
                     </div>
-                    <div class="col-8 col-xs-9 col-sm-5 col-md-6 col-lg-6 lista" style="background:red">
+                    <div class="col-8 col-xs-9 col-sm-5 col-md-6 col-lg-6 lista">
                         <p  style="line-height: 2;">
                             > &nbsp; Superación personal<br>
                             > &nbsp; Mejores oportunidades<br>

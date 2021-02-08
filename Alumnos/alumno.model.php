@@ -1,5 +1,27 @@
 <?php
 
+// Include config file
+require_once "../Require/config.php";
+
+
+//===========================================================================================================================
+
+
+if ($stmt3 = $link->prepare("SELECT  periodo FROM periodoactual")) {
+    $stmt3->execute();
+
+    /* bind variables to prepared statement */
+    $stmt3->bind_result($periActuBD);
+
+    /* fetch values */
+$stmt3->fetch();
+
+    /* close statement */
+    $stmt3->close();
+}
+
+
+
 class AlumnoModel
 {
 	private $pdo;
@@ -42,12 +64,12 @@ class AlumnoModel
                 $alm->__SET('estado', $r->estado);
                 $alm->__SET('municipio', $r->municipio);
                 $alm->__SET('localidad', $r->localidad);
+                $alm->__SET('postal', $r->postal);
+                $alm->__SET('email', $r->email);
                 $alm->__SET('telefono', $r->telefono);
-				$alm->__SET('nivelActual', $r->nivelActual);
-				$alm->__SET('grupoActual', $r->grupoActual);
-                $alm->__SET('carrera', $r->carrera);
-                $alm->__SET('modalidad', $r->modalidad);
-				$alm->__SET('idmaestroActual', $r->idmaestroActual);
+				
+                
+                
 
 				$result[] = $alm;
 			}
@@ -59,6 +81,86 @@ class AlumnoModel
 			die($e->getMessage());
 		}
 	}
+    
+    
+    public function Listar2()
+	{
+        
+        global $periActuBD;
+		try
+		{
+			$result = array();
+
+			$stm = $this->pdo->prepare("SELECT * FROM gruposasignados WHERE periodo = '".$periActuBD."' AND nivel = 1");
+			$stm->execute();
+
+			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
+			{
+				$alm = new Alumno();
+				
+				$alm->__SET('idgrupo', $r->idgrupo);
+				$alm->__SET('nivel', $r->nivel);
+                $alm->__SET('grupo', $r->grupo);
+				$alm->__SET('carrera', $r->carrera);
+				$alm->__SET('modalidad', $r->modalidad);
+				$alm->__SET('periodo', $r->periodo);
+                $alm->__SET('idmaestro', $r->idmaestro);
+				
+                
+                
+
+				$result[] = $alm;
+			}
+
+			return $result;
+		}
+		catch(Exception $e)
+		{
+			die($e->getMessage());
+		}
+	}
+    
+    
+    public function Listar3($idgrupo)
+	{
+        
+        global $periActuBD;
+		try
+		{
+			$result = array();
+
+			$stm = $this->pdo->prepare("SELECT * FROM gruposasignados WHERE idgrupo = '".$idgrupo."'");
+			$stm->execute();
+
+			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
+			{
+				$alm = new Alumno();
+				
+				$alm->__SET('idgrupo', $r->idgrupo);
+				$alm->__SET('nivel', $r->nivel);
+                $alm->__SET('grupo', $r->grupo);
+				$alm->__SET('carrera', $r->carrera);
+				$alm->__SET('modalidad', $r->modalidad);
+				$alm->__SET('periodo', $r->periodo);
+                $alm->__SET('idmaestro', $r->idmaestro);
+				
+                
+                
+
+				$result[] = $alm;
+			}
+
+			return $result;
+		}
+		catch(Exception $e)
+		{
+			die($e->getMessage());
+		}
+	}
+    
+    
+    
+    
 
 	public function Obtener($id)
 	{
@@ -85,12 +187,12 @@ class AlumnoModel
             $alm->__SET('estado', $r->estado);
             $alm->__SET('municipio', $r->municipio);
             $alm->__SET('localidad', $r->localidad);
+            $alm->__SET('postal', $r->postal);
+            $alm->__SET('email', $r->email);
             $alm->__SET('telefono', $r->telefono);
-			$alm->__SET('nivelActual', $r->nivelActual);
-			$alm->__SET('grupoActual', $r->grupoActual);
-            $alm->__SET('carrera', $r->carrera);
-            $alm->__SET('modalidad', $r->modalidad);
-			$alm->__SET('idmaestroActual', $r->idmaestroActual);
+			
+            
+            
 
 			return $alm;
 		} catch (Exception $e) 
@@ -110,7 +212,9 @@ class AlumnoModel
                         telefono        = ?,
                         estado          = ?,
                         municipio       = ?,
-                        localidad       = ?
+                        localidad       = ?,
+                        postal          = ?,
+                        email           = ?
 				    WHERE numeroControl = '".$_SESSION['numeroControl']."'";
 
 			$this->pdo->prepare($sql)
@@ -120,8 +224,9 @@ class AlumnoModel
                     $data->__GET('telefono'),
                     $data->__GET('estado'), 
                     $data->__GET('municipio'), 
-                    $data->__GET('localidad')
-					//$data->__GET('id')
+                    $data->__GET('localidad'),
+                    $data->__GET('postal'),
+                    $data->__GET('email')
 					)
 				);
 		} catch (Exception $e) 
@@ -129,6 +234,8 @@ class AlumnoModel
 			die($e->getMessage());
 		}
 	}
+    
+    
 
 	
 }

@@ -2,7 +2,7 @@
 
 session_start();
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+if(isset($_SESSION["loggedinAl"]) && $_SESSION["loggedinAl"] === true){
 
     // Unset all of the session variables
     $_SESSION = array();
@@ -40,7 +40,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($numeroControl_err) && empty($contrase_err)){
         // Prepare a select statement
-        $sql = "SELECT id, numeroControl, curp, nivelActual, contrase,nombre, paterno, materno FROM alumnos WHERE numeroControl = ?";
+        $sql = "SELECT id, numeroControl, curp, contrase, nombre, paterno, materno FROM alumnos WHERE numeroControl = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -57,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if username exists, if yes then verify contraseña
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp, $nivelActual, $hashed_contrase, $nombre, $paterno, $materno);
+                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp, $hashed_contrase, $nombre, $paterno, $materno);
                     
                     if(mysqli_stmt_fetch($stmt)){
                         
@@ -68,11 +68,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             session_start();
                             
                             // Store data in session variables
-                            $_SESSION["loggedin"] = true;
+                            $_SESSION["loggedinAl"] = true;
                             $_SESSION["id"] = $id;   
                             $_SESSION["numeroControl"] = $numeroControl;
                             $_SESSION["curp"] = $curp;
-							$_SESSION["nivelActual"] = $nivelActual;
                             $_SESSION["nombre"] = $nombre;
                             $_SESSION["paterno"] = $paterno;
                             $_SESSION["materno"] = $materno;
@@ -232,87 +231,155 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 <body>
 
-    <header>
-        
-            
-        <div class="container-fluid">
+        <header>
 
-            <div class="row">
-                
-                
-                <div class="col-lg-8 col-xs-12 col-sm-12 col-md-12">
-                    <img class="logo" src="../imagenes/itslnobreLargo.png" >
-                </div>
-                <div class="col-sm-4" style="text-align:center; padding-top:20px; ">
-                    <img src="../imagenes/TecNMwhite.png" width="150px" height="auto" >
-                </div>
-                
-                
-                
-                
+            <div class="container-fluid">
+
                 <div class="row">
-                    <div class="col-lg-10">
-                    
+
+                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-8">
+                        <img class="logo" src="../imagenes/itslnobreLargo.png" >
                     </div>
-                    <div class="col-lg-2" >
-
-
-                        <div class="btn-group dropdown" role="group">
-
-                            <a href="../home.php" class="btn btn-outline-light" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
-
-                            <div class=" btn-group dropdown" role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle active" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Estudiantes
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item" href="inscripcionAlumn.php" "dropdown-item">Inscripción</a>
-                                    <a class="dropdown-item" href="reinscripcionVeri.php" "dropdown-item">Reinscripción</a>
-                                    <a class="dropdown-item active" href="alumnos.php" "dropdown-item">Consulta calificaciones</a>
-                                </div>
-
-                            </div >
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Docentes
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <a class="dropdown-item" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Docentes</a>
-                                </div>
-
-                            </div >
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Administración
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
-                                    <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
-                                </div>
-
-                            </div >
-
-                        </div>    
+                    <div class="col-sm-4 col-md-3" style="text-align:center; padding-top:20px; ">
+                        <img src="../imagenes/TecNMwhite.png" width="150px" height="auto" >
                     </div>
-                
-                
+
                 </div>
+                
+                
+                
+                
+                
+
+                    <div class="row justify-content-md-center">
+
+                        <div class="col-md-12 d-none d-sm-block" style="text-align:center;">
+
+
+                            <div class="btn-group dropdown" role="group">
+
+                                <a href="../home.php" class="btn btn-outline-light" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle active" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Estudiantes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <a class="dropdown-item" href="inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                        <a class="dropdown-item" href="reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
+                                        <a class="dropdown-item active" href="califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                        <a class="dropdown-item" href="horarioAl.php" "dropdown-item">Consultar Horario</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Docentes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                        <a class="dropdown-item" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Acceso Docentes</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Administración
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                        <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
+                                    </div>
+
+                                </div >
+
+                            </div>    
+                        </div>
+
+
+                    </div>
+                
+                
+                
+                
+                
+                
+                <div class="row justify-content-md-center collapse" id="navbarToggleExternalContent" >
+
+                        <div class="col-xs-12 col-sm-12 d-block d-sm-none" style="text-align:center;" >
+
+
+                            <div class="btn-group-vertical btn-block dropdown" role="group">
+
+                                <a href="../home.php" class="btn btn-outline-light btn-block active" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Estudiantes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <a class="dropdown-item" href="inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                        <a class="dropdown-item" href="reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
+                                        <a class="dropdown-item active" href="califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                        <a class="dropdown-item" href="horarioAl.php" "dropdown-item">Consultar Horario</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light btn-block dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Docentes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                        <a class="dropdown-item" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Acceso Docentes</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Administración
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                        <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
+                                    </div>
+
+                                </div >
+
+                            </div>   
+                            
+                        </div>
+
+
+                    </div>
+                  
+
+
 
 
             </div>
-        </div>
+            
+            <nav class="navbar navbar-expnad-lg navbar-light bg-light d-block d-sm-none">
+                <button class="navbar-toggler d-block d-sm-none" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
 
-    </header>
+        </header>
 
-
-
+<br><br><br>
     
     
     <div class="container-fluid">
@@ -367,7 +434,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </div>
     
     
-    
+    <br><br><br>
     
 
      <div class="container-fluid">

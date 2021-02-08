@@ -1,668 +1,717 @@
 <?php
 
-if(isset($_POST['btnPostMe801'])){  
-    //numeroControl , nivel, grupo, post parcial, periodo, post calificacion, 
-                                                                              //ismaestro
-                                                                                            //carrera, modalidad, comentario, conexión  
-      
-    calificar($numeros5[0], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec400'])){  
+          //numeroControl ,    nivel,       grupo,        post parcial,      periodo,      post calificacion      ismaestro                carrera,    modalidad,       comentario         
+    calificar($numeros5[0], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe802'])){  
-        //numeroControl , nivel, grupo, post parcial, periodo, post calificacion, 
-                                                                              //ismaestro
-                                                                                            //carrera, modalidad, comentario, conexión  
-    modificar($numeros5[0], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem400'])){  
+           //numeroControl ,   nivel,       grupo,        post parcial,      periodo,     post calificacion,        ismaestro             carrera,     modalidad,    comentario          
+    modificar($numeros5[0], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep400'])){
+             //numeroControl , nivel,       grupo,    modalidad,     carrera,       periodo,   idmaestro,    comentario,     conexión 
+    promediar($numeros5[0], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe803'])){  
-      
-    calificar($numeros5[1], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec401'])){          
+    calificar($numeros5[1], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe804'])){  
-        
-    modificar($numeros5[1], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem401'])){          
+    modificar($numeros5[1], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep401'])){
+     promediar($numeros5[1], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe805'])){  
-      
-    calificar($numeros5[2], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec402'])){          
+    calificar($numeros5[2], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe806'])){  
-        
-    modificar($numeros5[2], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem402'])){          
+    modificar($numeros5[2], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep402'])){
+     promediar($numeros5[2], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe807'])){  
-      
-    calificar($numeros5[3], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec403'])){          
+    calificar($numeros5[3], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe808'])){  
-        
-    modificar($numeros5[3], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem403'])){          
+    modificar($numeros5[3], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep403'])){
+     promediar($numeros5[3], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe809'])){  
-      
-    calificar($numeros5[4], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec404'])){          
+    calificar($numeros5[4], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe810'])){  
-        
-    modificar($numeros5[4], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem404'])){          
+    modificar($numeros5[4], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep404'])){
+     promediar($numeros5[4], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe811'])){  
-      
-    calificar($numeros5[5], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec405'])){          
+    calificar($numeros5[5], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe812'])){  
-        
-    modificar($numeros5[5], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem405'])){          
+    modificar($numeros5[5], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep405'])){
+     promediar($numeros5[5], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe813'])){  
-      
-    calificar($numeros5[6], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec406'])){          
+    calificar($numeros5[6], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-if(isset($_POST['btnPostMe814'])){  
-        
-    modificar($numeros5[6], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem406'])){          
+    modificar($numeros5[6], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep406'])){
+     promediar($numeros5[6], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe815'])){  
-      
-    calificar($numeros5[7], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec407'])){          
+    calificar($numeros5[7], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-if(isset($_POST['btnPostMe816'])){  
-        
-    modificar($numeros5[7], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem407'])){          
+    modificar($numeros5[7], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep407'])){
+     promediar($numeros5[7], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe817'])){  
-      
-    calificar($numeros5[8], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec408'])){          
+    calificar($numeros5[8], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-if(isset($_POST['btnPostMe818'])){  
-        
-    modificar($numeros5[8], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem408'])){          
+    modificar($numeros5[8], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-
+if(isset($_POST['btnPostMep408'])){
+     promediar($numeros5[8], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe819'])){  
-      
-    calificar($numeros5[9], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec409'])){          
+    calificar($numeros5[9], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe820'])){  
-        
-    modificar($numeros5[9], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem409'])){          
+    modificar($numeros5[9], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep409'])){
+     promediar($numeros5[9], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe821'])){  
-      
-    calificar($numeros5[10], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec410'])){          
+    calificar($numeros5[10], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe822'])){  
-        
-    modificar($numeros5[10], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem410'])){          
+    modificar($numeros5[10], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep410'])){
+     promediar($numeros5[10], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe823'])){  
-      
-    calificar($numeros5[11], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec411'])){          
+    calificar($numeros5[11], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe824'])){  
-        
-    modificar($numeros5[11], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem411'])){          
+    modificar($numeros5[11], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-
+if(isset($_POST['btnPostMep411'])){
+     promediar($numeros5[11], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe825'])){  
-      
-    calificar($numeros5[12], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec412'])){          
+    calificar($numeros5[12], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe826'])){  
-        
-    modificar($numeros5[12], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem412'])){          
+    modificar($numeros5[12], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep412'])){
+     promediar($numeros5[12], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe827'])){  
-      
-    calificar($numeros5[13], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec413'])){          
+    calificar($numeros5[13], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe828'])){  
-        
-    modificar($numeros5[13], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem413'])){          
+    modificar($numeros5[13], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep413'])){
+     promediar($numeros5[13], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe829'])){  
-      
-    calificar($numeros5[14], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec414'])){          
+    calificar($numeros5[14], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe830'])){  
-        
-    modificar($numeros5[14], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem414'])){          
+    modificar($numeros5[14], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep414'])){
+     promediar($numeros5[14], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe831'])){  
-      
-    calificar($numeros5[15], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec415'])){          
+    calificar($numeros5[15], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe832'])){  
-        
-    modificar($numeros5[15], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem415'])){          
+    modificar($numeros5[15], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep415'])){
+     promediar($numeros5[15], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe833'])){  
-      
-    calificar($numeros5[16], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec416'])){          
+    calificar($numeros5[16], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe834'])){  
-        
-    modificar($numeros5[16], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem416'])){          
+    modificar($numeros5[16], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep416'])){
+     promediar($numeros5[16], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe835'])){  
-      
-    calificar($numeros5[17], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec417'])){          
+    calificar($numeros5[17], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe836'])){  
-        
-    modificar($numeros5[17], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem417'])){          
+    modificar($numeros5[17], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep417'])){
+     promediar($numeros5[17], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe837'])){  
-      
-    calificar($numeros5[18], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec418'])){          
+    calificar($numeros5[18], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe838'])){  
-        
-    modificar($numeros5[18], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem418'])){          
+    modificar($numeros5[18], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep418'])){
+     promediar($numeros5[18], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe839'])){  
-      
-    calificar($numeros5[19], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec419'])){          
+    calificar($numeros5[19], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe840'])){  
-        
-    modificar($numeros5[19], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem419'])){          
+    modificar($numeros5[19], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep419'])){
+     promediar($numeros5[19], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe841'])){  
-      
-    calificar($numeros5[20], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec420'])){          
+    calificar($numeros5[20], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe842'])){  
-        
-    modificar($numeros5[20], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem420'])){          
+    modificar($numeros5[20], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep420'])){
+     promediar($numeros5[20], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe843'])){  
-      
-    calificar($numeros5[21], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec421'])){          
+    calificar($numeros5[21], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe844'])){  
-        
-    modificar($numeros5[21], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem421'])){          
+    modificar($numeros5[21], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep421'])){
+     promediar($numeros5[21], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe845'])){  
-      
-    calificar($numeros5[22], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec422'])){          
+    calificar($numeros5[22], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe846'])){  
-        
-    modificar($numeros5[22], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem422'])){          
+    modificar($numeros5[22], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep422'])){
+     promediar($numeros5[22], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe847'])){  
-      
-    calificar($numeros5[23], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec423'])){          
+    calificar($numeros5[23], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe848'])){  
-        
-    modificar($numeros5[23], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem423'])){          
+    modificar($numeros5[23], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep423'])){
+     promediar($numeros5[23], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe849'])){  
-      
-    calificar($numeros5[24], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec424'])){          
+    calificar($numeros5[24], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"], $link);
 }
-if(isset($_POST['btnPostMe850'])){  
-        
-    modificar($numeros5[24], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem424'])){          
+    modificar($numeros5[24], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep424'])){
+     promediar($numeros5[24], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe851'])){  
-      
-    calificar($numeros5[25], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec425'])){          
+    calificar($numeros5[25], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe852'])){  
-        
-    modificar($numeros5[25], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem425'])){          
+    modificar($numeros5[25], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep425'])){
+     promediar($numeros5[25], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe853'])){  
-      
-    calificar($numeros5[26], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec426'])){          
+    calificar($numeros5[26], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe854'])){  
-        
-    modificar($numeros5[26], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem426'])){          
+    modificar($numeros5[26], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep426'])){
+     promediar($numeros5[26], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe855'])){  
-      
-    calificar($numeros5[27], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec427'])){          
+    calificar($numeros5[27], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe856'])){  
-        
-    modificar($numeros5[27], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem427'])){          
+    modificar($numeros5[27], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep427'])){
+     promediar($numeros5[27], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe857'])){  
-      
-    calificar($numeros5[28], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec428'])){          
+    calificar($numeros5[28], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe858'])){  
-        
-    modificar($numeros5[28], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem428'])){          
+    modificar($numeros5[28], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep428'])){
+     promediar($numeros5[28], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe859'])){  
-      
-    calificar($numeros5[29], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec429'])){          
+    calificar($numeros5[29], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe860'])){  
-        
-    modificar($numeros5[29], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem429'])){          
+    modificar($numeros5[29], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep429'])){
+     promediar($numeros5[29], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe861'])){  
-      
-    calificar($numeros5[30], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec430'])){          
+    calificar($numeros5[30], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe862'])){  
-        
-    modificar($numeros5[30], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem430'])){          
+    modificar($numeros5[30], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep430'])){
+     promediar($numeros5[30], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe863'])){  
-      
-    calificar($numeros5[31], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec431'])){          
+    calificar($numeros5[31], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe864'])){  
-        
-    modificar($numeros5[31], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem431'])){          
+    modificar($numeros5[31], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep431'])){
+     promediar($numeros5[31], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe865'])){  
-      
-    calificar($numeros5[32], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec432'])){          
+    calificar($numeros5[32], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe866'])){  
-        
-    modificar($numeros5[32], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem432'])){          
+    modificar($numeros5[32], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep432'])){
+     promediar($numeros5[32], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe867'])){  
-      
-    calificar($numeros5[33], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec433'])){          
+    calificar($numeros5[33], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe868'])){  
-        
-    modificar($numeros5[33], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem433'])){          
+    modificar($numeros5[33], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep433'])){
+     promediar($numeros5[33], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe869'])){  
-      
-    calificar($numeros5[34], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec434'])){          
+    calificar($numeros5[34], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe870'])){  
-        
-    modificar($numeros5[34], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem434'])){          
+    modificar($numeros5[34], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep434'])){
+     promediar($numeros5[34], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe871'])){  
-      
-    calificar($numeros5[35], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec435'])){          
+    calificar($numeros5[35], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe872'])){  
-        
-    modificar($numeros5[35], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem435'])){          
+    modificar($numeros5[35], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep435'])){
+     promediar($numeros5[35], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe873'])){  
-      
-    calificar($numeros5[36], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec436'])){          
+    calificar($numeros5[36], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe874'])){  
-        
-    modificar($numeros5[36], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem436'])){          
+    modificar($numeros5[36], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep436'])){
+     promediar($numeros5[36], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe875'])){  
-      
-    calificar($numeros5[37], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec437'])){          
+    calificar($numeros5[37], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe876'])){  
-        
-    modificar($numeros5[37], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem437'])){          
+    modificar($numeros5[37], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep437'])){
+     promediar($numeros5[37], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe877'])){  
-      
-    calificar($numeros5[38], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec438'])){          
+    calificar($numeros5[38], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe878'])){  
-        
-    modificar($numeros5[38], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem438'])){          
+    modificar($numeros5[38], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep438'])){
+     promediar($numeros5[38], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe879'])){  
-      
-    calificar($numeros5[39], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec439'])){          
+    calificar($numeros5[39], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe880'])){  
-        
-    modificar($numeros5[39], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem439'])){          
+    modificar($numeros5[39], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-
+if(isset($_POST['btnPostMep439'])){
+     promediar($numeros5[39], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe881'])){  
-      
-    calificar($numeros5[40], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec440'])){          
+    calificar($numeros5[40], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe882'])){  
-        
-    modificar($numeros5[40], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem440'])){          
+    modificar($numeros5[40], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-
+if(isset($_POST['btnPostMep440'])){
+     promediar($numeros5[40], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe883'])){  
-      
-    calificar($numeros5[41], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec441'])){          
+    calificar($numeros5[41], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe884'])){  
-        
-    modificar($numeros5[41], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem441'])){          
+    modificar($numeros5[41], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep441'])){
+     promediar($numeros5[41], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe885'])){  
-      
-    calificar($numeros5[42], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec442'])){          
+    calificar($numeros5[42], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe886'])){  
-        
-    modificar($numeros5[42], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem442'])){          
+    modificar($numeros5[42], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep442'])){
+     promediar($numeros5[42], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe887'])){  
-      
-    calificar($numeros5[43], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec443'])){          
+    calificar($numeros5[43], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe888'])){  
-        
-    modificar($numeros5[43], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem443'])){          
+    modificar($numeros5[43], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-
+if(isset($_POST['btnPostMep443'])){
+     promediar($numeros5[43], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe889'])){  
-      
-    calificar($numeros5[44], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec444'])){          
+    calificar($numeros5[44], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-if(isset($_POST['btnPostMe890'])){  
-        
-    modificar($numeros5[44], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem444'])){          
+    modificar($numeros5[44], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep444'])){
+     promediar($numeros5[44], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe891'])){  
-      
-    calificar($numeros5[45], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec445'])){          
+    calificar($numeros5[45], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe892'])){  
-        
-    modificar($numeros5[45], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem445'])){          
+    modificar($numeros5[45], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep445'])){
+     promediar($numeros5[45], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe893'])){  
-      
-    calificar($numeros5[46], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec446'])){          
+    calificar($numeros5[46], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe894'])){  
-        
-    modificar($numeros5[46], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem446'])){          
+    modificar($numeros5[46], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep446'])){
+     promediar($numeros5[46], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe895'])){  
-      
-    calificar($numeros5[47], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec447'])){          
+    calificar($numeros5[47], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe896'])){  
-        
-    modificar($numeros5[47], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem447'])){          
+    modificar($numeros5[47], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep447'])){
+     promediar($numeros5[47], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe897'])){  
-      
-    calificar($numeros5[48], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec448'])){          
+    calificar($numeros5[48], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe898'])){  
-        
-    modificar($numeros5[48], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem448'])){          
+    modificar($numeros5[48], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep448'])){
+     promediar($numeros5[48], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe899'])){  
-      
-    calificar($numeros5[49], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec449'])){          
+    calificar($numeros5[49], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe900'])){  
-        
-    modificar($numeros5[49], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem449'])){          
+    modificar($numeros5[49], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep449'])){
+     promediar($numeros5[49], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe901'])){  
-      
-    calificar($numeros5[50], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec450'])){          
+    calificar($numeros5[50], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe902'])){  
-        
-    modificar($numeros5[50], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem450'])){          
+    modificar($numeros5[50], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-
+if(isset($_POST['btnPostMep450'])){
+     promediar($numeros5[50], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe903'])){  
-      
-    calificar($numeros5[51], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec451'])){          
+    calificar($numeros5[51], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-if(isset($_POST['btnPostMe904'])){  
-        
-    modificar($numeros5[51], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem451'])){          
+    modificar($numeros5[51], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-
+if(isset($_POST['btnPostMep451'])){
+     promediar($numeros5[51], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe905'])){  
-      
-    calificar($numeros5[52], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec452'])){          
+    calificar($numeros5[52], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe906'])){  
-        
-    modificar($numeros5[52], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem452'])){          
+    modificar($numeros5[52], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep452'])){
+     promediar($numeros5[52], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe907'])){  
-      
-    calificar($numeros5[53], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec453'])){          
+    calificar($numeros5[53], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe908'])){  
-        
-    modificar($numeros5[53], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem453'])){          
+    modificar($numeros5[53], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep453'])){
+     promediar($numeros5[53], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe909'])){  
-      
-    calificar($numeros5[54], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec454'])){          
+    calificar($numeros5[54], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-if(isset($_POST['btnPostMe910'])){  
-        
-    modificar($numeros5[54], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem454'])){          
+    modificar($numeros5[54], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep454'])){
+     promediar($numeros5[54], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe911'])){  
-      
-    calificar($numeros5[55], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec455'])){          
+    calificar($numeros5[55], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe912'])){  
-        
-    modificar($numeros5[55], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem455'])){          
+    modificar($numeros5[55], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-
+if(isset($_POST['btnPostMep455'])){
+     promediar($numeros5[55], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe913'])){  
-      
-    calificar($numeros5[56], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec456'])){          
+    calificar($numeros5[56], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe914'])){  
-        
-    modificar($numeros5[56], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem456'])){          
+    modificar($numeros5[56], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep456'])){
+     promediar($numeros5[56], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe915'])){  
-      
-    calificar($numeros5[57], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec457'])){          
+    calificar($numeros5[57], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-if(isset($_POST['btnPostMe916'])){  
-        
-    modificar($numeros5[57], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem457'])){          
+    modificar($numeros5[57], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep457'])){
+     promediar($numeros5[57], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe917'])){  
-      
-    calificar($numeros5[58], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec458'])){          
+    calificar($numeros5[58], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe918'])){  
-        
-    modificar($numeros5[58], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem458'])){          
+    modificar($numeros5[58], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-
+if(isset($_POST['btnPostMep458'])){
+     promediar($numeros5[58], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
-
-if(isset($_POST['btnPostMe919'])){  
-      
-    calificar($numeros5[59], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMec459'])){          
+    calificar($numeros5[59], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
 }
-if(isset($_POST['btnPostMe920'])){  
-        
-    modificar($numeros5[59], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $link);
+if(isset($_POST['btnPostMem459'])){          
+    modificar($numeros5[59], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
 }
-
+if(isset($_POST['btnPostMep459'])){
+     promediar($numeros5[59], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec460'])){          
+    calificar($numeros5[60], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMem460'])){          
+    modificar($numeros5[60], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMep460'])){
+     promediar($numeros5[60], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec461'])){          
+    calificar($numeros5[61], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
+}
+if(isset($_POST['btnPostMem461'])){          
+    modificar($numeros5[61], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
+}
+if(isset($_POST['btnPostMep461'])){
+     promediar($numeros5[61], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec462'])){          
+    calificar($numeros5[62], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMem462'])){          
+    modificar($numeros5[62], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMep462'])){
+     promediar($numeros5[62], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec463'])){          
+    calificar($numeros5[63], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMem463'])){          
+    modificar($numeros5[63], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
+}
+if(isset($_POST['btnPostMep463'])){
+     promediar($numeros5[63], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec464'])){          
+    calificar($numeros5[64], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
+}
+if(isset($_POST['btnPostMem464'])){          
+    modificar($numeros5[64], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMep464'])){
+     promediar($numeros5[64], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec465'])){          
+    calificar($numeros5[65], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMem465'])){          
+    modificar($numeros5[65], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMep465'])){
+     promediar($numeros5[65], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec466'])){          
+    calificar($numeros5[66], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMem466'])){          
+    modificar($numeros5[66], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMep466'])){
+     promediar($numeros5[66], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec467'])){          
+    calificar($numeros5[67], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMem467'])){          
+    modificar($numeros5[67], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMep467'])){
+     promediar($numeros5[67], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec468'])){          
+    calificar($numeros5[68], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMem468'])){          
+    modificar($numeros5[68], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
+}
+if(isset($_POST['btnPostMep468'])){
+     promediar($numeros5[68], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec469'])){          
+    calificar($numeros5[69], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMem469'])){          
+    modificar($numeros5[69], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMep469'])){
+     promediar($numeros5[69], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
+//=====================================================================================================================
+if(isset($_POST['btnPostMec470'])){          
+    calificar($numeros5[70], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"], $_POST["oportunidad"],  $link);
+}
+if(isset($_POST['btnPostMem470'])){          
+    modificar($numeros5[70], $dataRow5[0], $dataRow5[1], $_POST["parcial"], $dataRow5[4], $_POST["calificacion"], $_SESSION["idmaestro"], $dataRow5[2], $dataRow5[3], $_POST["comentario"],  $_POST["oportunidad"], $link);
+}
+if(isset($_POST['btnPostMep470'])){
+     promediar($numeros5[70], $dataRow5[0], $dataRow5[1],$dataRow5[3], $dataRow5[2],$dataRow5[4], $_SESSION["idmaestro"] , $_POST["comentario"], $link);
+}
 //=====================================================================================================================
 
 

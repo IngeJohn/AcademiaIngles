@@ -3,7 +3,7 @@
 session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+if(isset($_SESSION["loggedinA"]) && $_SESSION["loggedinA"] === true){
    
 }else{
     header("location: ../Alumnos/logoutAl.php");
@@ -24,32 +24,83 @@ if ($mes >= 1 && $mes <= 6){
 }else if($mes >= 8 && $mes <= 12){
     $per = 2;
     $peri = "Periodo: ".$per."-".$year;
+    
 }
 
 
+$periodoActu = $per."-".$year;
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+
+
+
+
+if ($stmt3 = $link->prepare("SELECT  periodo FROM periodoactual")) {
+    $stmt3->execute();
+
+    /* bind variables to prepared statement */
+    $stmt3->bind_result($periActuBD);
+
+    /* fetch values */
+$stmt3->fetch();
+
+    /* close statement */
+    $stmt3->close();
+}
+
+//echo $periodoActu." ".$periActuBD;
+
+if( $periActuBD !== $periodoActu ){
     
-    $sql1 = "UPDATE `academia_ingles`.`alumnos` SET `nivelActual`='6', `periodoActual`='2-2020' WHERE `numeroControl`= {$_SESSION["numeroControl"]}";
+    $sql2 = "UPDATE periodoactual SET periodo ='$periodoActu', periodoAnterior ='$periActuBD';";
     
-    if($stmt = mysqli_prepare($link, $sql)){
-        
+    if($stmt4 = mysqli_prepare($link, $sql2)){
+        $stmt4->execute();
     }
-    
-    echo("<p><script>alert('¡Te has inscrito exitosamente!');</script></p>");
-
+    //echo("<p><script>alert('¡Periodo actualizado!');</script></p>");
 }
 
 
 
 
+//==============================================================================================================================================
+function grupoInformacion($id){
+    
+    global $link;
+    
+    $nivel = $grupo = $carrera = $modalidad = $periodo = $idmaestro = "";
+    
+    if ($stmt8 = $link->prepare("SELECT nivel, grupo, carrera, modalidad, periodo, idmaestro FROM gruposasignados WHERE idgrupo = '{$id}'")) {
+        
+        $stmt8->execute();
 
-$numeroControl = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $telefono = $nivelActual = $idmaestroActual = $estado = $modalidad = $numeroNivel = " ";
+        /* bind variables to prepared statement */
+        $stmt8->bind_result($nivel , $grupo , $carrera , $modalidad , $periodo , $idmaestro);
+
+        /* fetch values */
+        $stmt8->fetch();
+
+        /* close statement */
+        $stmt8->close();
+        
+        return $nivel." ".$grupo." | ".$carrera." | ".$modalidad." | ".$periodo;
+    }
 
 
+}
+
+
+
+//==============================================================================================================================================
+
+$numeroControl = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $altasBajas = $municipio = $localidad = $postal = $email = $telefono = $nivel = $idmaestro = $estado = $modalidad = $numeroNivel = " ";
+
+// Define variables and initialize with empty values
+$new_password = $confirm_password = $old_password = "";
+$new_password_err = $confirm_password_err = $old_password_err = "";
 
 // Prepare a select statement, checks for the las level.
-        $sql = "SELECT id, numeroControl, curp, nombre, paterno, materno, sexo, direccion, telefono, nivelActual, idmaestroActual FROM alumnos WHERE numeroControl = ?";
+        $sql = "SELECT id, numeroControl, curp, nombre, paterno, materno, sexo, direccion, estado, municipio, localidad, postal, email, telefono FROM alumnos WHERE numeroControl = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -68,16 +119,9 @@ $numeroControl = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $t
                 if(mysqli_stmt_num_rows($stmt) == 1){ 
                     
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp, $nombre, $paterno, $materno, $sexo, $direccion, $telefono, $nivelActual, $idmaestroActual);
+                    mysqli_stmt_bind_result($stmt, $id, $numeroControl, $curp, $nombre, $paterno, $materno, $sexo, $direccion, $estado, $municipio, $localidad, $postal, $email, $telefono);
                     if(mysqli_stmt_fetch($stmt)){
-                            // Store data in session variables  
-                            $_SESSION["nombre"] = $nombre;
-                            $_SESSION["paterno"] = $paterno;
-                            $_SESSION["materno"] = $materno;
-                            $_SESSION["sexo"] = $sexo;
-                            $_SESSION["direccion"] = $direccion;
-                            $_SESSION["telefono"] = $telefono;
-                            $_SESSION["nivelActual"] = $nivelActual;
+                         
                         
                         //echo "si entro\n";
                         } 
@@ -93,7 +137,7 @@ $numeroControl = $curp = $nombre = $paterno = $materno = $sexo = $direccion = $t
         // Close statement
         mysqli_stmt_close($stmt);
 
-$query = "SELECT  numeroNivel, estado, modalidad FROM `niveles` WHERE numeroControl = {$_SESSION["numeroControl"]}";
+$query = "SELECT promedio, estado, inscripcionPagoEstado, libroPagoEstado, idgrupo FROM niveles WHERE numeroControl = {$_SESSION["numeroControl"]}";
 
 
 // resultNiv
@@ -109,122 +153,349 @@ if (!$result) {
 
 $dataRow = "";
 
+$grupoInf = "";
+
 while($row1 = mysqli_fetch_array($result)){
-    $dataRow = $dataRow."<tr><td>&nbsp;&nbsp;&nbsp;$row1[0]</td><td>$row1[1]</td><td>$row1[2]</td><tr>"; 
+    
+    $grupoInf = grupoInformacion($row1[4]);
+    
+    $dataRow = $dataRow."<tr><td>$grupoInf</td><td>$row1[0]</td><td>$row1[1]</td><td>$row1[2]</td><td>$row1[3]</td><tr>"; 
 }
-
-
 
 
 // Close statement
 $result->close();
 
+//=================================================================================================================================================================
 
 
-if ($stmt2 = $link->prepare("SELECT  numeroNivel, estado, modalidad FROM `niveles` WHERE numeroControl = {$_SESSION["numeroControl"]} AND numeroNivel = {$nivelActual}")) {
+
+$numeroNivel = $estadoNivele = $periodoNivel = "";
+$idgrupo = $nivel = $grupo = $carrera = $modalidad = $periodo = $idmaestro = "";
+
+if ($stmt2 = $link->prepare("SELECT idgrupo, estado FROM niveles WHERE numeroControl = '{$_SESSION["numeroControl"]}' ORDER BY id DESC LIMIT 1;")) {
     $stmt2->execute();
 
     /* bind variables to prepared statement */
-    $stmt2->bind_result($numeroNivel, $estado, $modalidad);
+    $stmt2->bind_result($idgrupo,$estadoDelNivel);
 
     /* fetch values */
 $stmt2->fetch();
 
-    
-    
 
 
     /* close statement */
     $stmt2->close();
 }
 /* close connection */
-$link->close();
+
+
+
+if ($stmt7 = $link->prepare("SELECT nivel, grupo, carrera, modalidad, periodo, idmaestro FROM gruposasignados WHERE idgrupo = '{$idgrupo}' ORDER BY idgrupo DESC LIMIT 1;")) {
+    $stmt7->execute();
+
+    /* bind variables to prepared statement */
+    $stmt7->bind_result($nivel, $grupo, $carrera, $modalidad, $periodo, $idmaestro);
+
+    /* fetch values */
+$stmt7->fetch();
+
+
+
+    /* close statement */
+    $stmt7->close();
+}
+/* close connection */
+
+
+
+//==================================================================================================================================================================
+$idmaestroSiguienteNivel = "";
+
+$nivelMasUno = $nivel+1;
+
+
+
+if($estadoDelNivel == "En curso"){
+    
+    $siguienteNivel = $nivel;
+    
+}else{
+    
+   $siguienteNivel = $nivel+1;
+    
+}
+
+
+if ($stmtid = $link->prepare("SELECT idmaestro, idgrupo FROM gruposasignados WHERE grupo = '{$grupo}' AND nivel = '{$siguienteNivel}' AND carrera = '{$carrera}' AND modalidad = '{$modalidad}' AND periodo = '{$periActuBD}';")) {
+    
+    $stmtid->execute();
+
+    /* bind variables to prepared statement */
+    $stmtid->bind_result($idmaestroSiguienteNivel, $idgrupoSiguienteNivel);
+
+    /* fetch values */
+$stmtid->fetch();
 
 
 
 
+    /* close statement */
+    $stmtid->close();
+}
+
+
+
+
+
+
+//=========================================================================================================================================
+
+function maestroID($id){
+    try{
+            global $link;
+    
+            $titulo = $nombre = $paterno = $materno = "";
+
+            if ($stmtm = $link->prepare("SELECT titulo, nombre, paterno, materno FROM docentes WHERE idmaestro = '{$id}'")) {
+
+                $stmtm->execute();
+
+                /* bind variables to prepared statement */
+                $stmtm->bind_result($titulo, $nombre, $paterno, $materno);
+
+                /* fetch values */
+                $stmtm->fetch();
+
+                /* close statement */
+                //$stmtm->close();
+
+                return $titulo." ".$nombre." ".$paterno." ".$materno;
+            }
+        
+        
+    }catch(Exception $e)
+		{
+			die($e->getMessage());
+		}
+
+
+}
+
+
+
+//=================================================================================================================================================================
 
 $mensaje = "";
 $color1 = "white";
-$accion = "";
-$mas1 = $_SESSION["nivelActual"];
+$accion = "disabled";
+$nombreMaestro = maestroID($idmaestroSiguienteNivel);
 
-$_SESSION["estado"] = $estado;
-//$per = 1;
-if(strcmp($_SESSION["estado"], 'En curso') === 0 ){
+//========  Pruebas ==================
+
+
+
+
+
+//========  Termina Pruebas ==================
+
+
+
+if($nivel == NULL){
     
-    $mensaje = $mensaje." ya estas inscrito en el nivel ".$_SESSION["nivelActual"]." del periodo ".$peri;
-                $accion = "disabled";
+    $mensaje = "No se encontro información en el sistema.";
+    $color1 = "black";
+    $accion = "disabled";
+    
+}elseif($nivel == 6 && $estado == "Acreditado"){
+    
+    $mensaje = "Has acreditado todos los niveles.";
+    $color1 = "black";
+    $accion = "disabled";
+    
+}elseif($nivel != NULL && $periodo == $periActuBD && $estadoDelNivel == "En curso"){
+    
+    $mensaje = "Te has inscrito exitosamente en el curso de Inglés nivel #$nivel | Grupo $grupo | Carrera $carrera | Modalidad $modalidad
+                <br>Tu Maestro(a) es $nombreMaestro";
     $color1 = "lightgreen";
- }else{         
+    $accion = "disabled";
     
-    if (strcmp($_SESSION["estado"], 'No acreditado') === 0 ) {
-        $color1 = "orange";
-        $mensaje = ' No acreditaste el nivel '.$_SESSION["nivelActual"].', deberas repetir el mismo nivel.';
-        if ($_SESSION["nivelActual"] & 1 ){
-            //odd
-            if (strcmp($per, '2') === 0 ){
-                
-                 $mensaje = $mensaje." El nivel ".$_SESSION["nivelActual"]." Si se oferta en este periodo.";
-
-            }else{
-                $mensaje = $mensaje." Ten en cuenta que el nivel ".$_SESSION["nivelActual"]." No se oferta en este periodo.";
-                $accion = "disabled";
-            }
-        }else{
-            //even
-            if ( strcmp($per, '1') === 0){
-                $color1 = "lightgreen";
-                 $mensaje = $mensaje." El nivel ".$_SESSION["nivelActual"]." Si se oferta en este periodo.";
-            }else{
-                $mensaje = $mensaje." Ten en cuenta que el nivel ".$_SESSION["nivelActual"]." No se oferta en este periodo.";
-                $accion = "disabled";
-            }
-        }
-    }else if(strcmp($_SESSION["estado"], 'Acreditado') === 0 && strcmp($_SESSION["nivelActual"], '6') !== 0  ){
-    //Odd
-        
-        
-        if(($mas1+1) & 1){
-            //Odd
-            if(strcmp($per, '2') === 0 ){
-                $color1 = "lightgreen";
-                $mas1++;
-                $mensaje =  "Acreditaste el nivel ".$_SESSION["nivelActual"].", si podrás inscribirte en el nivel ".$mas1++;
-            }else{
-                $mas1++;
-                $color1 = "red";
-                $accion = "disabled";
-                $mensaje =  "Parece que perdiste un semestre, no podras reinscribirte en el nivel ". $mas1.", deberas esperar al siguiente periodo.";
-            }
-            
-            
-        }else{
-            if(strcmp($per, '1') === 0 ){
-                $color1 = "lightgreen";
-                $mas1++;
-                $mensaje =  "Te puedes registrar en el nivel ".$mas1;
-            }else{
-                $mas1++;
-                $color1 = "red";
-                $mensaje =  "Parece que perdiste un semestre, no podras reinscribirte este periodo en el nivel ".$mas1." ya que no se oferta, deberas esperar al siguiente periodo.";
-                $accion = "disabled";
-            }
-            
-        }
-        
-
-    }elseif(strcmp($_SESSION["estado"], 'Acreditado') === 0 && strcmp($_SESSION["nivelActual"], '6') === 0  ){
-        $color1 = "lightgreen";
-        $mensaje = 'Has acreditado todos los niveles.';
-        $accion = "disabled";
-    }else{
-        $color1 = "black";
-        $mensaje = 'Nada que mostrar.';
-        $accion = "disabled";
-    }
-
+}elseif($nivel != NULL && $nivel % 2 != 0 && $per == 1 && $estadoDelNivel == "Acreditado"){
+    
+    $mensaje = "Puedes inscribirte en el curso de Inglés nivel #$nivelMasUno | Grupo $grupo | Carrera $carrera | Modalidad $modalidad
+                <br>Tu Maestro(a) será $nombreMaestro";
+    $color1 = "lightgreen";
+    $accion = "";
+    
+}elseif($nivel != NULL && $nivel % 2 != 0 && $per == 1 && $estadoDelNivel == "No acreditado"){
+    
+    $mensaje = "No podrás inscribirte en el curso de Inglés nivel #$nivelMasUno | Grupo $grupo | Carrera $carrera | Modalidad $modalidad | 
+                <br>ya que tu calificación del nivel #$nivel no fue satisfactoria y <br>deberás repetirlo en el siguiente periodo ya que en este no se oferta.<br>Nota: Es posible que se abra un grupo especial para alumnos atrasados. Consulta con tu coordinador(a).";
+    $color1 = "red";
+    $accion = "disabled";
+    
+}elseif($nivel != NULL && $nivel % 2 == 0 && $per == 1 && $estadoDelNivel == "No acreditado"){
+    
+    $mensaje = "Puedes inscribirte en el curso de Inglés nivel #$nivel, pero deberás solicitar la asistencia un administrador por cuestiones de disponibilidad.";
+    $color1 = "orange";
+    $accion = "disabled";
+    
+}elseif($nivel != NULL && $nivel % 2 == 0 && $per == 2 && $estadoDelNivel == "Acreditado"){
+    
+    $mensaje = "Puedes inscribirte en el curso de Inglés nivel #$nivelMasUno | Grupo $grupo | Carrera $carrera | Modalidad $modalidad
+                <br>Tu Maestro(a) será $nombreMaestro";
+    $color1 = "lightgreen";
+    $accion = "";
+}elseif($nivel != NULL && $nivel % 2 != 0 && $per == 2 && $estadoDelNivel == "Acreditado"){
+    
+    $mensaje = "No podras inscribirte en el curso de Inglés nivel #$nivelMasUno ya que no se oferta en este periodo.<br>Nota: Es posible que se abra un grupo especial para alumnos atrasados. Consulta con tu coordinador(a).";
+    $color1 = "orange";
+    $accion = "";
+}elseif($nivel != NULL && $nivel % 2 == 0 && $per == 1 && $estadoDelNivel == "Acreditado"){
+    
+    $mensaje = "No podras inscribirte en el curso de Inglés nivel #$nivelMasUno ya que no se oferta en este periodo.<br>Nota: Es posible que se abra un grupo especial para alumnos atrasados. Consulta con tu coordinador(a).";
+    $color1 = "orange";
+    $accion = "";
+}elseif($nivel != NULL && $numeroNivel == 6 && $per == 2 && $estadoDelNivel == "No acreditado"){
+    
+    $mensaje = "Tu calificación del nivel #$nivel no fue satisfactoria y <br>deberás repetirlo en el siguiente periodo ya que en este no se oferta.";
+    $color1 = "red";
+    $accion = "disabled";
+    
+}elseif($nivel != NULL && $nivel % 2 == 0 && $per == 2 && $estadoDelNivel == "No acreditado"){
+    
+    $mensaje = "No podrás inscribirte en el curso de Inglés nivel #$nivelMasUno | Grupo $grupo | Carrera $carrera | Modalidad $modalidad | 
+                <br>ya que tu calificación del nivel #$nivel no fue satisfactoria y <br>deberás repetirlo en el siguiente periodo ya que en este no se oferta.";
+    $color1 = "red";
+    $accion = "disabled";
+    
 }
+elseif($nivel != NULL && $nivel % 2 != 0 && $per == 2 && $estadoDelNivel == "No acreditado"){
+    
+    $mensaje = "Puedes inscribirte en el curso de Inglés nivel #$nivel, pero deberás solicitar la asistencia un administrador por cuestiones de disponibilidad.";
+    $color1 = "orange";
+    $accion = "disabled";
+    
+}
+
+//==========================================================================================================================================
+//Si el nivel existe no permitira esta acción, de lo contrario insertara la información en la base de datos.
+
+
+$tipoProgramaBeca = $tipoProgramaBeca_err = "";
+
+if(isset($_POST['reinscrip'])){  
+
+            //_________________
+    
+    if(empty(trim($_POST["tipoProgramaBeca"]))){
+        $tipoProgramaBeca_err = "Selecciona una opción.";
+    } else{
+         $tipoProgramaBeca = trim($_POST["tipoProgramaBeca"]);
+            } 
+        //_________________
+  
+    
+    
+    $sql1 =  "INSERT INTO niveles (numeroControl,idgrupo,estado,tipoProgramaBeca) VALUES ('".$_SESSION['numeroControl']."','".$idgrupoSiguienteNivel."','En curso','".$tipoProgramaBeca."')";
+    
+    if($stmt5 = mysqli_prepare($link, $sql1)){
+
+        if(mysqli_stmt_execute($stmt5)){
+            
+             $sql1 = "UPDATE alumnos SET idgrupoActual ='{$idgrupoSiguienteNivel}' WHERE numeroControl = {$_SESSION["numeroControl"]}";
+            
+            if($stmt6 = mysqli_prepare($link, $sql1)){
+
+                if(mysqli_stmt_execute($stmt6)){
+                    
+                    echo("<p><script>alert('¡Te has inscrito exitosamente!');location.replace('reinscripcionAlumn.php')</script></p>");
+                    
+                }
+            }
+            
+        }
+    }
+    
+    
+}
+
+
+
+
+//=======================================================================================================
+
+    
+if(isset($_POST['boton2'])){
+    
+    // Validate old password
+    if(empty(trim($_POST["old_password"]))){
+        $old_password_err = "Inroduce tu contraseña actual.";     
+    } elseif(strlen(trim($_POST["old_password"])) < 6){
+        $old_password_err = "La contraseña debe ser de 6 digitos.";
+    } else{
+        $old_password = trim($_POST["old_password"]);
+        if(password_verify($old_password,$_SESSION["contraseña"])){
+            
+    }else{
+            $old_password_err = "La contraseña que ingresaste no coincide con tu contraseña actual.";
+        }}
+ 
+    // Validate new password
+    if(empty(trim($_POST["new_password"]))){
+        $new_password_err = "Inroduce una nueva contraseña.";     
+    } elseif(strlen(trim($_POST["new_password"])) < 6){
+        $new_password_err = "La contraseña debe ser de 6 digitos.";
+    } else{
+        $new_password = trim($_POST["new_password"]);
+    }
+    
+    // Validate confirm password
+    if(empty(trim($_POST["confirm_password"]))){
+        $confirm_password_err = "Confirma la contraseña.";
+    } else{
+        $confirm_password = trim($_POST["confirm_password"]);
+        if(empty($new_password_err) && ($new_password != $confirm_password)){
+            $confirm_password_err = "La contraseña no coincide.";
+        }
+    }
+        
+    // Check input errors before updating the database
+    if(empty($new_password_err) && empty($confirm_password_err)){
+        // Prepare an update statement
+        $sql = "UPDATE alumnos SET contrase = ? WHERE id = ?";
+        
+        if($stmt = mysqli_prepare($link, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "ss", $param_password, $param_id);
+            
+            // Set parameters
+            $param_password = password_hash($new_password, PASSWORD_DEFAULT);
+            $param_id = $_SESSION["id"];
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+
+                header("location: reinscripcionAlumn.php");
+                exit();
+            } else{
+                echo "Uups! Algo salio mal, intenta más tarde.";
+            }
+        }
+        
+        // Close statement
+        mysqli_stmt_close($stmt);
+    }
+    
+    // Close connection
+    mysqli_close($link);
+}
+
+//=========================================================================================================
+
+
+
+
 //=========================================================================================================
 require_once 'alumno.entidad.php';
 require_once 'alumno.model.php';
@@ -240,10 +511,12 @@ if(isset($_REQUEST['action']))
 		case 'actualizar':
 			$alm->__SET('id',              $_REQUEST['id']);
             $alm->__SET('direccion',       $_REQUEST['direccion']);
-            $alm->__SET('estado',          $_REQUEST['estado']);
+            $alm->__SET('estado',       $_REQUEST['estado']);
             $alm->__SET('municipio',       $_REQUEST['municipio']);
             $alm->__SET('localidad',       $_REQUEST['localidad']);
+            $alm->__SET('postal',       $_REQUEST['postal']);
             $alm->__SET('telefono',        $_REQUEST['telefono']);
+            $alm->__SET('email',           $_REQUEST['email']);
 
 			$model->Actualizar($alm);
 			header('Location: reinscripcionAlumn.php');
@@ -274,11 +547,15 @@ if(isset($_REQUEST['action']))
         <script src="../bootstrap/4.5.3/dist/js/bootstrap.bundle.min.js" 
             integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" 
             crossorigin="anonymous"></script>
+        
+            <link rel="stylesheet" href="../pure/0.5.0/pure-min.css">
+        
+            <script type="text/javascript" src="../direcciones/localidadesReins.js"></script>
     
     <link rel="icon" href="../imagenes/itsl2.png">
         <style type="text/css">
             		body{
-            background-color: lightslategray;
+            background-color: white;
             
             }
         .logo{
@@ -290,50 +567,7 @@ if(isset($_REQUEST['action']))
                   background-color: #000000;
 
                    }
-            .demo-content{
-                background: #ffffff;
-                padding-top: 40px;
-                padding-left: 40px;
-                padding-right: 100px;
-                }
-            /* The Modal (background) */
-            .modal {
-              display: none; /* Hidden by default */
-              position: fixed; /* Stay in place */
-              z-index: 1; /* Sit on top */
-              padding-top: 50px; /* Location of the box */
-              left: 0;
-              top: 0;
-              width: 100%; /* Full width */
-              height: 100%; /* Full height */
-              overflow: auto; /* Enable scroll if needed */
-              background-color: rgb(0,0,0); /* Fallback color */
-              background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            }
 
-            /* Modal Content */
-            .modal-content {
-              background-color: #fefefe;
-              margin: auto;
-              padding: 20px;
-              border: 1px solid #888;
-              width: 80%;
-            }
-
-            /* The Close Button */
-            .close {
-              color: #aaaaaa;
-              float: right;
-              font-size: 28px;
-              font-weight: bold;
-            }
-
-            .close:hover,
-            .close:focus {
-              color: #000;
-              text-decoration: none;
-              cursor: pointer;
-            }
             .redes{
             padding-left: 10px;
             color: white;
@@ -398,6 +632,8 @@ if(isset($_REQUEST['action']))
                             <a href="../home.php" class="btn btn-outline-light" role="button" >Ir al inicio</a>
                             
                             <a href="reinscripcionAlumn.php" class="btn btn-outline-light active" role="button">Reinscripción Alumnos</a>
+                            
+                            <a class="btn btn-outline-light" role="button" data-toggle="modal" data-target="#modal1">Cambiar contraseña</a>
 
                             <a href="reinscripcionVeri.php" class="btn btn-outline-light" role="button">&nbsp;Pulsa para salir&nbsp;</a>
 
@@ -411,55 +647,82 @@ if(isset($_REQUEST['action']))
             </div>
         </div>
 </header>
-    <div class="container demo-content">
+    <div class="container" style="background-color: white;">
         
-        <div class="pure-g">
-            <div class="pure-u-1-1">
-        
+        <div class="row" >
+            
+            
+            <div class="col-sm-12">
+            
                 <h2><br>Datos del Alumno</h2>
-                <hr>
+            
+            </div>
+            
+            
+            
+            
+            <div class="col-sm-6"  style="border: 2px solid; border-radius: 5px; padding: 20px;">
+        
+                
+              
                 
                     <p style="font-size:20px;">Datos Personales</p>
         
-                <?php foreach($model->Listar() as $r): ?> 
+                 <?php foreach($model->Listar() as $r): ?> 
                     <p><b>Nombre: </b><?php echo $r->__GET('nombre'); ?>&nbsp;<?php echo $r->__GET('paterno'); ?>&nbsp;<?php echo $r->__GET('materno'); ?></p>
                     <p><b>Fecha de nacimiento: </b><?php echo $r->__GET('fnacimiento'); ?></p>
                     <p><b>CURP: </b><?php echo $r->__GET('curp'); ?></p>
                     <p><b>Sexo: </b><?php echo $r->__GET('sexo'); ?></p>
                 
                 
-                <hr>
+                </div>
+                <div class="col-sm-6"  style="border: 2px solid; border-radius: 5px; padding: 20px;">
                 
                     <p style="font-size:20px;">Información de contacto</p>
                 
-                    <p><b>Dirección: </b><?php echo $r->__GET('direccion'); ?>
-                    <p><b>Estado: </b><?php echo $r->__GET('estado'); ?>
-                    <p><b>Municipio: </b><?php echo $r->__GET('municipio'); ?>
-                    <p><b>Localidad: </b><?php echo $r->__GET('localidad'); ?>
-                    <p><b>Teléfono: </b><?php echo $r->__GET('telefono'); ?>
+                    <p><b>Dirección: </b><?php echo $r->__GET('direccion'); ?></p>
+                    <p><b>Estado: </b><?php echo $r->__GET('estado'); ?></p>
+                    <p><b>Municipio: </b><?php echo $r->__GET('municipio'); ?></p>
+                    <p><b>Localidad: </b><?php echo $r->__GET('localidad'); ?></p>
+                    <p><b>Código Postal: </b><?php echo $r->__GET('postal'); ?></p>
+                    <p><b>Correo Electrónico: </b><?php echo $r->__GET('email'); ?></p>
+                    <p><b>Teléfono: </b><?php echo $r->__GET('telefono'); ?></p>
+                
+                    <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalA">Actualizar Información</button></p>
                     
-                    <p><a id="myBtn" href="?action=editar&id=<?php echo $r->id; ?>" class="btn btn-primary">Actualizar Información</a></p>
+               
                 
                 
-                
-                <hr>
+                </div>
+            
+                <div class="col-sm-12">
+                    
                     <p style="font-size:20px;">Datos Academicos</p>
                     <p><b>Número de Control: </b><?php echo $r->__GET('numeroControl'); ?></p>
-                    <p><b>Último nivel inscrito: </b><?php echo $r->__GET('nivelActual'); ?></p>
-                    <p><b>Grupo: </b><?php echo $r->__GET('grupoActual'); ?></p>
-                    <p><b>Maestro id: </b><?php echo $r->__GET('idmaestroActual'); ?>Pendiente</p>
+                    
+                    
+                <?php endforeach; ?>
+                <?php foreach($model->Listar3($idgrupo) as $r): ?>
+                    
+                    
+                    <p><b>Último nivel inscrito: </b> nivel <?php echo $r->__GET('nivel'); ?> del periodo: <?php echo $r->__GET('periodo'); ?></p>
+                    <p><b>Grupo: </b><?php echo $r->__GET('grupo'); ?></p>
+                    <p><b>Maestro: </b><?php echo maestroID($r->__GET('idmaestro')); ?></p>
                     <p><b>Carrera: </b><?php echo $r->__GET('carrera'); ?></p>
                     <p><b>Modalidad: </b><?php echo $r->__GET('modalidad'); ?></p>
-                <br>
+                    
+               
                         <p style="font-size:20px;">Historial Niveles</p>
                         	  
-                        
-                            <table class="table" style="width:400px">
+     
+                            <table class="table table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Nivel</th>
+                                        <th>Información del grupo</th>
+                                        <th>Calificación</th>
                                         <th>Estado</th>
-                                        <th>Modalidad</th>
+                                        <th>Inscripción</th>
+                                        <th>Libro</th>
 
                                     </tr>
                                 </thead>
@@ -479,65 +742,146 @@ if(isset($_REQUEST['action']))
         </div>
         
         
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
+        
+        
+        
+        
 
-          <!-- Modal content -->
-          <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>Actualiza tu información de contacto</h3>
-              <hr>
-            <div class= "container">
+        
+ <!-- Large modal -->
+
+
+<div class="modal fade bd-example-modal-lg" id="modalA" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="color:black">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Actualizar Información de Contacto.</h2>
+        <button id="myBtn4" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        
+        <div class= "container">
                 <div class= "row">
-                    <div class="pure-g">
-                        <div class="pure-u-1-2">
+        
+                    <div class="col-sm-12">
+                       
                           <div>  
+
                             <form action="?action=actualizar&id" method="post" class="pure-form pure-form-stacked" style="margin-bottom:30px;">
                                 <input type="hidden" name="id" value="<?php echo $alm->__GET('id'); ?>" />
 
                                 <table style="width:auto" >
                                     <tr>
                                         <th style="text-align:left;"></th>
-                                        <td><b>Domicilio</b><input type="text" name="direccion" value="<?php echo $alm->__GET('direccion'); ?>" style="width:150%;" /></td>
+                                        <td><b>Domicilio</b><input type="text" name="direccion" value="<?php echo $direccion; ?>" style="width:150%;" /></td>
                                     </tr>
                                     <tr>
                                         <th style="text-align:left;"></th>
-                                        <td><b>Estado</b><select class="form-control" style="font-size:16px; width:auto;"name="estado" id="validationCustom03" onchange="ChangeEstList()" required>
-                                                <option value="">Elije una opcion...</option>
-                                                <option value="Zacatecas">Zacatecas</option>
+                                        <td><b>Estado</b><select class="form-control" name="estado" id="validationCustom03" onchange="ChangeEstList()" required>
+                                                <option value="<?php echo $estado; ?>">Elige...(<?php echo $estado; ?>)</option>
                                                 <option value="Aguascalientes">Aguascalientes</option>
+                                                <option value="Zacatecas">Zacatecas</option>
                                               </select>
                                         </td>
                                     </tr>
+                                    <tr>
                                     
-                                    <tr>
                                         <th style="text-align:left;"></th>
-                                        <td><b>Municipio</b><select class="form-control" id="validationCustom04" name="municipio" onchange="ChangeMuniList()" required style="font-size:16px; width:auto;"></select></td>
+                                        <td><b>Municipio</b><select class="form-control" id="validationCustom04" name="municipio" onchange="ChangeMuniList()" required ><option value="<?php echo $municipio; ?>"><?php echo $municipio; ?></option></select></td>
                                     </tr>
                                     <tr>
                                         <th style="text-align:left;"></th>
-                                        <td><b>Localidad</b><select class="form-control" id="validationCustom05" name="localidad" required style=" font-size:16px;width:auto;"></select></td>
+                                        <td><b>Localidad</b><select class="form-control" id="validationCustom05" name="localidad" required ><option value="<?php echo $localidad; ?>"><?php echo $localidad; ?></option></select></td>
                                     </tr>
                                     <tr>
                                         <th style="text-align:left;"></th>
-                                        <td><b>Teléfono</b><input type="text" name="telefono" value="<?php echo $alm->__GET('telefono'); ?>" style="width:auto;" /></td>
+                                        <td><b>Código Postal</b><input type="text" name="postal" value="<?php echo $postal; ?>" style="" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left;"></th>
+                                        <td><b>Email</b><input type="text" name="email" value="<?php echo $email; ?>" style="" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left;"></th>
+                                        <td><b>Teléfono</b><input type="text" name="telefono" value="<?php echo $telefono; ?>" style="" /></td>
                                     </tr>
                                 </table>
-                                <hr>
-                                <button id="myBtn2" type="submit" class="btn btn-primary">Guardar</button>
-                                <button id="myBtn3" type="button" class="btn btn-secondary">Cancelar</button>
+                                <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancelar</button>
+                            </div>
                             </form>
+
                          </div>
                          
-                        </div>
+                        
+                        
+                        
+                        
+                        
+                        
                     </div>
                 </div>
 			</div>
-          </div>
-
-        </div>
-
+      
+         
+    </div>
+  </div>
+</div>
         
+        
+        
+        <!-- Large modal -->
+
+
+<div class="modal fade bd-example-modal-lg" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="color:black">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Cambiar Contraseña</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+          <div class="container">
+            <div class="row">
+                <div class = col-sm-12>
+                    
+                    
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
+                        <div class="modal-body">
+                            <div class="form-group row <?php echo (!empty($old_password_err)) ? 'has-error' : ''; ?>">
+                                <label>Contraseña actual</label>
+                                <input type="password" name="old_password" class="form-control" value="<?php echo $old_password; ?>">
+                                <span class="help-block text-danger"><?php echo $old_password_err; ?></span>
+                            </div>
+                            <div class="form-group row <?php echo (!empty($new_password_err)) ? 'has-error' : ''; ?>">
+                                <label>Contraseña nueva</label>
+                                <input type="password" name="new_password" class="form-control" value="<?php echo $new_password; ?>">
+                                <span class="help-block text-danger"><?php echo $new_password_err; ?></span>
+                            </div>
+                            <div class="form-group row <?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
+                                <label>Confirma nueva contraseña</label>
+                                <input type="password" name="confirm_password" class="form-control mb-2">
+                                <span class="help-block text-danger"><?php echo $confirm_password_err; ?></span>
+                            </div>
+                        </div>
+                        <div class="form-group row modal-footer">
+                            <input type="submit" name="boton2" class="btn btn-primary" value="Guardar cambios">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                        
+      
+                </div> 
+            </div> 
+        </div> 
+      
+    </div>
+  </div>
+</div>
 
         
         <hr>
@@ -546,7 +890,7 @@ if(isset($_REQUEST['action']))
             <p>Toma en cuenta que para reinscribirte ya debes haber pagado tu cuota de reinscripción.</p>
             <p><b>Según la información registrada en el sistema: </b></p>
                 
-            <div style="border: 2px solid <?php echo $color1; ?>; border-radius: 5px; text-align:center; padding: 20px;">
+            <div style="font-size:28px; border: 2px solid <?php echo $color1; ?>; border-radius: 5px; text-align:center; padding: 20px;">
             
             
             <?php echo $mensaje ?>
@@ -554,8 +898,18 @@ if(isset($_REQUEST['action']))
             </div>
                 
                 <form method="POST">
+                    <div class="form-group col-md-6">
+                        <br>
+                        <label>&nbsp;&nbsp;¿Cuentas con alguna Beca o Programa?</label>
+						<select class="form-control" name= "tipoProgramaBeca" >
+                            <option value ="">Elije una opción</option>
+							<option value ="Si">Si</option>
+							<option value ="No">No</option>
+						</select> 
+                    </div>
+                    
                     <br><label>Presiona para reinscribirte</label><br><br>
-                    <button type="submit" class="btn btn-primary" <?php echo $accion; ?>>Reinscripción</button>
+                    <button type="submit" name="reinscrip" class="btn btn-primary" <?php echo $accion; ?>>Reinscripción</button>
                 </form>
         
             <br><br><br>
@@ -563,6 +917,14 @@ if(isset($_REQUEST['action']))
         </div>
         
       </div>
+    
+    
+    
+    
+    <?php $link->close(); ?>
+    
+    
+    
      <div class="container-fluid">
          <div class="row" style="background:#0a6d7a; ">
             <div class="col-md-3 bordes" >
@@ -627,377 +989,10 @@ if(isset($_REQUEST['action']))
 
 </footer>
     
-    
-    <script type="text/javascript">
-        var estYmuni = {};
-        estYmuni['Zacatecas'] = ['Elige...','Loreto', 'Luis Moya', 'Noria de Ángles', 'Ojocaliente', 'Pinos', 'Villa González Ortega', 'Villa Gracía'];
-        estYmuni['Aguascalientes'] = ['Elige...','Rincón de Romos', 'Cosío', 'Tepezalá', 'Asientos','Pavellón de Arteaga','San francisdo de los Romos','El Llano'];
-        
 
-        function ChangeEstList() {
-            var estList = document.getElementById("validationCustom03");
-            var muniList = document.getElementById("validationCustom04");
-            var selEst = estList.options[estList.selectedIndex].value;
-            //alert("si entro en la función ChangeMunList()".concat(selEst));
-            while (muniList.options.length) {
-                muniList.remove(0);
-            }
-            var ests = estYmuni[selEst];
-            //alert("si entro en la función ChangeMunList()  ".concat(estYmuni[selEst]));
-            if (ests) {
-                var i;
-                for (i = 0; i < ests.length; i++) {
-                    var est = new Option(ests[i], ests[i]);
-                    muniList.options.add(est);
-                }
-            }
-            localStorage.setItem("ests", ests);
-            //alert(ests);
-        } 
-
-    </script>
-    
-    
-    <script type="text/javascript">
-        
-        
-        var muniYloca = {};
-        muniYloca['Loreto'] = ['Elige...',
-                          'Bimbaletes',
-                            'Carboneras (Los Lobos)',
-                            'Charco Largo (San Jacinto)',
-                            'Colonia Agrícola Vicente Guerrero',
-                            'Colonia Hidalgo (El Tecolote)',
-                            'Colonia Victoria (El Cuije)',
-                            'Crisóstomos',
-                            'Ejido Hidalgo',
-                            'El Álamo',
-                            'El Bajío (El Rosal)',
-                            'El Becerro',
-                            'El Cajetillo',
-                            'El Carreño (Las Palmas)',
-                            'El Carreño',
-                            'El Chaparral',
-                            'El Crucero',
-                            'El Durazno',
-                            'El Forastero',
-                            'El Gordillo',
-                            'El Hinojo',
-                            'El Lobo',
-                            'El Maguey',
-                            'El Mastranto',
-                            'El Matorral',
-                            'El Mezquite',
-                            'El Montoro',
-                            'El Paraíso',
-                            'El Prieto',
-                            'El Puente (La Alamedita)',
-                            'El Ranchito',
-                            'El Refugio',
-                            'El Rincón (José Rodríguez Carrera)',
-                            'El Rincón (Luis Acevedo Sagredo)',
-                            'El Rocío',
-                            'El Salitre (El Bajío)',
-                            'El Socorro',
-                            'El Solitario (El Injerto)',
-                            'El Tecolote (El Dormido)',
-                            'El Tepetate',
-                            'El Verde',
-                            'El Vergel',
-                            'Emilio Carranza (Arenal del Picacho)',
-                            'Ezequiel Martínez',
-                            'Felipe Carrillo Puerto (Carrillo Puerto)',
-                            'Jesús González Montañez',
-                            'Jesús María',
-                            'La Alquería',
-                            'La Amapola',
-                            'La Biznaga',
-                            'La Cascarona',
-                            'La Concepción',
-                            'La Embarcación (El Paraíso)',
-                            'La Florida',
-                            'La Huerta',
-                            'La Lagunita',
-                            'La Loma (El Bajío)',
-                            'La Luz',
-                            'La Mesita (Ojo de Agua de la Mesita)',
-                            'La Presita (El Paraíso)',
-                            'La Providencia (El Milagro)',
-                            'La Puerta de la Mesa (María Santos Cruz R.)',
-                            'La Salita (Guadalupe Moreno)',
-                            'La Soledad (El Borrado)',
-                            'La Soledad',
-                            'La Ternera (Zenón Hernández)',
-                            'La Tinaja',
-                            'La Victoria',
-                            'Larrañaga (Jorge Martínez)',
-                            'Las Agujas (Monte de las Burras)',
-                            'Las Canteritas (Manuel Rodríguez Hernández)',
-                            'Las Estacas',
-                            'Las Floridas (Gómez de Palacio)',
-                            'Las Pintas',
-                            'Las Playas',
-                            'Linares',
-                            'Loc. sin Nombre (Guadalupe Zacarías Aréchiga)',
-                            'Lomas del Paraíso',
-                            'Loreto',
-                            'Los Cedros (Francisco Acevedo)',
-                            'Los Cuates',
-                            'Los Patos (El Dormido)',
-                            'Los Rosarios (El Rosario)',
-                            'Monte Grande',
-                            'Norias de Guadalupe',
-                            'Norias de la Venta',
-                            'Norias de San Miguel',
-                            'Ojo de Agua',
-                            'Pozo San Matías',
-                            'Rancho Dos Arbolitos',
-                            'Rancho el Nogal',
-                            'Rancho Zamora (David López Trinidad)',
-                            'Salvador Salas Velázquez',
-                            'San Blas',
-                            'San Cayetano',
-                            'San Isidro (El Salitrillo)',
-                            'San Isidro (La Soledad)',
-                            'San Isidro',
-                            'San José de la Lechuguilla (El Calvario)',
-                            'San José',
-                            'San Marcos',
-                            'San Matías',
-                            'San Pedro',
-                            'San Ramón',
-                            'Santa Ana (Motor Amarillo)',
-                            'Santa Cruz de las Palomas (Jesús Salas Elías)',
-                            'Santa Elena',
-                            'Santa María de los Ángeles',
-                            'Santa Teresa (David López Trinidad) [Rancho]',
-                            'Tanque de la Joya',
-                            'Tanque de la Venada',
-                            'Tierra Blanca',
-                            'Unidad de Riego el Pajonal',
-                            'Valle de San Francisco'];
-        
-        muniYloca['Luis Moya'] = ['Elige...',
-                            'Acuña [Granja]',
-                            'Barranquillas (Barranquilla)',
-                            'Coecillo',
-                            'Colonia Hidalgo',
-                            'Colonia Julián Adame (Charco de la Gallina)',
-                            'Colonia Lázaro Cárdenas',
-                            'Colonia Ricardo Flores Magón (Anexo de Casas Coloradas)',
-                            'Colonia Veinte de Noviembre',
-                            'Domecq (Invido) [Industrias Vinícolas]',
-                            'El Alazán (Roberto Franco)',
-                            'El Cenizo',
-                            'El Coecillo [Viñedos]',
-                            'El Duraznillo',
-                            'El Fresno',
-                            'El Gran Chaparral',
-                            'El Lagunero',
-                            'El Llano',
-                            'El Mezquital',
-                            'El Mezquite Largo',
-                            'El Milagro [Viñedos]',
-                            'El Retiro',
-                            'Enfriadora de Leche',
-                            'Esteban S. Castorena (Casas Coloradas)',
-                            'Flor del Valle',
-                            'Gemelo',
-                            'Kalúa [Balneario y Restaurante]',
-                            'La Esperanza',
-                            'La Loma',
-                            'La Loma',
-                            'La Loma',
-                            'La Loma Dos',
-                            'La Manga (Las Mangas)',
-                            'La Mojina',
-                            'La Palmita',
-                            'La Pila',
-                            'La Primavera',
-                            'La Purísima',
-                            'La Raya',
-                            'La Soledad',
-                            'Las Carmelitas (Jesús Betancourt) [Granja]',
-                            'Las Liebres',
-                            'Las Palomas',
-                            'Las Palomas (Jorge Ortiz Luévano)',
-                            'Leyva',
-                            'Los Alacranes',
-                            'Los Badillo',
-                            'Los Conejos (Arturo Adame)',
-                            'Los Conejos (Jorge Adame)',
-                            'Los Griegos (Griegos)',
-                            'Los Pocitos',
-                            'Los Sauces (Miguel Cardona)',
-                            'Luis Moya',
-                            'Maluz [Granja]',
-                            'María Guadalupe Ramírez Diosdado',
-                            'Milpa Alta',
-                            'Nicasio Cardona Luévano',
-                            'Ninguno',
-                            'Noria de Molinos',
-                            'Nuestra Señora de la Soledad [Viñedos]',
-                            'Paty [Viñedos]',
-                            'Pozo San Dimas (José García)',
-                            'Rancho Casillas',
-                            'Rancho del Padre',
-                            'Rancho Dolores',
-                            'Rancho Flores',
-                            'Rancho Marcelita',
-                            'Rancho Matanuzka (Alberto Guerrero)',
-                            'San Ángel',
-                            'San Antonio',
-                            'San Diego',
-                            'San Felipe',
-                            'San Isidro',
-                            'San Jorge',
-                            'San José (El Huarache) [Rancho]',
-                            'San José de Buenavista [Viñedo]',
-                            'San Miguel (Salvador Alba Gómez)',
-                            'San Rafael',
-                            'Santa Fe',
-                            'Santa María',
-                            'Santa Rita',
-                            'Sociedad Reyes (Pozo Diez)',
-                            'Teresita [Viñedos]'];
-        
-        muniYloca['Noria de Ángles'] = ['Elige...', 
-                            'Ampliación la Honda',
-                            'Antártida Chilena',
-                            'Bella Vista',
-                            'Colonia Alvarado (El Gallinero)',
-                            'Colonia Benito Juárez (Coyotes)',
-                            'Colonia Francisco I. Madero',
-                            'Colonia Independencia (La Soledad)',
-                            'Colonia Lázaro Cárdenas',
-                            'Colonia Madero (Madero)',
-                            'Colonia Pozo Colorado',
-                            'Colonia San Francisco (San Francisco)',
-                            'De Guadalupe [Granjas]',
-                            'El Blanquito',
-                            'El Chaparral',
-                            'El Lucero (San Carlos)',
-                            'El Matorral',
-                            'El Palmarito',
-                            'El Salado',
-                            'El Salvador',
-                            'El Samaritano (Pozo Número Nueve)',
-                            'El Socorro [Granja]',
-                            'El Tepozán',
-                            'Genaro [Estación]',
-                            'General Guadalupe Victoria (Estación la Honda)',
-                            'General Lauro G. Caloca (El Rascón)',
-                            'Ignacio Zaragoza (San Diego)',
-                            'La Curva [Rancho]',
-                            'La Grulla',
-                            'La Larga',
-                            'La Puerta de la Venta',
-                            'La Trinidad',
-                            'Las Hondillas',
-                            'Las Huertas',
-                            'Loma Bonita',
-                            'Loma de San Antonio',
-                            'Los Cortés',
-                            'Los Reyes [Rancho]',
-                            'Maravillas',
-                            'Noria de Ángeles',
-                            'Norias de San Juan (San Juan)',
-                            'Playas del Refugio (Huertas de Maravillas)',
-                            'Pozo el Huizache (Rubén Serna)',
-                            'Puerta de Puebla',
-                            'Puerto de Juan Alberto',
-                            'Rancho Dávila',
-                            'Rancho Nuevo de Morelos (De Guadalupe)',
-                            'Rancho Nuevo de Morelos (El Sagrado Corazón)',
-                            'Real de Ángeles',
-                            'San Agustín de las Cuevas',
-                            'San Antonio de la Mula',
-                            'San Juan',
-                            'Santa Rosa'];
-
-
-
-        function ChangeMuniList() {
-            
-            var munList = document.getElementById("validationCustom04");
-            var locList = document.getElementById("validationCustom05");
-            var selMun= munList.options[munList.selectedIndex].value;
-            //alert("si entro en la función ChangeMunList()".concat(selMun));
-            while (locList.options.length) {
-                locList.remove(0);
-            }
-            var locs = muniYloca[selMun];
-            if (locs) {
-                var j;
-                for (j = 0; j < locs.length; j++) {
-                    var loc = new Option(locs[j], locs[j]);
-                    locList.options.add(loc);
-                }
-            }
-            //alert("si entro en la función ChangeMunList()".concat(locs));
-        } 
-
-    </script>
         
     
-    <script>
-        var counter1 = 0;
-        // Get the modal
-        var modal = document.getElementById("myModal");
 
-        // Get the button that opens the modal
-        var btn = document.getElementById("myBtn");
-        
-        // Get the button that save data
-        var btn2 = document.getElementById("myBtn2");
-        
-        // Get the button that save data
-        var btn3 = document.getElementById("myBtn3");
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks the button, open the modal 
-        btn.onclick = function() {
-          modal.style.display = "block";
-            counter1 = 1;
-            localStorage.setItem("counter1", counter1);
-        }
-        
-         // When the user clicks the button, close the modal 
-        btn2.onclick = function() {
-          modal.style.display = "none";
-            counter1 = 0;
-            localStorage.setItem("counter1", counter1);
-        }
-        
-         // When the user clicks the button, close the modal 
-        btn3.onclick = function() {
-          modal.style.display = "none";
-            counter1 = 0;
-            localStorage.setItem("counter1", counter1);
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-          modal.style.display = "none";
-            counter1 = 0;
-            localStorage.setItem("counter1", counter1);
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-          if (event.target == modal) {
-            modal.style.display = "none";
-              counter1 = 0;
-              localStorage.setItem("counter1", counter1);
-          }
-        }
-        counter1 = localStorage.getItem("counter1");
-        if(counter1 != 0 ){
-            modal.style.display = "block";
-           }
-    </script>
     
 </body>
 </html>

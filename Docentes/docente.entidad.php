@@ -15,7 +15,13 @@ class Docente
     private $telefono;
     private $email;
 	private $idmaestro;
+    private $idmaestroActual;
     private $rfc;
+    private $fnacimiento;
+    private $nivelAcademico;
+    private $altaBaja;
+    private $titulo;
+    private $certificacion;
 
 
 	public function __GET($k){ return $this->$k; }

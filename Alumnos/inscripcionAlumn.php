@@ -16,77 +16,72 @@ require_once "../Require/config.php";
 
 
 
-date_default_timezone_set('UTC');
+//===========================================================================================================================
 
-    $peri = "";  
-    $per = "";  
-    $mes = date("n"); 
-    $year = date("Y"); 
 
-if ($mes >= 1 && $mes <= 6){
-    $per = 1;
-    $peri = "Periodo: ".$per."-".$year;
-}else if($mes >= 8 && $mes <= 12){
-    $per = 2;
-    $peri = "Periodo: ".$per."-".$year;
+if ($stmt5 = $link->prepare("SELECT  periodo FROM periodoactual")) {
+    $stmt5->execute();
+
+    /* bind variables to prepared statement */
+    $stmt5->bind_result($periActuBD2);
+
+    /* fetch values */
+$stmt5->fetch();
+
+    /* close statement */
+    $stmt5->close();
 }
 
 
-if($per == 2){//camviar para avilitar o denegar acceso
+
+//===========================================================================================================================
+
+function grupoInformacion($id){
     
-}else{
-    $message = "¡Las inscripciones esta cerradas por el momento!";
-    echo "<script type='text/javascript'>alert('$message'); location.href='../home.php';</script>";
+    global $link;
     
+    $nivel = $grupo = $carrera = $modalidad = $periodo = $idmaestro = "";
+    
+    if ($stmtm = $link->prepare("SELECT nivel, grupo, carrera, modalidad, periodo, idmaestro FROM gruposasignados WHERE idgrupo = '{$id}'")) {
+        
+        $stmtm->execute();
+
+        /* bind variables to prepared statement */
+        $stmtm->bind_result($nivel , $grupo , $carrera , $modalidad , $periodo , $idmaestro);
+
+        /* fetch values */
+        $stmtm->fetch();
+
+        /* close statement */
+        $stmtm->close();
+        
+        echo $nivel." ".$grupo." ".$carrera." ".$modalidad;
+    }
+
 }
+
 
 
  
 // Define variables and initialize with empty values
-$numeroControl = $confirm_numeroControl = $curp = $confirm_curp = $nombre = $paterno = $materno = $sexo = $direccion = $telefono = $grupo = $nivelActual = $estado = $municipio = $localidad = $fnacimiento = $modalidad = $carrera = $periodoactual = $email = $postal = $contrase = $confirm_contrase = "";
-$numeroControl_err = $confirm_numeroControl_err = $curp_err = $confirm_curp_err = $category_err = $nombre_err = $paterno_err = $materno_err = $sexo_err = $direccion_err = $telefono_err = $grupo_err = $nivelActual_err = $estado_err =$municipio_err =$localidad_err = $fnacimiento_err = $modalidad_err = $carrera_err = $periodoactual_err = $email_err = $postal_err = $contrase_err = $confirm_contrase_err = "";
+$tipoProgramaBeca = $numeroControl = $confirm_numeroControl = $curp = $confirm_curp = $nombre = $paterno = $materno = $sexo = $direccion = $telefono = $estado = $municipio = $localidad = $fnacimiento = $email = $postal = $contrase = $confirm_contrase = $idgrupo = "";
+$tipoProgramaBeca_err = $numeroControl_err = $confirm_numeroControl_err = $curp_err = $confirm_curp_err = $nombre_err = $paterno_err = $materno_err = $sexo_err = $direccion_err = $telefono_err = $estado_err =$municipio_err =$localidad_err = $fnacimiento_err = $email_err = $postal_err = $contrase_err = $confirm_contrase_err = $idgrupo_err = "";
 
 
 
 
+if ($stmt4 = $link->prepare("SELECT periodo FROM periodoactual")) {
+    $stmt4->execute();
 
-        // Prepare a select statement
-        $sql = "SELECT periodo FROM periodoactual WHERE idperiodoactual = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_idperiodoactual);
-            
-            // Set parameters
-            $param_idperiodoactual = '1';
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Store result
-                mysqli_stmt_store_result($stmt);
-                
-                // Check if idperiodoactual exists, if yes then verify 
-                if(mysqli_stmt_num_rows($stmt) == 1){                    
-                    // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $param_periodoactual );
-                    if(mysqli_stmt_fetch($stmt)){
-                        
-                            $periodoactual = $param_periodoactual;
-                            // Store data in session variables
-                            
-                        
-                    }
-                } else{
-                    // Display an error message if username doesn't exist
-                    $periodoactual_err = "No se encontro información del periodo actual.";
-                }
-            } else{
-                echo "Ooops! Algo salio mal. Por favor intenta más tarde.";
-            }
-        }
-        
-        // Close statement
-        mysqli_stmt_close($stmt);
+    /* bind variables to prepared statement */
+    $stmt4->bind_result($periodoactual);
+
+    /* fetch values */
+$stmt4->fetch();
+
+    /* close statement */
+    $stmt4->close();
+}
     
 
  
@@ -96,7 +91,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         //_________________
     
      if(empty(trim($_POST["email"]))){
-        $email_err = "Selecciona tu grupo.";
+        $email_err = "Introduce tu correo electrónico";
     } else{
          $email = trim($_POST["email"]);
             }         
@@ -109,20 +104,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             } 
         //_________________
     
-     if(empty(trim($_POST["grupo"]))){
-        $grupo_err = "Selecciona tu grupo.";
+     if(empty(trim($_POST["idgrupo"]))){
+        $idgrupo_err = "Selecciona un grupo.";
     } else{
-         $grupo = trim($_POST["grupo"]);
+         $idgrupo = trim($_POST["idgrupo"]);
             } 
         //_________________
     
-     if(empty(trim($_POST["nivelActual"]))){
-        $nivelActual_err = "Selecciona el nivel de inglés al que te estas inscribiendo.";
+    if(empty(trim($_POST["tipoProgramaBeca"]))){
+        $tipoProgramaBeca_err = "Selecciona una opción.";
     } else{
-         $nivelActual = trim($_POST["nivelActual"]);
+         $tipoProgramaBeca = trim($_POST["tipoProgramaBeca"]);
             } 
-        //_________________		
-    
         //_________________
     
      if(empty(trim($_POST["nombre"]))){
@@ -133,21 +126,37 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     //_________________
     
      if(empty(trim($_POST["paterno"]))){
-        $paterno_err = "Introduce tu apellido paterno.";
+         
+         if(empty(trim($_POST["materno"]))){
+             
+                $materno_err = "¡Introduce por lo meno un apellido!";
+                $paterno_err = "¡Introduce por lo meno un apellido!";
+            } else{
+             
+                 $materno = trim($_POST["materno"]);
+                 $paterno = ".";
+                    } 
+         
+        
     } else{
+         
          $paterno = trim($_POST["paterno"]);
-            } 
+         
+          if(empty(trim($_POST["materno"]))){
+             
+                $materno = ".";
+              
+            } else{
+
+                    $materno = trim($_POST["materno"]);;
+              
+                 } 
+        } 
     //_________________
     
-     if(empty(trim($_POST["materno"]))){
-        $materno_err = "Introduce tu apellido materno.";
-    } else{
-         $materno = trim($_POST["materno"]);
-            } 
-    //_________________
-    
+
      if(empty(trim($_POST["sexo"]))){
-        $sexo_err = "Introduce tu sexo (F = femenino, M = masculino).";
+        $sexo_err = "Introduce tu sexo (M = Mujer, H = Hombre).";
     } else{
          $sexo = trim($_POST["sexo"]);
             } 
@@ -160,9 +169,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             } 
     //_________________
     
-     if(empty(trim($_POST["telefono"]))){
-        $telefono_err = "Introduce tu número de teléfono.";
-    } elseif(strlen(trim($_POST["telefono"])) < 10){
+     if(strlen(trim($_POST["telefono"])) < 10){
         $telefono_err = "EL número de teléfono debe tener 10 dígitos.";
     } else{
          $telefono = trim($_POST["telefono"]);
@@ -197,30 +204,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             } 
         //_________________  //_________________
     
-     if(empty(trim($_POST["modalidad"]))){
-        $modalidad_err = "Selecciona una modalidad.";
-    } else{
-         $modalidad= trim($_POST["modalidad"]);
-            } 
-        //_________________  //_________________
-    
-     if(empty(trim($_POST["carrera"]))){
-        $carrera_err = "Selecciona una carrera.";
-    } else{
-         $carrera = trim($_POST["carrera"]);
-            } 
-        //_________________
-    
-    
     
 
  
     // Validate numeroControl
     if(empty(trim($_POST["numeroControl"]))){
         $numeroControl_err = "Introduce tu Número de Control.";
-    } elseif(strlen(trim($_POST["numeroControl"])) < 8){
-        $numeroControl_err = "El número de Control debe tener 8 dígitos.";
-    } else{
+    } elseif(strlen(trim($_POST["numeroControl"])) == 8){
+        
         // Prepare a select statement
         $sql = "SELECT id FROM alumnos WHERE numeroControl = ?";
         
@@ -237,7 +228,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 mysqli_stmt_store_result($stmt);
                 
                 if(mysqli_stmt_num_rows($stmt) == 1){
-                    $numeroControl_err = "Este número de control ya existe en el sistema.";
+                    $numeroControl_err = "Ese número de control ya existe en el sistema.";
                 } else{
                     $numeroControl = trim($_POST["numeroControl"]);
                 }
@@ -259,15 +250,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
          
         // Close statement
         mysqli_stmt_close($stmt);
+    } else{
+        
+        $numeroControl_err = "El número de Control debe tener 8 dígitos.";
+        
     }
     
     // Validate curp
     if(empty(trim($_POST["curp"]))){
         $curp_err = "Introduce tu CURP.";     
-    } elseif(strlen(trim($_POST["curp"])) < 18){
-        $curp_err = "CURP debe tener 18 caracteres alfanuméricos.";
-    } else{
+    } elseif(strlen(trim($_POST["curp"])) == 18){
         $curp = trim($_POST["curp"]);
+    } else{
+        $curp_err = "CURP debe tener 18 caracteres alfanuméricos.";
+        
     }
     
     // Validate confirm CURP
@@ -301,14 +297,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
 
     // Check input errors before inserting in database
-    if(empty($numeroControl_err) && empty($confirm_numeroControl_err) && empty($curp_err) && empty($confirm_curp_err) && empty($nombre_err) && empty($paterno_err) && empty($materno_err) && empty($sexo_err) && empty($direccion_err) && empty($estado_err) && empty($municipio_err) && empty($loclidad_err) && empty($telefono_err) && empty($grupo_err) && empty($nivelActual_err) && empty($fnacimiento_err) && empty($modalidad_err) && empty($carrera_err) && empty($email_err) && empty($postal_err) && empty($contrase_err) && empty($confirm_contrase_err)){
+    if(empty($numeroControl_err) && empty($confirm_numeroControl_err) && empty($curp_err) && empty($confirm_curp_err) && empty($nombre_err) && empty($paterno_err) && empty($materno_err) && empty($sexo_err) && empty($idgrupo_err) && empty($fnacimiento_err) && empty($contrase_err) && empty($confirm_contrase_err)){
+        
+        
+         if ($stmt5 = $link->prepare("SELECT idmaestro FROM gruposasignados WHERE  idgrupo = '$idgrupo' AND periodo = '$periActuBD2';")) {
+             
+                $stmt5->execute();
+
+                /* bind variables to prepared statement */
+                $stmt5->bind_result($idmaestro);
+
+                /* fetch values */
+                $stmt5->fetch();
+
+                /* close statement */
+                $stmt5->close();
+            }
+        
+        
         
         // Prepare an insert statement
-        $sql = "INSERT INTO alumnos (numeroControl, curp, nombre, paterno, materno, sexo, direccion, telefono, grupoActual, nivelActual, estadoAcademico, estado, municipio, localidad, fnacimiento, modalidad, carrera, periodoActual, email, postal, contrase) VALUES (?,?,?,?,?,?,?,?,?,?,'1',?,?,?,?,?,?,'{$periodoactual}',?,?,?)";
+        $sql = "INSERT INTO alumnos (numeroControl, curp, nombre, paterno, materno, sexo, direccion, telefono, altaBaja, estado, municipio, localidad, fnacimiento,  email, postal, contrase, idgrupoActual) VALUES (?,?,?,?,?,?,?,?,'Alta',?,?,?,?,?,?,?,?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sssssssssssssssssss", $param_numeroControl, $param_curp, $param_nombre, $param_paterno, $param_materno, $param_sexo, $param_direccion, $param_telefono, $param_grupo, $param_nivelActual, $param_estado, $param_municipio, $param_localidad, $param_fnacimiento, $param_modalidad, $param_carrera, $param_email, $param_postal, $param_contrase);
+            mysqli_stmt_bind_param($stmt, "issssssssssssiss", $param_numeroControl, $param_curp, $param_nombre, $param_paterno, $param_materno, $param_sexo, $param_direccion, $param_telefono, $param_estado, $param_municipio, $param_localidad, $param_fnacimiento, $param_email, $param_postal, $param_contrase, $param_idgrupoActual);
             
             // Set parameters
             $param_numeroControl = $numeroControl;
@@ -319,25 +332,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_sexo = $sexo;
             $param_direccion = $direccion;
             $param_telefono = $telefono;
-			$param_grupo = $grupo;
-			$param_nivelActual = $nivelActual;
             $param_estado = $estado;
             $param_municipio = $municipio;
             $param_localidad = $localidad;
             $param_fnacimiento = $fnacimiento;
-            $param_modalidad = $modalidad;
-            $param_carrera = $carrera;
             $param_email = $email;
             $param_postal = $postal;
             $param_contrase = password_hash($contrase, PASSWORD_DEFAULT);
+            $param_idgrupoActual = $idgrupo;
             
-            
+
 			
             //echo "si preparo el statement";
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 
-                $sql2 = "INSERT INTO niveles (numeroControl, numeroNivel, grupo, estado, modalidad, periodo) VALUES ('{$numeroControl}','{$nivelActual}','{$grupo}','En curso','{$modalidad}','{$periodoactual}')";
+                $sql2 = "INSERT INTO niveles (numeroControl, idgrupo, estado, tipoProgramaBeca) VALUES ('{$numeroControl}','{$idgrupo}','En curso','{$tipoProgramaBeca}')";
                 
                 if($stmt2 = mysqli_prepare($link, $sql2)){
                     
@@ -360,10 +370,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Close statement
         mysqli_stmt_close($stmt2);
         mysqli_stmt_close($stmt);
+    }else{
+        echo "<script type='text/javascript'>alert('Revisa los campos obligatorios.*');</script>";
     }
     // Close connection
     mysqli_close($link);
 }
+
+
+//========================================================================================================
+
+
+
+require_once 'alumno.entidad.php';
+require_once 'alumno.model.php';
+
+// Logica
+$alm = new alumno();
+$model = new alumnoModel();
+
+
+
+
 ?>
  
 <!DOCTYPE html>
@@ -507,10 +535,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 </head>
 <body>
     <header>
-        
-        
-        
-        <div class="container-fluid">
+                
+      
+          <div class="container-fluid">
 
             <div class="row">
                 
@@ -525,60 +552,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 
                 
                 
-                <div class="row">
-                    <div class="col-lg-10">
+               
                     
-                    </div>
-                    <div class="col-lg-2" >
+                    <div class="col-sm-12" style="text-align: center;">
 
 
-                        <div class="btn-group dropdown" role="group">
+                        <div class="btn-group" role="group">
 
-                            <a href="../home.php" class="btn btn-outline-light" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
+                            <a href="../home.php" class="btn btn-outline-light" role="button" >Ir al inicio</a>
+                            
+                            <a href="inscripcionAlumn.php" class="btn btn-outline-light active" role="button">Inscripción Nuevo Ingreso</a>
 
-                            <div class=" btn-group dropdown" role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle active" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Estudiantes
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item active" href="inscripcionAlumn.php" "dropdown-item">Inscripción</a>
-                                    <a class="dropdown-item" href="reinscripcionVeri.php" "dropdown-item">Reinscripción</a>
-                                    <a class="dropdown-item" href="califiVeri.php" "dropdown-item">Consulta calificaciones</a>
-                                </div>
-
-                            </div >
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Docentes
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <a class="dropdown-item" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Docentes</a>
-                                </div>
-
-                            </div >
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Administración
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
-                                    <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
-                                </div>
-
-                            </div >
+                            <a href="../home.php" class="btn btn-outline-light" role="button">&nbsp;Pulsa para salir&nbsp;</a>
 
                         </div>    
                     </div>
                 
                 
-                </div>
+                
 
 
             </div>
@@ -590,55 +581,55 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <div class="container diviciones">
 	    
         <h2 class="centered">Registro de Alumnos de Nuevo Ingreso del periodo <?php  echo $periodoactual; ?></h2>
-        <h3 class="centered">Lengua Extranjera Inglés I</h3>
+        <h3 class="centered">Lengua Extranjera Inglés Nivel I</h3>
         <p style="padding-top:30px">Los campos marcados con * son campos obligatorios.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <hr>
-            <p>Datos Personales</p>
+            <p style="font-size:24px;">Datos Personales</p>
             <div class= "row">
 				
 					<div class="form-group <?php echo (!empty($nombre_err)) ? 'has-error' : ''; ?> col-sm-4">
 						<label>Nombre(s)*</label>
-						<input type="text" name="nombre" class="form-control" value="<?php echo $nombre; ?>" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+						<input type="text" name="nombre" class="form-control" value="<?php echo $nombre; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $nombre_err; ?></span>
 					</div> 
 					<div class="form-group <?php echo (!empty($paterno_err)) ? 'has-error' : ''; ?> col-sm-4">
 						<label>Apellido paterno*</label>
-						<input type="text" name="paterno" class="form-control" value="<?php echo $paterno; ?>">
+						<input type="text" name="paterno" class="form-control" value="<?php echo $paterno; ?> "autocomplete="off">
 						<span class="text-danger"><?php echo $paterno_err; ?></span>
 					</div> 
 					<div class="form-group <?php echo (!empty($materno_err)) ? 'has-error' : ''; ?> col-sm-4">
 						<label>Apellido materno*</label>
-						<input type="text" name="materno" class="form-control" value="<?php echo $materno; ?>">
+						<input type="text" name="materno" class="form-control" value="<?php echo $materno; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $materno_err; ?></span>
 					</div> 
                     
                     <div class="form-group <?php echo (!empty($fnacimiento_err)) ? 'has-error' : ''; ?> col-sm-4">
                         <label>Fecha de nacimiento (Año-mes-día)*</label>
-                        <input id="datepicker" width="276" name="fnacimiento" class="form-control" value="<?php echo $fnacimiento; ?>"/>
+                        <input id="datepicker" width="276" name="fnacimiento" class="form-control" autocomplete="off">
                         <span class="text-danger"><?php echo $fnacimiento_err; ?></span>
                     </div>
                     
                 
-                    <div class="form-group col-md-3">
+                    <div class="form-group <?php echo (!empty($sexo_err)) ? 'has-error' : ''; ?> col-md-3">
 						<label>Sexo*</label>
 						<select class="form-control" name= "sexo" >
-                            <option value =" "> </option>
+                            <option value ="<?php echo $sexo; ?>"><?php echo $sexo; ?></option>
 							<option value ="H">Hombre</option>
                             <option value ="M">Mujer</option>
-							
+							<span class="text-danger"><?php echo $sexo_err; ?></span>
 						</select> 
                         
 					</div>
                     <div class="form-group col-md-6">
                         <div class="form-group <?php echo (!empty($curp_err)) ? 'has-error' : ''; ?> col-sm-12">
                             <label>CURP*</label>
-                            <input type="text" name="curp" class="form-control" value="<?php echo $curp; ?>">
+                            <input type="text" name="curp" class="form-control" maxlength="18" value="<?php echo $curp; ?>" autocomplete="off">
                             <span class="text-danger"><?php echo $curp_err; ?></span>
                         </div>
                         <div class="form-group <?php echo (!empty($confirm_curp_err)) ? 'has-error' : ''; ?> col-sm-12">
                             <label>Confirmar CURP*</label>
-                            <input type="text" name="confirm_curp" class="form-control" value="<?php echo $confirm_curp; ?>">
+                            <input type="text" name="confirm_curp" class="form-control" maxlength="18" value="<?php echo $confirm_curp; ?>" autocomplete="off">
                             <span class="text-danger"><?php echo $confirm_curp_err; ?></span>
                         </div>
                     </div>
@@ -646,96 +637,62 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     
 				</div>	
             <hr>
-            <p>Datos Escolares</p>
+            <p style="font-size:24px;">Datos Escolares</p>
                 <div class= "row">
                 
                     <div class="form-group <?php echo (!empty($numeroControl_err)) ? 'has-error' : ''; ?> col-sm-3">
 						<label>Número de control*</label>
-						<input type="text" name="numeroControl" class="form-control" value="<?php echo $numeroControl; ?>">
+						<input type="number" name="numeroControl" maxlength="8" class="form-control" value="<?php echo $numeroControl; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $numeroControl_err; ?></span>
 					</div>   
                     
                     <div class="form-group <?php echo (!empty($confirm_numeroControl_err)) ? 'has-error' : ''; ?> col-sm-3">
 						<label>Confirma Número de Control*</label>
-						<input type="text" name="confirm_numeroControl" class="form-control" value="<?php echo $confirm_numeroControl; ?>">
+						<input type="number" name="confirm_numeroControl" maxlength="8" class="form-control" value="<?php echo $confirm_numeroControl; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $confirm_numeroControl_err; ?></span>
 					</div>  
                 
                 
-                    <div class="form-group col-md-3"> 
-                            <label>&nbsp;&nbsp;Carrera*</label>
+                    <div class="form-group col-md-5"> 
+                            <label>&nbsp;&nbsp;Grupo*</label>
 
 
-                            <select class="form-control" name= "carrera" >
-                                <option value =" "> </option>
-                                <option value ="Sistemas Computacionales">Sistemas Computacionales</option>
-                                <option value ="Industrial">Industrial</option>
-                                <option value ="Mecatrónica">Mecatrónica</option>
-                                <option value ="Gestión Empresarial">Gestión Empresarial</option>
-
-                            </select> 
+                            <select class="custom-select custom-select mb-3" required name="idgrupo">
+                                  <option value="" selected>Elige...</option>
+                                   <?php foreach($model->Listar2() as $r): ?>
+                                  <option value="<?php echo $r->__GET('idgrupo'); ?>" <?php if($r->__GET('idgrupo') == $alm->__GET('idgrupo')){echo "selected";}else{echo "";} ?>><?php echo grupoInformacion($r->__GET('idgrupo')); ?></option>
+                                  <?php endforeach; ?>
+                            </select>
                     </div>
-                    <div class="form-group col-md-3"> 
-                            <label>&nbsp;&nbsp;Modalidad*</label>
-
-
-                            <select class="form-control" name= "modalidad" >
-                                <option value =" "> </option>
-                                <option value ="Escolarizado">Escolarizado</option>
-                                <option value ="Sabatino">Sabatino</option>
-                                <option value ="Verano">Verano</option>
-                                
-
-                            </select> 
-                    </div>
-                
-                
-                
-                
-					<div class="form-group col-md-1">
-						<label>Nivel</label>
-						<select class="form-control" name= "nivelActual" >
-							<option value ="1" selected>1</option>
-							
-						</select> 
-
-                    </div>
-                        
-						
-				    <div class="form-group col-md-1">
-                        <label>&nbsp;&nbsp;Grupo*</label>
-						<select class="form-control" name= "grupo" >
-                            <option value =" "> </option>
-							<option value ="A">A</option>
-							<option value ="B">B</option>
-							<option value ="C">C</option>
-							<option value ="D">D</option>
-							<option value ="E">E</option>
-							<option value ="F">F</option>
-                            <option value ="G">G</option>
-                            <option value ="H">H</option>
-                            <option value ="I">I</option>
+                    
+                    <div class="form-group col-md-6">
+                        <label>&nbsp;&nbsp;¿Cuentas con alguna Beca o Programa?</label>
+						<select class="form-control" name= "tipoProgramaBeca" >
+                            <option value ="">Elije una opción</option>
+							<option value ="Con Beca">Si</option>
+							<option value ="Sin Beca">No</option>
 						</select> 
                   </div>
+                   
                     
 					
 				</div>	
             <hr>
-            <p>Información de contacto</p>
+            <p style="font-size:24px;">Información de contacto</p>
                 <div class= "row">
                 
 				
 				    <div class="form-group <?php echo (!empty($direccion_err)) ? 'has-error' : ''; ?> col-sm-4">
-						<label>Domicilio*</label>
-						<input type="text" name="direccion" class="form-control" value="<?php echo $direccion; ?>">
+						<label>Domicilio</label>
+						<input type="text" name="direccion" class="form-control" value="<?php echo $direccion; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $direccion_err; ?></span>
 					</div>
                 
                 
                   <div class="col-sm-3 form-group">
-                        <label for="validationCustom03">Estado*:</label>
-                          <select class="form-control" name="estado" id="validationCustom03" onchange="ChangeEstList()" required>
-                            <option value="Elige una opción...">Elige una opción... </option>
+                        <label for="validationCustom03">Estado:</label>
+                          <select class="form-control" name="estado" id="validationCustom03" onchange="ChangeEstList()" required value ="<?php echo $estado; ?>">
+                            <option value="<?php if($estado !== ""){echo $estado;}else{echo "";} ?>"><?php if($estado !== ""){echo $estado;}else{echo "Elige una opción";} ?></option>
                             <option value="Aguascalientes">Aguascalientes</option>
                             <option value="Zacatecas">Zacatecas</option>
                           </select>
@@ -744,53 +701,58 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                       </div>
                       <div class="col-sm-3 form-group">
-                        <label for="validationCustom04">Municipio*:</label>
-                         <select class="form-control" id="validationCustom04" name="municipio" onchange="ChangeMuniList()" required><option value ="">Cargando...</option></select>
+                        <label for="validationCustom04">Municipio:</label>
+                         <select class="form-control" id="validationCustom04" name="municipio" onchange="ChangeMuniList()" required>
+                             <option value ="<?php if($estado !== ""){echo $municipio;}else{echo "";} ?>"><?php if($municipio !== ""){echo $municipio;}else{echo "Elige una opción";} ?></option>
+                          </select>
                         <div class="invalid-feedback">
                             Elige un Municipio.
                         </div>
                       </div>
                 
                 
-                        <div class="col-sm-4 form-group">
-                        <label for="validationCustom05">Localidad*:</label>
-                         <select class="form-control" id="validationCustom05" name="localidad" required><option value ="">Cargando...</option></select>
+                        <div class="col-sm-4 <?php echo (!empty($localidad_err)) ? 'has-error' : ''; ?> form-group">
+                        <label for="validationCustom05">Localidad:</label>
+                         <select class="form-control" id="validationCustom05" name="localidad" required>
+                             <option value ="<?php if($estado !== ""){echo $localidad;}else{echo "";} ?>"><?php if($localidad !== ""){echo $localidad;}else{echo "Elige una opción";} ?></option>
+                            </select>
                         <div class="invalid-feedback">
                             Elige una Locaidad...
                         </div>
+                            <span class="text-danger"><?php echo $localidad_err; ?></span>
                       </div>
                     
                     <div class="form-group <?php echo (!empty($postal_err)) ? 'has-error' : ''; ?> col-sm-2">
-						<label>Código Postal*</label>
-						<input type="text" name="postal" class="form-control" value="<?php echo $postal; ?>">
+						<label>Código Postal</label>
+						<input type="text" name="postal" class="form-control" value="<?php echo $postal; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $postal_err; ?></span>
 					</div>    
                 
 					<div class="form-group <?php echo (!empty($telefono_err)) ? 'has-error' : ''; ?> col-sm-2">
-						<label>Teléfono*</label>
-						<input type="text" name="telefono" class="form-control" value="<?php echo $telefono; ?>">
+						<label>Teléfono</label>
+						<input type="text" name="telefono" class="form-control" value="<?php echo $telefono; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $telefono_err; ?></span>
 					</div>    
                     
                     <div class="form-group <?php echo (!empty($email_err)) ? 'has-error' : ''; ?> col-sm-3">
-						<label>Correo electrónico*</label>
-						<input type="email" name="email" class="form-control" value="<?php echo $email; ?>">
+						<label>Correo electrónico</label>
+						<input type="email" name="email" class="form-control" value="<?php echo $email; ?>" placeholder="tu_correo@ejemplo.com" autocomplete="off">
 						<span class="text-danger"><?php echo $email_err; ?></span>
 					</div>   
 				
 				
 			</div> 
             <hr>
-            <p>Seguridad de cuenta</p>
+            <p style="font-size:24px;">Seguridad</p>
             
             <div class="form-group <?php echo (!empty($contrase_err)) ? 'has-error' : ''; ?> col-sm-3">
 						<label>Crea una contraseña*</label>
-						<input type="password" name="contrase" class="form-control" value="<?php echo $contrase; ?>">
+						<input type="password" name="contrase" class="form-control" value="<?php echo $contrase; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $contrase_err; ?></span>
 					</div>
 					<div class="form-group <?php echo (!empty($confirm_ccontrase_err)) ? 'has-error' : ''; ?> col-sm-3">
 						<label>Confirma contraseña*</label>
-						<input type="password" name="confirm_contrase" class="form-control" value="<?php echo $confirm_contrase; ?>">
+						<input type="password" name="confirm_contrase" class="form-control" value="<?php echo $confirm_contrase; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $confirm_contrase_err; ?></span>
 					</div>
             <hr>
@@ -877,6 +839,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             locale: 'es-es',
             format: 'yyyy/mm/dd'
         });
+        $('#datepicker').val('<?php echo $fnacimiento; ?>');
     </script>
 
 

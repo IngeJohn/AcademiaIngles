@@ -15,9 +15,13 @@ class Alumno
     private $telefono;
     private $carrera;
     private $modalidad;
-	private $nivelActual;
-	private $grupoActual;
-	private $idmaestroActual;
+	private $nivel;
+	private $grupo;
+	private $idmaestro;
+    private $email;
+    private $postal;
+    private $periodo;
+    private $idgrupo;
 
 
 	public function __GET($k){ return $this->$k; }

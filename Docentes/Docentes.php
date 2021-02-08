@@ -3,7 +3,7 @@
 session_start();
  
 // Check if the user is logged in, if not then redirect to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+if(!isset($_SESSION["loggedinDo"]) || $_SESSION["loggedinDo"] !== true){
     header("location: IniciarSesionDo.php");
     exit;
 }
@@ -12,16 +12,89 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 require_once "../Require/config.php";
 
 
+
+
+//================================================================================================================================================
+
+
+date_default_timezone_set('America/Mexico_City');
+
+    $peri = "";  
+    $per = "";  
+    $mes = date("n"); 
+    $year = date("Y"); 
+
+if ($mes >= 1 && $mes <= 6){
+    $per = 1;
+    $peri = "Periodo: ".$per."-".$year;
+}else if($mes >= 8 && $mes <= 12){
+    $per = 2;
+    $peri = "Periodo: ".$per."-".$year;
+    
+}
+
+
+$periodoActu = $per."-".$year;
+
+
+
+
+
+
+if ($stmt3 = $link->prepare("SELECT  periodo FROM periodoactual")) {
+    $stmt3->execute();
+
+    /* bind variables to prepared statement */
+    $stmt3->bind_result($periActuBD);
+
+    /* fetch values */
+$stmt3->fetch();
+
+    /* close statement */
+    $stmt3->close();
+}
+
+//echo $periodoActu." ".$periActuBD;
+
+if( $periActuBD !== $periodoActu ){
+    
+    $sql2 = "UPDATE periodoactual SET periodo ='$periodoActu', periodoAnterior ='$periActuBD';";
+    
+    if($stmt4 = mysqli_prepare($link, $sql2)){
+        $stmt4->execute();
+    }
+    //echo("<p><script>alert('¡Periodo actualizado!');</script></p>");
+}
+
+
+
+
+//==============================================================================================================================================
+
+
+
+
  
 // Define variables and initialize with empty values
-$new_password = $confirm_password = $old_password = "";
-$new_password_err = $confirm_password_err = $old_password_err = "";
+$new_password = $confirm_password = $old_password = $usuario = $usuario_nue = $param_usuario = "";
+$new_password_err = $confirm_password_err = $old_password_err = $usuario_err = "";
 
 
+if ($stmtU = $link->prepare("SELECT username FROM docentes WHERE idmaestro = '{$_SESSION['idmaestro']}';")) {
+    $stmtU->execute();
 
-$query = "SELECT gruposasignados.nivel, gruposasignados.grupo, gruposasignados.carrera, gruposasignados.modalidad, periodoactual.periodo FROM academia_ingles.gruposasignados, academia_ingles.periodoactual WHERE gruposasignados.periodo = periodoactual.periodo AND periodoactual.idperiodoactual = '1' AND gruposasignados.idmaestro = {$_SESSION["idmaestro"]};";
+    /* bind variables to prepared statement */
+    $stmtU->bind_result($usuario);
 
-//$query = "SELECT  nivel, grupo, carrera, modalidad FROM `gruposasignados` WHERE idmaestro = {$_SESSION["idmaestro"]}";
+    /* fetch values */
+   $stmtU->fetch();
+    /* close statement */
+    $stmtU->close();
+  }
+
+//================================================================================================================================================
+
+$query = "SELECT nivel, grupo, carrera, modalidad, periodo FROM gruposasignados WHERE idmaestro = {$_SESSION["idmaestro"]} AND periodo = '{$periActuBD}';";
 
 $result = mysqli_query($link, $query);
 
@@ -33,37 +106,137 @@ if (!$result) {
 
 $dataRow = "";
 
+$pye = 0;
+
 while($row = mysqli_fetch_array($result))
 {
     
-    $dataRow = $dataRow."<tr><td>&nbsp;$row[0]</td>"."<td>&nbsp;$row[1]</td>"."<td>&nbsp;$row[2]</td>"."<td>&nbsp;$row[3]</td></tr>";
+    $dataRow = $dataRow."<tr style='text-align:center;'><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td><td><a href='pdfyexcel/pdf$pye.php' target='_blank' class='btn btn-outline-light' role='button'>PDF</a></td><td><a href='pdfyexcel/xls$pye.php' target='_blank' class='btn btn-outline-light' role='button'>XLS</a></td></tr>";
+    
+    $pye++;
     
 }
 
 
 
 
-$query2 = "SELECT  periodo FROM periodoactual WHERE  idperiodoactual ='1'";
+//========================================================================================================================================
 
-$result2 = mysqli_query($link, $query2);
 
-if (!$result2) {
+
+
+$queryh = "SELECT gruposasignados.nivel, gruposasignados.grupo, gruposasignados.carrera, 
+		gruposasignados.modalidad, horarios.lunes, horarios.martes, horarios.miercoles, 
+		horarios.jueves, horarios.viernes, horarios.sabadoC, horarios.sabadoT 
+        FROM horarios, gruposasignados 
+        WHERE idmaestro = {$_SESSION["idmaestro"]} AND gruposasignados.idgrupo = horarios.idgrupo 
+        AND periodo = '{$periActuBD}' ORDER BY lunes DESC;";
+
+$resulth = mysqli_query($link, $queryh);
+
+if (!$resulth) {
     $message  = 'Invalid query: ' . mysqli_error() . "\n";
-    $message .= 'Whole query: ' . $query2;
+    $message .= 'Whole query: ' . $queryh;
     die($message);
 }
 
-$dataRow2 = "";
-
-$row2 = mysqli_fetch_array($result2);
-
-$dataRow2 = $row2["periodo"];
+$dataRowh = "";
 
 
 
+while($rowh = mysqli_fetch_array($resulth))
+{
+    
+    $dataRowh = $dataRowh."<tr style='text-align:center;'><td>$rowh[0]$rowh[1] / $rowh[2] / $rowh[3]</td><td>$rowh[4]</td><td>$rowh[5]</td><td>$rowh[6]</td><td>$rowh[7]</td><td>$rowh[8]</td><td>$rowh[9] - $rowh[10]</td></tr>";
+    
+
+    
+}
+
+
+
+
+//========================================================================================================================================
+
+
+if(isset($_POST['boton1'])){
+
+       // Validate username
+    if(empty(trim($_POST["usuario"]))){
+        $usuario_err = "Introduce un nombre se usuario.";
+    } else{
+        
+        // Prepare a select statement
+        $sqlu = "SELECT username FROM docentes WHERE username = ? ";
+        
+        if($stmtu = mysqli_prepare($link, $sqlu)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmtu, "s", $param_usuario);
+            
+            // Set parameters
+            $param_usuario = trim($_POST["usuario"]);
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmtu)){
+                /* store result */
+                mysqli_stmt_store_result($stmtu);
+                
+                if(mysqli_stmt_num_rows($stmtu) == 1){
+                    $usuario_err = "Ese nombre de usuario ya existe en el sistema.";
+                } else{
+                    $usuario_nue = trim($_POST["usuario"]);
+                }            
+                
+            } else{
+                $usuario_err = "Error ¡intenta más tarde!";
+                    echo "<script>window.alert($usuario_err)</script>";
+            }
+        }
+         
+        // Close statement
+        mysqli_stmt_close($stmtu);
+    }
+    
+     // Check input errors before inserting in database
+    if(empty($usuario_err)){
+        
+        // Prepare an insert statement
+        $sqlus = "UPDATE docentes SET username = ? WHERE idmaestro = '{$_SESSION['idmaestro']}'";
+         
+        if($stmtus = mysqli_prepare($link, $sqlus)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmtus, "s", $param_usuario);
+            
+            // Set parameters
+            $param_usuario = $usuario_nue;
+
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmtus)){
+                
+                       // Redirect to home page
+                        $message = "¡Nombre de usario registrado con exito!";
+                        echo "<script type='text/javascript'>alert('$message'); location.href='IniciarSesionDo.php';counteru1 = 0;
+            localStorage.setItem('counteru1', 0);</script>";
+        
+            } else{
+                echo "Algo salio mal, intentalo más tarde."."Error: %s.\n", $stmt->error;
+                $message = "¡Nombre de usario registrado con exito!";
+
+            }
+        }
+        // Close statement
+        mysqli_stmt_close($stmtus);
+
+    }
+}
  
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+    
+
+
+//=======================================================================================================
+
+    
+if(isset($_POST['boton2'])){
     
     // Validate old password
     if(empty(trim($_POST["old_password"]))){
@@ -100,7 +273,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before updating the database
     if(empty($new_password_err) && empty($confirm_password_err)){
         // Prepare an update statement
-        $sql = "UPDATE docentes SET password = ? WHERE id = ?";
+        $sql = "UPDATE docentes SET password = ? WHERE idmaestro = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -108,13 +281,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             
             // Set parameters
             $param_password = password_hash($new_password, PASSWORD_DEFAULT);
-            $param_id = $_SESSION["id"];
+            $param_id = $_SESSION["idmaestro"];
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
-                // Password updated successfully. Destroy the session, and redirect to login page
-                //session_destroy();
-                header("location: Docentes.php");
+
+                header("location: IniciarSesionDo.php");
                 exit();
             } else{
                 echo "Uups! Algo salio mal, intenta más tarde.";
@@ -144,12 +316,12 @@ if(isset($_REQUEST['action']))
 	switch($_REQUEST['action'])
 	{
 		case 'actualizar':
-			$alm->__SET('id',              $_REQUEST['id']);
+			$alm->__SET('idmaestro',       $_REQUEST['idmaestro']);
             $alm->__SET('direccion',       $_REQUEST['direccion']);
-            $alm->__SET('estado',       $_REQUEST['estado']);
+            $alm->__SET('estado',          $_REQUEST['estado']);
             $alm->__SET('municipio',       $_REQUEST['municipio']);
             $alm->__SET('localidad',       $_REQUEST['localidad']);
-            $alm->__SET('postal',       $_REQUEST['postal']);
+            $alm->__SET('postal',          $_REQUEST['postal']);
             $alm->__SET('telefono',        $_REQUEST['telefono']);
             $alm->__SET('email',           $_REQUEST['email']);
 
@@ -163,6 +335,9 @@ if(isset($_REQUEST['action']))
 	}
 }
 
+
+
+//=====================================================================================================================
 ?>
  
 <!DOCTYPE html>
@@ -367,8 +542,16 @@ if(isset($_REQUEST['action']))
                             
                             <a href="Docentes.php" class="btn btn-outline-light active" role="button" >Docentes</a>
                             
-                            <a href="calificacionesAl.php" class="btn btn-outline-light" role="button" data-toggle="modal" data-target="#modal1">Cambiar contraseña</a>
-
+                            <a href="SubirCalifiDo.php" class="btn btn-outline-light" role="button" >Calificar Grupos</a>
+                            
+                            <a href="Parciales.php" class="btn btn-outline-light" role="button" >Parciales</a>
+                            
+                            <a href="Reportes.php" class="btn btn-outline-light" role="button" >Reportes</a>
+                            
+                            <a class="btn btn-outline-light" role="button" data-toggle="modal" data-target="#modal1">Cambiar contraseña</a>
+                            
+                            <a class="btn btn-outline-light" role="button" id="botonu">Cambiar Nombre de Usuario</a>
+                            
                             <a href="logoutDo.php" class="btn btn-outline-light" role="button">Cerrar sesión</a>
 
                         </div>    
@@ -423,8 +606,48 @@ if(isset($_REQUEST['action']))
                             </div>
                         </div>
                         <div class="form-group row modal-footer">
-                            <input type="submit" class="btn btn-primary" value="Guardar cambios">
+                            <input type="submit" name="boton2" class="btn btn-primary" value="Guardar cambios">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                        
+      
+                </div> 
+            </div> 
+        </div> 
+      
+    </div>
+  </div>
+</div>
+    
+    
+<div class="modal fade bd-example-modal-lg" id="modal5" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="color:black">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Cambiar Nombre de Usuario</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+          <div class="container">
+            <div class="row">
+                <div class = col-sm-12 style="padding:20px;">
+                    
+                    
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
+                        <div class="modal-body">
+                            
+                            <div class="form-group row <?php echo (!empty($usuario_err)) ? 'has-error' : ''; ?>">
+                                <label>Nuevo nombre de usuario</label>
+                                <input type="text" name="usuario" class="form-control mb-2">
+                                <span class="help-block text-danger"><?php echo $usuario_err; ?></span>
+                            </div>
+                        </div>
+                        <div class="form-group row modal-footer">
+                            <input type="submit" name="boton1" class="btn btn-primary" value="Guardar cambios">
+                            <button type="button" id="botonu2" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         </div>
                     </form>
                         
@@ -459,9 +682,9 @@ if(isset($_REQUEST['action']))
                         
                         <div class="pure-u-1-2">
                           <div>  
-                            <form action="?action=actualizar&id" method="post" class="pure-form pure-form-stacked" style="margin-bottom:30px;">
+                            <form action="?action=actualizar&idmaestro" method="post" class="pure-form pure-form-stacked" style="margin-bottom:30px;">
                                 <div class="modal-body">
-                                <input type="hidden" name="id" value="<?php echo $alm->__GET('id'); ?>" />
+                                <input type="hidden" name="idmaestro" value="<?php echo $alm->__GET('idmaestro'); ?>" />
 
                                 <table style="width:400px; color:black;" >
                                     <tr>
@@ -525,95 +748,86 @@ if(isset($_REQUEST['action']))
 </div>
 
     
+    
 
     
     
     
-    
-    
-        <div class="container" style="padding-top:40px;">
-            <div class="collapse" id="collapse1">
-              <div class="card card-body" style="color:black;">
-            
-                  <?php foreach($model->Listar() as $r): ?> 
-                  <div class="row">
-                      <div class="col-sm-6" style="border: 2px solid black; border-radius: 5px; text-align:left; padding: 20px;">
-                          
-                          <p style="font-size: 18px;"><b>Información Personal</b></p>
-                          
-                          <p><b>Nombre: </b><?php echo "Lic. ".$r->__GET('nombre'); echo " ".$r->__GET('paterno'); echo " ".$r->__GET('materno'); ?></p>
-                          <p><b>Sexo: </b><?php echo $r->__GET('sexo'); ?></p>
-                          <p><b>No. de Empleado: </b><?php echo $r->__GET('idmaestro'); ?></p>
-                          <p><b>CURP: </b><?php echo $r->__GET('curp'); ?></p>
-                          <p><b>RFC: </b><?php echo $r->__GET('rfc'); ?></p>
-                          
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12" style="padding-top:10px;">
+                <p><b>Bienvenido: </b><?php echo $usuario; ?></p>
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-datos-tab" data-toggle="tab" href="#nav-datos" role="tab" aria-controls="nav-datos" aria-selected="true">Datos del Docente</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-grupos" role="tab" aria-controls="nav-grupos" aria-selected="false">Grupos Asignados</a>
+                            <a class="nav-item nav-link" id="nav-horarios-tab" data-toggle="tab" href="#nav-horarios" role="tab" aria-controls="nav-horarios" aria-selected="false">Horarios</a>
                         </div>
-                        <div class="col-sm-6" style="border: 2px solid black; border-radius: 5px; text-align:left; padding: 20px;">
-                          
-                          <p style="font-size: 18px;"><b>Información de Contacto</b></p>
-                          <p><b>Domicilio: </b><?php echo $r->__GET('direccion'); ?></p>
-                          <p><b>Estado: </b><?php echo $r->__GET('estado'); ?></p>
-                          <p><b>Municipio: </b><?php echo $r->__GET('municipio'); ?></p>
-                          <p><b>Localidad: </b><?php echo $r->__GET('localidad'); ?></p>
-                          <p><b>Código postal: </b><?php echo $r->__GET('postal'); ?></p>
-                          <p><b>Teléfono: </b><?php echo $r->__GET('telefono'); ?></p>
-                          <p><b>Email: </b><?php echo $r->__GET('email'); ?></p>
-                          <p><a id="myBtn1" href="?action=editar&id=<?php echo $r->id; ?>" class="btn btn-primary">Actualizar Información</a>
-                          </p>
-                      </div>
-                  
-                  </div >
-                  <div class="row">
-                      <div class="col">
-                          
-                          
-                          
-                          
-                      </div>
-                  </div>
-                  
-                  <?php endforeach; ?>
-                   </div>
-                  </div>
-              
-        </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    <br>
-    
-    
-    
-    
-    
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-datos" role="tabpanel" aria-labelledby="nav-datos-tab">
+                            <?php foreach($model->Listar() as $r): ?> 
+                      <div class="row">
+                          <div class="col-sm-4" style="border: 2px solid gray; border-radius: 5px; text-align:left; padding: 20px;">
 
-    
-    
-    
-        <div class="container" >
-            <div class="collapse" id="collapse2">
-              <div class="card card-body" style="color:black;">
-                  
-                  <div class="row">
-                      <div class="col-9">
+                              <p style="font-size: 20px;"><b>Información Personal</b></p>
+
+                              <p><b>Nombre: </b><?php echo $r->__GET('titulo')." ".$r->__GET('nombre')." ".$r->__GET('paterno')." ".$r->__GET('materno'); ?></p>
+                              <p><b>Fecha de nacimiento: </b><?php echo $r->__GET('fnacimiento'); ?></p>
+                              <p><b>Sexo: </b><?php echo $r->__GET('sexo'); ?></p>
+                              <p><b>CURP: </b><?php echo $r->__GET('curp'); ?></p>
+                              <p><b>RFC: </b><?php echo $r->__GET('rfc'); ?></p>
+
+                            </div>
                           
-                              <p style="font-size: 18px;"><b>Niveles y Grupos Asignados Periodo <?php echo $dataRow2;?></b></p>
+                          <div class="col-sm-4" style="border: 2px solid gray; border-radius: 5px; text-align:left; padding: 20px;">
+
+                              <p style="font-size: 20px;"><b>Datos académicos</b></p>
+                              <p><b>Certificación: </b><?php echo $r->__GET('certificacion'); ?></p>
+                              <p><b>Nivel de estudios: </b><?php echo $r->__GET('nivelAcademico'); ?></p>
+                              <p><b>Estado Académinco: </b><?php echo $r->__GET('altaBaja');  ?></p>
+                              <p><b>Maestro ID: </b><?php echo $r->__GET('idmaestro'); ?></p>
+                            
+                              
+                          </div>
+                          
+                          
+                            <div class="col-sm-4" style="border: 2px solid gray; border-radius: 5px; text-align:left; padding: 20px;">
+
+                              <p style="font-size: 20px;"><b>Información de Contacto</b></p>
+                              <p><b>Domicilio: </b><?php echo $r->__GET('direccion'); ?></p>
+                              <p><b>Estado: </b><?php echo $r->__GET('estado'); ?></p>
+                              <p><b>Municipio: </b><?php echo $r->__GET('municipio'); ?></p>
+                              <p><b>Localidad: </b><?php echo $r->__GET('localidad'); ?></p>
+                              <p><b>Código postal: </b><?php echo $r->__GET('postal'); ?></p>
+                              <p><b>Teléfono: </b><?php echo $r->__GET('telefono'); ?></p>
+                              <p><b>Email: </b><?php echo $r->__GET('email'); ?></p>
+                              <p><a id="myBtn1" href="?action=editar&idmaestro=<?php echo $r->idmaestro; ?>" class="btn btn-primary">Actualizar Información</a>
+                              </p>
+                          </div>
+                          
+
+                      </div >
+
+                      <?php endforeach; ?>
+                            
+                        </div>
+                        <div class="tab-pane fade" id="nav-grupos" role="tabpanel" aria-labelledby="nav-grupos-tab" style="width:80%;">
+
+                              <p style="font-size: 18px;"><b>Listas en PDF y Excel de Grupos Asignados Periodo <?php echo $periActuBD;?></b></p>
                               
                           
-                              <div class="table-responsive">  
+                              <div class="table-responsive form-group">  
                     
-                                <table class="table">
+                                <table class="table table-dark">
                                     <thead>
-                                        <tr>
+                                        <tr style="text-align:center;">
                                             <th>Nivel</th>
                                             <th>Grupo</th>
                                             <th>Carrera</th>
                                             <th>Modalidad</th>
+                                            <th>Imprimir Lista</th>
+                                            <th>Exportar Excel</th>
                                             
 
                                         </tr>
@@ -624,76 +838,45 @@ if(isset($_REQUEST['action']))
                                 </table>
                               </div>
 
-                         
+                        </div>
+                        <div class="tab-pane fade" id="nav-horarios" role="tabpanel" aria-labelledby="nav-horarios-tab">
+                            
+                            <p style="font-size: 18px; text-align:center;"><b>Horarios Periodo <?php echo $periActuBD;?></b></p>
+                              
                           
-                      </div>
-                  
-                  </div >
-                  <div class="row">
-                      <div class="col">
-                          
-                          <p>
-                              <a href="" class="btn btn-primary">Ver listas de alumnos</a>
-                              <button id="myBtn8" type="button" class="btn btn-dark">Cerrar</button>
-                          </p>
-                          
-                          
-                      </div>
-                  </div>
-                  
-                  
-              </div>
+                              <div class="table-responsive form-group">  
+                    
+                                <table class="table table-bordered table-dark">
+                                    <thead>
+                                        <tr style="text-align:center;">
+                                            <th>Grupo</th>
+                                            <th>Lunes</th>
+                                            <th>Martes</th>
+                                            <th>Miercoles</th>
+                                            <th>Jueves</th>
+                                            <th>Viernes</th>
+                                            <th>Sabado</th>
+                                            
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <?php echo $dataRowh;?>
+                                        
+                                    </tbody>
+                                </table>
+                              </div>
+                            
+                        </div>
+                    </div>
                 
             </div>
         </div>
-    
-    
-    
-
-    
+    </div>
     
     
 
-	<div class= "container">
-        <div class= "row justify-content-center">
-            <div class="col-sm-4">
-                <p style="text-align:center;">Selecciona una opción</p>
-            </div>
-        </div>
-		<div class= "row justify-content-center">
-            
-			<div class= "col-7 col-sm-7 col-md-3 col-lg-2">
-				 <p><a   role="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
-                    <img class="cuadros card"  alt="Grupos Asignados" src="../imagenes/profesores1.png" >
-                    </a></p>
-                 
-			</div>
-			<div class= "col-7 col-sm-7 col-md-3 col-lg-2">
-				 <p><a href="SubirCalifiDo.php">
-                    <img class="cuadros card"  alt="Subir Calificaciones" src="../imagenes/calificaciones.png" >
-                    </a></p>
-			</div>
-			<div class= "col-7 col-sm-7 col-md-3 col-lg-2">
-				 
-				 <p><a role="button"  data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                    <img class="cuadros card"  alt="Subir Documentos" src="../imagenes/grupos.png" >
-                    </a></p>
-			</div>
-            
-		</div>
-
-		</div>
-    
-    
-        
-    
-    
-    
-  
-    
-    
-    
-    
         
     
     <hr>
@@ -771,8 +954,6 @@ if(isset($_REQUEST['action']))
    <script>
        
         var counter1 = 0;
-        // Get the modal
-        var modal = document.getElementById("modal2");
 
         // Get the button that opens the modal
         var btn = document.getElementById("myBtn1");
@@ -812,13 +993,49 @@ if(isset($_REQUEST['action']))
         }
 
         counter1 = localStorage.getItem("counter1");
-        if(counter1 != 0 ){
+        if(counter1 == 1 ){
             $('#modal2').modal('show');
            }else{
                $('#modal2').modal('none');
            }
     </script>
-	
+       <script>
+       
+        var counteru1 = 0;
+
+
+        // Get the button that opens the modal
+        var btnu = document.getElementById("botonu");
+        
+        // Get the button that save data
+        var btnu2 = document.getElementById("botonu2");
+
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btnu.onclick = function() {
+            counteru1 = 1;
+            localStorage.setItem("counteru1", counteru1);
+            // location.href='Docentes.php';
+             $('#modal5').modal('show');
+        }
+        
+         // When the user clicks the button, close the modal 
+        btnu2.onclick = function() {
+            counteru1 = 0;
+            localStorage.setItem("counteru1", counteru1);
+        }
+
+        counteru1 = localStorage.getItem("counteru1");
+        if(counteru1 == 1 ){
+               $('#modal5').modal('show');
+           }else{
+               $('#modal5').modal('none');
+           }
+    </script>
+
 	
 
 </body>

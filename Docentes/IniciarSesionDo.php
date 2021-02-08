@@ -2,7 +2,7 @@
 
 session_start();
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+if(isset($_SESSION["loggedinDo"]) && $_SESSION["loggedinDo"] === true){
 
     // Unset all of the session variables
     $_SESSION = array();
@@ -15,7 +15,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 require_once "../Require/config.php";
  
 // Define variables and initialize with empty values
-$username = $password = $category = $idmaestro = $nombre = $paterno = $materno = $hashed_password ="";
+$username = $password = $estado = $idmaestro = $nombre = $paterno = $materno = $hashed_password ="";
 $username_err = $password_err = "";
  
 // Processing form data when form is submitted
@@ -38,7 +38,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, username, password, category, nombre, paterno, materno, idmaestro FROM docentes WHERE username = ?";
+        $sql = "SELECT username, password, altaBaja, nombre, paterno, materno, idmaestro, titulo FROM docentes WHERE username = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -55,51 +55,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if username exists, if yes then verify password
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password, $category, $nombre, $paterno, $materno, $idmaestro);
+                    mysqli_stmt_bind_result($stmt, $username, $hashed_password, $altaBaja, $nombre, $paterno, $materno, $idmaestro, $titulo);
                     if(mysqli_stmt_fetch($stmt)){
+
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
                             session_start();
                             
                             // Store data in session variables
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
+                            $_SESSION["loggedinDo"] = true;
                             $_SESSION["username"] = $username;   
-                            $_SESSION["category"] = $category;
+                            $_SESSION["altaBaja"] = $altaBaja;
+                            $_SESSION["titulo"] = $titulo;
                             $_SESSION["nombre"] = $nombre;
                             $_SESSION["paterno"] = $paterno;
                             $_SESSION["materno"] = $materno;
 							$_SESSION["idmaestro"] = $idmaestro;
                             $_SESSION["contraseña"] = $hashed_password;
-							
-                            
-                            static $cate ;
-                            $cate = "yo";
-                            if($_SESSION["category"] == 1){
-                                $cate;
-                                $cate = "Estudiante";
-                                header("location: Estudiantes.php");
-                            }elseif($_SESSION["category"] == 2){
-                                $cate ;
-                                $cate = "Docente";
+                            $_SESSION["alerta"]="";
+
                                 header("location: Docentes.php");
-                            }elseif($_SESSION["category"] == 3){
-                                $cate ;
-                                $cate = "Contador";
-                                header("location: Contadores.php");
-                            }elseif($_SESSION["category"] == 4){
-                                $cate ;
-                                $cate = "Administrador";
-                                // Redirect user to welcome page
-                                header("location: Administrador.php");
-                            } 
-                            
-                            
-                            
-                            
-                            
-                            
-                            
+                 
                         } else{
                             // Display an error message if password is not valid
                             $password_err = "La contraseña que ingresaste no es valida.";
@@ -127,7 +103,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html lang="en">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITSL - Academia de Inglés</title>
+    <title>Docentes - ITSL Inglés</title>
     
     <link rel="stylesheet" href="../bootstrap/4.5.3/dist/css/bootstrap.min.css" 
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
@@ -253,85 +229,155 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 <body>
 
-    <header>
-        
-        <div class="container-fluid">
+            <header>
 
-            <div class="row">
+            <div class="container-fluid">
 
-
-
-                <div class="col-lg-8 col-xs-12 col-sm-12 col-md-12">
-                    <img class="logo" src="../imagenes/itslnobreLargo.png" >
-                </div>
-                <div class="col-sm-4" style="text-align:center; padding-top:20px; ">
-                    <img src="../imagenes/TecNMwhite.png" width="150px" height="auto" >
-                </div>
-
-
-                
                 <div class="row">
-                    <div class="col-lg-10">
-                    
+
+                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-8">
+                        <img class="logo" src="../imagenes/itslnobreLargo.png" >
                     </div>
-                    <div class="col-lg-2" >
-
-
-                        <div class="btn-group dropdown" role="group">
-
-                            <a href="../home.php" class="btn btn-outline-light " role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Estudiantes
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item" href="../Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
-                                    <a class="dropdown-item" href="../Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
-                                    <a class="dropdown-item" href="../Alumnos/califiVeri.php" "dropdown-item">Consulta calificaciones</a>
-                                </div>
-
-                            </div >
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle active" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Docentes
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <a class="dropdown-item active" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Acceso Docentes</a>
-                                </div>
-
-                            </div >
-
-                            <div class=" btn-group dropdown " role="group" > 
-
-                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                    Administración
-                                </button>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
-                                    <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
-                                </div>
-
-                            </div >
-
-                        </div>    
+                    <div class="col-sm-4 col-md-3" style="text-align:center; padding-top:20px; ">
+                        <img src="../imagenes/TecNMwhite.png" width="150px" height="auto" >
                     </div>
-                
-                
+
                 </div>
+                
+                
+                
+                
+                
+
+                    <div class="row justify-content-md-center">
+
+                        <div class="col-md-12 d-none d-sm-block" style="text-align:center;">
+
+
+                            <div class="btn-group dropdown" role="group">
+
+                                <a href="../home.php" class="btn btn-outline-light" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Estudiantes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <a class="dropdown-item" href="../Alumnos/inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                        <a class="dropdown-item" href="../Alumnos/reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
+                                        <a class="dropdown-item" href="../Alumnos/califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                        <a class="dropdown-item" href="../Alumnos/horarioAl.php" "dropdown-item">Consultar Horario</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle active" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Docentes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                        <a class="dropdown-item active" href="IniciarSesionDo.php" "dropdown-item">Acceso Docentes</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Administración
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                        <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
+                                    </div>
+
+                                </div >
+
+                            </div>    
+                        </div>
+
+
+                    </div>
+                
+                
+                
+                
+                
+                
+                <div class="row justify-content-md-center collapse" id="navbarToggleExternalContent" >
+
+                        <div class="col-xs-12 col-sm-12 d-block d-sm-none" style="text-align:center;" >
+
+
+                            <div class="btn-group-vertical btn-block dropdown" role="group">
+
+                                <a href="../home.php" class="btn btn-outline-light btn-block" role="button" aria-pressed="true" >&nbsp;&nbsp;Inicio&nbsp;</a>
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Estudiantes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <a class="dropdown-item" href="inscripcionAlumn.php" "dropdown-item">Inscripción</a>
+                                        <a class="dropdown-item" href="reinscripcionAlumn.php" "dropdown-item">Reinscripción</a>
+                                        <a class="dropdown-item" href="califiVeri.php" "dropdown-item">Consulta calificaciones</a>
+                                        <a class="dropdown-item" href="horarioAl.php" "dropdown-item">Consultar Horario</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light btn-block dropdown-toggle active" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Docentes
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                        <a class="dropdown-item active" href="../Docentes/IniciarSesionDo.php" "dropdown-item">Acceso Docentes</a>
+                                    </div>
+
+                                </div >
+
+                                <div class=" btn-group dropdown " role="group" > 
+
+                                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                        Administración
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                        <a class="dropdown-item" href="../Administradores/IniciarSesionAd.php" "dropdown-item">Administración</a>
+                                    </div>
+
+                                </div >
+
+                            </div>   
+                            
+                        </div>
+
+
+                    </div>
+                  
 
 
 
 
             </div>
-        </div>
+            
+            <nav class="navbar navbar-expnad-lg navbar-light bg-light d-block d-sm-none">
+                <button class="navbar-toggler d-block d-sm-none" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
 
-    </header>
+        </header>
+
+<br><br><br>
 
 
 
@@ -345,7 +391,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             
             <div class="col-sm-4" style="padding: 50px 0 100px 0; font-size: 14px;">
                 <div class="p-4 mb-2 bg-light text-dark">
-                    <p><a href="../home.php"><u>Inicio</u></a> > Acceso Docentes</p>
+                   
                     <p style="font-size:24px;">Acceso Docentes</p>
                     <p>Por favor ingrese sus credenciales para inicar sesión.</p>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
@@ -360,7 +406,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <span class="text-danger"><?php echo $password_err; ?></span>
                         </div>
                         <div class="form-group">
-                            <input type="submit" class="btn btn-primary" value="Iniciar Sesión">
+                            <input type="submit" class="btn btn-primary btn-block" value="Iniciar Sesión">
                         </div>
                     </form>
                 </div>

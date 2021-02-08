@@ -3,13 +3,13 @@
 session_start();
  
 // Check if the user is logged in, if not then redirect him to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+if(!isset($_SESSION["loggedinDo"]) || $_SESSION["loggedinDo"] !== true){
     header("location: califiVeri.php");
     exit;
 }
 
 
-
+//========================================================================================================
 require('../fpdf181/fpdf.php');
 require_once "../Require/config.php";
 
@@ -499,4 +499,6 @@ $pdf->Cell(100,5,utf8_decode('Nombre'),0,1,'L',0);
 
 
 $pdf->Output();
+
+//======================================================================================================================
 ?>

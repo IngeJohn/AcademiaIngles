@@ -7,7 +7,7 @@ define('DB_PASSWORD', 'a98450153_-');
 define('BD_NAME', 'academia_ingles');
 
 /* Attempt to connect to MySQL database */
-$link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, "academia_ingles");
+$link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, BD_NAME);
 
 // Check connection
 if($link === false){
