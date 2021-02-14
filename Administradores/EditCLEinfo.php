@@ -342,7 +342,7 @@ if(isset($_REQUEST['action']))
                     
                     <input type="hidden" name="id" value="<?php echo $alm->__GET('id'); ?>" />
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>Subdirección</th>
                             <th>Sub-Nombre</th>
@@ -458,7 +458,7 @@ if(isset($_REQUEST['action']))
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				<?php foreach($model->Listar() as $r): ?>
                     <thead style="text-align:center; font-size:14px;">
 					

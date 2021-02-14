@@ -459,7 +459,7 @@ if(isset($_REQUEST['action']))
                     <input type="hidden" name="numeroControl" value="<?php echo $alm->__GET('numeroControl'); ?>" />
 
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>Nombre Alumno <?php echo $alm->__GET('id'); ?></th>
                             <th>Número de Control</th>
@@ -547,8 +547,8 @@ if(isset($_REQUEST['action']))
                                 </select> 
                             </td>
                             <th colspan="1" style="text-align:right;">
-                                <a href="adminAlumnReinscripciones.php" class="btn btn-secondary">Limpiar campos</a>
-                                <button type="submit" class="btn btn-primary">Guardar Datos</button>
+                                <a href="adminAlumnReinscripciones.php" class="btn btn-secondary btn-sm">Limpiar campos</a>
+                                <button type="submit" class="btn btn-primary btn-sm">Guardar Datos</button>
                             </th>
                             
                             
@@ -577,7 +577,7 @@ if(isset($_REQUEST['action']))
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center; font-size:14px;">
 					
@@ -598,7 +598,7 @@ if(isset($_REQUEST['action']))
                             <td><?php echo $r->__GET('numeroControl'); ?></td>
                             <td><?php echo grupoID($r->__GET('idgrupoActual')); ?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=obtener&numeroControl=<?php echo $r->numeroControl; ?>">Obtener</a>
+                                <a class="btn btn-success btn-sm" href="?action=obtener&numeroControl=<?php echo $r->numeroControl; ?>">Obtener</a>
                             </td>
                         </tr>
                     </tbody>
@@ -612,13 +612,13 @@ if(isset($_REQUEST['action']))
         <div class="col-sm-6"style="font-size:16px;">
             
             <div>
-                <input type="text" id="myInput" class="form-control" placeholder="Filtro Ya inscritos en el periodo <?php echo $periActuBD; ?>">
+                <input type="text" id="myInput2" class="form-control" placeholder="Filtro Ya inscritos en el periodo <?php echo $periActuBD; ?>">
             </div>
 				
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center; font-size:14px;">
 					
@@ -633,13 +633,13 @@ if(isset($_REQUEST['action']))
                         </tr>
                     </thead>
                     <?php foreach($model->Listar() as $r): ?>
-                    <tbody id="tab-id" style="text-align:center;">
+                    <tbody id="tab-id2" style="text-align:center;">
                         <tr>
                             <td><?php if($r->__GET('numeroControl')==""){ }else{echo NombreAlumno($r->__GET('numeroControl'));}?></td>
                             <td><?php echo $r->__GET('numeroControl'); ?></td>
                             <td><?php echo grupoID($r->__GET('idgrupo')); ?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
                             </td>
                         </tr>
                     </tbody>
@@ -740,6 +740,18 @@ if(isset($_REQUEST['action']))
         $("#myInput").on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $("#tab-id tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    });
+        
+        </script>
+        <script>
+
+    $(document).ready(function(){
+        $("#myInput2").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tab-id2 tr").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });

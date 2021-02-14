@@ -291,7 +291,7 @@ if(isset($_REQUEST['action']))
                     
                     <input type="hidden" name="idmaestro" value="<?php echo $alm->__GET('idmaestro'); ?>" />
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>
                                 
@@ -348,7 +348,7 @@ if(isset($_REQUEST['action']))
 				
              <div class="ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center;">
 					
@@ -366,7 +366,7 @@ if(isset($_REQUEST['action']))
                             <td><?php echo $r->__GET('titulo')." ".$r->__GET('nombre')." ".$r->__GET('paterno')." ".$r->__GET('materno'); ?></td>
                             <td><?php  if(($r->__GET('roll')) == 1){echo "Administrador";}elseif(($r->__GET('roll')) == ""){echo "Sin Asignar";}elseif(($r->__GET('roll')) == 0){echo "Docente";}?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&idmaestro=<?php echo $r->idmaestro; ?>">Asignar Rol</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&idmaestro=<?php echo $r->idmaestro; ?>">Asignar Rol</a>
                             </td>
                         </tr>
                     </tbody>

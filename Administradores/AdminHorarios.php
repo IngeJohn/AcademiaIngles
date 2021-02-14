@@ -450,7 +450,7 @@ if(isset($_REQUEST['action']))
             </div>
             <div class="col-sm-5 y"  ><div class="x">Instituto Tecnológico Superior de Loreto</div> <hr></div>
            
-        <div class="col-sm-12" style="font-size:16px;">
+        <div class="col-sm-12">
    
               <div> <?php if(isset($_SESSION["alerta"])){$_SESSION["alerta"]=$_SESSION["alerta"];}else{$_SESSION["alerta"]="";} ?>
                 <form action="?action=<?php echo $alm->id > 0 ? 'actualizar' : 'registrar'; ?>" method="post" onsubmit="return confirm('Presiona OK para continuar.');">
@@ -463,14 +463,14 @@ if(isset($_REQUEST['action']))
                     <input type="hidden" name="contrase" value="<?php echo $alm->__GET('contrase'); ?>" />
 
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>Lunes</th>
                             <th>Martes</th>
                             <th>Miercoles</th>
                             <th>Jueves</th>
                             <th>Viernes</th>
-                            <th colspan="2">Sabado | comienzo - final</th>
+                            
                         </tr>
                          <tr>
                             <td >  
@@ -563,7 +563,21 @@ if(isset($_REQUEST['action']))
                         
                                 </select>
                             </td>
-                             <td>  
+                             
+                        </tr>
+                    </table>
+                    
+                    
+                    
+                    
+                    <table class="table table-bordered table-dark"  >
+                        
+                        <tr>
+                            <th colspan="2">Sabado | comienzo - final</th>
+                            <th>Información del Grupo</th>
+                            <th>Función</th>
+                        </tr>
+                         <tr><td>  
                                 <select class="custom-select custom-select mb-3" name="sabadoC">
                                   <option value="" selected>Elige...</option>
                                   <option value="8:00am" <?php if($alm->__GET('sabadoC')=='8:00am'){echo "selected";}else{echo "";} ?>>8:00am</option>
@@ -650,19 +664,6 @@ if(isset($_REQUEST['action']))
                         
                                 </select>
                             </td>
-                        </tr>
-                    </table>
-                    
-                    
-                    
-                    
-                    <table class="table table-bordered table-dark"  >
-                        
-                        <tr>
-                            <th>Información del Grupo</th>
-                            <th>Función</th>
-                        </tr>
-                         <tr>
                             <td colspan="1" >
                                 <select class="custom-select custom-select mb-3" name="idgrupo">
                                   <option value="" selected>Elige...</option>
@@ -672,8 +673,8 @@ if(isset($_REQUEST['action']))
                                 </select>
                             </td>
                             <td colspan="1">
-                                <a href="AdminHorarios.php" class="btn btn-danger">Limpiar campos</a>
-                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                <a href="AdminHorarios.php" class="btn btn-danger btn-sm">Limpiar campos</a>
+                                <button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button>
                             </td>
                         </tr>
                     </table>
@@ -692,7 +693,7 @@ if(isset($_REQUEST['action']))
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center; font-size:14px;">
 					
@@ -711,7 +712,7 @@ if(isset($_REQUEST['action']))
                             <td><?php echo nombreMaestro($r->__GET('idgrupo')); ?></td>
                             <td><?php echo grupoID($r->__GET('idgrupo')); ?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
                             </td>
                         </tr>
                     </tbody>

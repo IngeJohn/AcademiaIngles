@@ -429,7 +429,7 @@ if(isset($_REQUEST['action']))
                     <input type="hidden" name="contrase" value="<?php echo $alm->__GET('contrase'); ?>" />
 
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>Nombre Completo</th>
                             <th>Número de Control *</th>
@@ -486,8 +486,8 @@ if(isset($_REQUEST['action']))
                         
                         <tr>
                             <th colspan="2">
-                                <a href="adminPagos.php" class="btn btn-danger">Limpiar campos</a> &nbsp;&nbsp;&nbsp;
-                                Función Actualizar: &nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                <a href="adminPagos.php" class="btn btn-danger btn-sm">Limpiar campos</a> &nbsp;&nbsp;&nbsp;
+                                Función Actualizar: &nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button>
                             </th>
                         </tr>
                     </table>
@@ -506,7 +506,7 @@ if(isset($_REQUEST['action']))
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center; font-size:14px;">
 					
@@ -529,7 +529,7 @@ if(isset($_REQUEST['action']))
                             <td><?php echo $r->__GET('inscripcionPagoEstado')." / ".$r->__GET('libroPagoEstado'); ?></td>
                             <td><?php echo grupoID($r->__GET('idgrupo')); ?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
                             </td>
                         </tr>
                     </tbody>

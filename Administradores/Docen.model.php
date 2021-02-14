@@ -15,6 +15,41 @@ class DocenModel
 			die($e->getMessage());
 		}
 	}
+    
+    
+    public function Listar0()
+	{
+		try
+		{
+			$result = array();
+
+			$stm = $this->pdo->prepare("SELECT certificacion FROM certificaciones");
+			$stm->execute();
+
+			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
+			{
+				$alm = new Docen();
+				
+				$alm->__SET('certificacion',     $r->certificacion);
+
+				$result[] = $alm;
+			}
+
+			return $result;
+		}
+		catch(Exception $e)
+		{
+			die($e->getMessage());
+		}
+	}
+    
+    
+    
+    
+    
+    
+    
+    
 
 	public function Listar()
 	{
@@ -44,6 +79,12 @@ class DocenModel
                 $alm->__SET('nivelAcademico',  $r->nivelAcademico);
                 $alm->__SET('titulo',          $r->titulo);
                 $alm->__SET('certificacion',   $r->certificacion);
+                $alm->__SET('direccion',       $r->direccion);
+                $alm->__SET('estado',          $r->estado);
+                $alm->__SET('municipio',       $r->municipio);
+                $alm->__SET('localidad',       $r->localidad);
+                $alm->__SET('postal',          $r->postal);
+                $alm->__SET('telefono',        $r->telefono);
 
 				$result[] = $alm;
 			}
@@ -114,6 +155,16 @@ class DocenModel
             $alm->__SET('nivelAcademico',  $r->nivelAcademico);
             $alm->__SET('titulo',          $r->titulo);
             $alm->__SET('certificacion',   $r->certificacion);
+            $alm->__SET('direccion',       $r->direccion);
+            $alm->__SET('estado',          $r->estado);
+            $alm->__SET('municipio',       $r->municipio);
+            $alm->__SET('localidad',       $r->localidad);
+            $alm->__SET('postal',          $r->postal);
+            $alm->__SET('telefono',        $r->telefono);
+            $alm->__SET('fecha',           $r->fecha);
+            $alm->__SET('email',           $r->email);
+            
+            
 
 			return $alm;
 		} catch (Exception $e) 

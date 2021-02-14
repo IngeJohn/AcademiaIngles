@@ -64,11 +64,11 @@ if ($stmt = $link->prepare("SELECT nivel, grupo, carrera, modalidad, periodo, id
     $stmt->close();
 }
     
-if ($stmt1 = $link->prepare("SELECT  promedio, estado, comentario FROM niveles WHERE  numeroControl = {$numcon} AND idgrupo = '{$idg}';")) {
+if ($stmt1 = $link->prepare("SELECT  promedio, estado, comentario, promedio2, oportunidad FROM niveles WHERE  numeroControl = {$numcon} AND idgrupo = '{$idg}';")) {
     $stmt1->execute();
 
     /* bind variables to prepared statement */
-    $stmt1->bind_result($pr,$es,$co);
+    $stmt1->bind_result($pr,$es,$co,$pr2, $op);
 
     /* fetch values */
     $stmt1->fetch();
@@ -183,14 +183,119 @@ if ($stmt1 = $link->prepare("SELECT  promedio, estado, comentario FROM niveles W
         
     }
     
+    //================================================================================================================================
+    
+    
+        
+    $query31 = "SELECT unidadTema FROM calificaciones2 WHERE numeroControl = {$numcon} AND idgrupo = '{$idg}';";
+    
+    $result31 = mysqli_query($link, $query31);
+
+    if (!$result31) {
+        $message  = 'Invalid query: ' . mysqli_error() . "\n";
+        $message .= 'Whole query: ' . $query31;
+        die($message);
+    }
+    
+    $query41 = "SELECT  calificacion FROM calificaciones2 WHERE numeroControl = {$numcon} AND idgrupo = '{$idg}';";
+    
+    $result41 = mysqli_query($link, $query41);
+
+    if (!$result41) {
+        $message  = 'Invalid query: ' . mysqli_error() . "\n";
+        $message .= 'Whole query: ' . $query41;
+        die($message);
+    }
+    
+    
+    $query51 = "SELECT  comentario FROM calificaciones2 WHERE numeroControl = {$numcon} AND idgrupo = '{$idg}';";
+    
+    $result51 = mysqli_query($link, $query51);
+
+    if (!$result51) {
+        $message  = 'Invalid query: ' . mysqli_error() . "\n";
+        $message .= 'Whole query: ' . $query51;
+        die($message);
+    }
+    
+    
+    $datarowpa1 = $color1 = $datarowca1 = "";
+    $counter1 = 0;
+    $td1 = "</td>";
+    
+    while($rowpa1 = mysqli_fetch_array($result31)){
+    
+        $datarowpa1 = $datarowpa1."<th>&nbsp;$rowpa1[0]</th>";
+
+    }
+
+    while($row31 = mysqli_fetch_array($result41)){
+        if ($row31[0] >= 70){
+            $color1 = '<td style="color:#66F60E;font-weight: bold;">';
+
+        }else{
+            $color1 = '<td style="color:red;font-weight: bold;">';
+
+            $counter1++;
+        }
+
+        $datarowca1 = $datarowca1.$color1.$row31[0].$td1;
+        
+        if ($counter1 > 0 ){
+            $color1 = 'style="color:red;"';
+            
+        }else{
+            $color1 = 'style="color:#66F60E;"';
+            
+        }
+
+    }
+    
+    $np1 = 1;
+    $datarowco1 = "";
+    
+    while($rowco1 = mysqli_fetch_array($result51)){
+        
+        
+        if(isset($rowco1[0])){
+            
+        }else{
+            $rowco1[0] = "Sin comentario."; 
+        }
+        $datarowco1 = $datarowco1."Unidad $np1 : $rowco1[0] <br>";
+        $np1++;
+    
+        
+    }
+    
+
+    if($pr2 !="" && $pr2 != 0){
+        
+        $pr3 = $pr2;
+        
+        $color2 = $color1;
+        
+    }else{
+        
+        $pr3 = $pr;
+        $color2 = $color;
+        
+    }
+    
+    
+    
+    //================================================================================================================================
+    
+    
     if($pe !== ""){
         return "<div class='container'style='border: 2px solid lightgray; border-radius: 5px;>
                     <div class='row'>
                         <div class='col-sm-9'>
+                        <p style='font-size:24px;'>Primera Oportunidad</p>
                         <p style='font-size:20px;'>Nivel $ni &nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;periodo: $pe &nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Docente: Lic.  $nombreMa</p>
                         <div class='table-responsive'>  
 
-                                <table class='table'>
+                                <table class='table table-sm'>
                                     <thead>
                                         <tr>
                                             <th>Unidad</th>
@@ -209,10 +314,34 @@ if ($stmt1 = $link->prepare("SELECT  promedio, estado, comentario FROM niveles W
                               <p>$datarowco</p>
 
                          </div><br>
-                         <p ><strong>Promedio: &nbsp;</strong><strong {$color}> $pr &nbsp;</strong></p>
-                         <p ><strong>Estado Nivel: &nbsp;</strong><strong {$color}> &nbsp;{$es}</strong></p>
+                         <p style='font-size:24px;'>Segunda Oportunidad</p>
+                         <div class='table-responsive'>  
 
-                         <p><b>Nivel equivalente: </b>A1</p>
+                                <table class='table table-sm'>
+                                    <thead>
+                                        <tr>
+                                            <th>Unidad</th>
+                                            {$datarowpa1}
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <th>Puntaje</th>
+                                        {$datarowca1}
+                                    </tbody>
+                                </table>
+                                <label><b>Comentarios por Unidad: </b></label>
+                         </div><div style='border: 2px solid gray; border-radius: 5px;  padding: 20px; '>
+
+                              <p>$datarowco1</p>
+
+                         </div><br>
+                         
+                         
+                         <p ><strong>Promedio: &nbsp;</strong><strong {$color2}> $pr3 &nbsp;</strong></p>
+                         <p ><strong>Estado Nivel: &nbsp;</strong><strong {$color2}> &nbsp;{$es}</strong></p>
+
+                         <p><b>Tipo de Calificación: </b>$op</p>
                          <label><b>Comentario promedio final: </b></label>
 
                          <div style='border: 2px solid gray; border-radius: 5px;  padding: 20px; '>
@@ -220,6 +349,12 @@ if ($stmt1 = $link->prepare("SELECT  promedio, estado, comentario FROM niveles W
                               <p>$co</p>
 
                          </div>
+                         <br>
+                         <table class='table'>
+                                        <tr>
+                                            <th class='table-dark' ></th>
+                                        </tr>
+                        </table>
                  </div>
                 </div>
             </div>
@@ -457,7 +592,7 @@ $result->close();
                 <p><b>Información del alumno</b></p>
                 <p><b>Alumno:</b> <?php echo $_SESSION["nombre"]." ".$_SESSION["paterno"]." ".$_SESSION["materno"]; ?>
                 <p><b>Número de control:</b> <?php echo $_SESSION["numeroControl"]; ?></p>
-                <a href="KardexPdf.php" target="_newtab" class="btn btn-primary">Imprimir Kardex</a>
+                <a href="KardexPdf.php" target="_newtab" class="btn btn-primary" >Imprimir Kardex</a>
             </div>
         </div>
     </div>

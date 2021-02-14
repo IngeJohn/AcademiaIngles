@@ -544,6 +544,8 @@ if(isset($_REQUEST['action']))
                             
                             <a href="SubirCalifiDo.php" class="btn btn-outline-light" role="button" >Calificar Grupos</a>
                             
+                            <a href="SubirCalifiDoSegOp.php" class="btn btn-outline-light" role="button" >Segunda Oportunidad</a>
+                            
                             <a href="Parciales.php" class="btn btn-outline-light" role="button" >Parciales</a>
                             
                             <a href="Reportes.php" class="btn btn-outline-light" role="button" >Reportes</a>

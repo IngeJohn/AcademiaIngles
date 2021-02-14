@@ -137,7 +137,7 @@ $new_password_err = $confirm_password_err = $old_password_err = "";
         // Close statement
         mysqli_stmt_close($stmt);
 
-$query = "SELECT promedio, estado, inscripcionPagoEstado, libroPagoEstado, idgrupo FROM niveles WHERE numeroControl = {$_SESSION["numeroControl"]}";
+$query = "SELECT promedio, estado, inscripcionPagoEstado, libroPagoEstado, idgrupo, promedio2 FROM niveles WHERE numeroControl = {$_SESSION["numeroControl"]}";
 
 
 // resultNiv
@@ -150,6 +150,7 @@ if (!$result) {
     die($message);
 }
 
+$promedios = 0.0;
 
 $dataRow = "";
 
@@ -157,9 +158,21 @@ $grupoInf = "";
 
 while($row1 = mysqli_fetch_array($result)){
     
+    if($row1[5] != "" && $row1[5] != 0){
+        
+        $promedios = $row1[5];
+        
+    }else{
+        
+        $promedios = $row1[0];
+        
+    }
+    
+    
+    
     $grupoInf = grupoInformacion($row1[4]);
     
-    $dataRow = $dataRow."<tr><td>$grupoInf</td><td>$row1[0]</td><td>$row1[1]</td><td>$row1[2]</td><td>$row1[3]</td><tr>"; 
+    $dataRow = $dataRow."<tr><td>$grupoInf</td><td>$promedios</td><td>$row1[1]</td><td>$row1[2]</td><td>$row1[3]</td><tr>"; 
 }
 
 

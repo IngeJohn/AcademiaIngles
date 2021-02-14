@@ -308,7 +308,7 @@ if(isset($_REQUEST['action']))
                     
                     <input type="hidden" name="idmaestro" value="<?php echo $alm->__GET('idmaestro'); ?>" />
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>
                                 
@@ -371,7 +371,7 @@ if(isset($_REQUEST['action']))
 				
              <div class="ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center;">
 					
@@ -389,7 +389,7 @@ if(isset($_REQUEST['action']))
                             <td><?php echo $r->__GET('titulo')." ".$r->__GET('nombre')." ".$r->__GET('paterno')." ".$r->__GET('materno'); ?></td>
                             <td><?php echo $r->__GET('idmaestro'); ?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&idmaestro=<?php echo $r->idmaestro; ?>">Seleccionar</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&idmaestro=<?php echo $r->idmaestro; ?>">Seleccionar</a>
                             </td>
                         </tr>
                     </tbody>

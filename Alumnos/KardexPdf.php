@@ -3,10 +3,10 @@
     session_start();
     
     // Check if the user is logged in, if not then redirect him to login page
-    if(!isset($_SESSION["loggedinAl"]) || $_SESSION["loggedinAl"] !== true){
-        header("location: califiVeri.php");
-        exit;
-    }
+   // if(!isset($_SESSION["loggedinAl"]) || $_SESSION["loggedinAl"] !== true){
+    //    header("location: califiVeri.php");
+   //     exit;
+   // }
     
 
     
@@ -40,6 +40,15 @@
     }
     
     // php populate html table from mysql database
+
+
+
+
+
+
+
+
+
     
 
     

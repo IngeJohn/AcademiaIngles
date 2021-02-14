@@ -11,6 +11,7 @@ class Niv
 	private $idmaestro;
     private $estado;
     private $promedio;
+    private $promedio2;
     private $comentario;
     private $oportunidad;
     private $tipoProgramaBeca;

@@ -69,7 +69,6 @@ class CLEModel
 			{
 				$alm = new CLE();
 				
-				$alm->__SET('id',        $r->id);
 				$alm->__SET('nombre',    $r->nombre);
 				$alm->__SET('paterno',   $r->paterno);
 				$alm->__SET('materno',   $r->materno);

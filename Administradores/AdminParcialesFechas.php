@@ -434,7 +434,7 @@ if(isset($_REQUEST['action']))
             </div>
             <div class="col-sm-5 y"  ><div class="x">Instituto Tecnológico Superior de Loreto</div> <hr></div>
            
-        <div class="col-sm-12" style="font-size:16px;">
+        <div class="col-sm-8" style="font-size:16px;">
    
               <div> 
                 <form action="?action=actualizar" method="post" onsubmit="return confirm('Presiona OK para continuar.');">
@@ -445,7 +445,7 @@ if(isset($_REQUEST['action']))
                     <input type="hidden" name="numeroParcial" value="<?php echo $alm->__GET('numeroParcial'); ?>" />
 
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>Parcial #</th>
                             <th>Frecha de Inicio</th>
@@ -496,7 +496,7 @@ if(isset($_REQUEST['action']))
             
                         </div>
            
-        <div class="col-sm-12"style="font-size:16px;">
+        <div class="col-sm-8"style="font-size:16px;">
             
             <div>
                 <input type="text" id="myInput" class="form-control" placeholder="Filtro Horarios...">
@@ -505,7 +505,7 @@ if(isset($_REQUEST['action']))
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center; font-size:14px;">
 					
@@ -526,7 +526,7 @@ if(isset($_REQUEST['action']))
                             <td><?php echo $r->__GET('fechaInicio'); ?></td>
                             <td><?php echo $r->__GET('fechaTermino'); ?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&idparcialFechas=<?php echo $r->idparcialFechas; ?>">Editar</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&idparcialFechas=<?php echo $r->idparcialFechas; ?>">Editar</a>
                             </td>
                         </tr>
                     </tbody>

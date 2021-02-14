@@ -16,6 +16,15 @@ class Docen
     private $titulo;
     private $certificacion;
     private $altaBaja;
+    private $direccion;
+    private $estado;
+    private $municipio;
+    private $localidad;
+    private $postal;
+    private $telefono;
+    private $email;
+    private $fecha;
+    
 
 
 

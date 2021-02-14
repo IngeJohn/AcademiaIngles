@@ -345,7 +345,7 @@ if(isset($_REQUEST['action']))
                     <input type="hidden" name="password" value="<?php echo $alm->__GET('password'); ?>" />
                     <input type="hidden" name="roll" value="<?php echo $alm->__GET('roll'); ?>" />
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>Titulo</th>
                             <th>Nombre(s)</th>
@@ -440,26 +440,23 @@ if(isset($_REQUEST['action']))
                             <td >  
                                 <input type="text" name="nivelAcademico" class="form-control" value="<?php echo $alm->__GET('nivelAcademico'); ?>"> 
                             </td>
-                            <td >  
-                                <select class="custom-select custom-select mb-3" name="certificacion">
-                                  <option value="" selected>Elige...</option>
-                                  <option value="TOEFL" <?php if($alm->__GET('certificacion')==='TOEFL'){echo "selected";}else{echo "";} ?>>TOEFL</option>
-                                  <option value="BULLATS" <?php if($alm->__GET('certificacion')==='BULLATS'){echo "selected";}else{echo "";} ?>>BULLATS</option>
-                                  <option value="IELTS" <?php if($alm->__GET('certificacion')==='IELTS'){echo "selected";}else{echo "";} ?>>IELTS</option>
-                                  <option value="TKT MODULO 1" <?php if($alm->__GET('certificacion')==='TKT MODULO 1'){echo "selected";}else{echo "";} ?>>TKT MODULO 1</option>
-                                  <option value="TKT MODULO 2" <?php if($alm->__GET('certificacion')==='TKT MODULO 2'){echo "selected";}else{echo "";} ?>>TKT MODULO 2</option>
-                                  <option value="TKT MODULO 3" <?php if($alm->__GET('certificacion')==='TKT MODULO 3'){echo "selected";}else{echo "";} ?>>TKT MODULO 3</option>
-                                  <option value="" <?php if($alm->__GET('certificacion')==NULL){echo "selected";}else{echo "hidden";} ?>>Sin Asignar</option>
-
-                                </select>
-                            </td>
+                            
+                                <td colspan="1" >
+                                    <select class="custom-select custom-select mb-3" name="certificacion">
+                                      <option value="" selected>Elige...</option>
+                                       <?php foreach($model->Listar0() as $r): ?>
+                                      <option value="<?php echo $r->__GET('certificacion'); ?>" <?php if($r->__GET('certificacion') == $alm->__GET('certificacion')){echo "selected";}else{echo "";} ?>><?php echo $r->__GET('certificacion'); ?></option>
+                                      <?php endforeach; ?>
+                                    </select>
+                                </td>
+                            
                             
                         </tr>
                         
                         <tr>
                             
-                            <td colspan="4"><a href="adminDocen.php" class="btn btn-danger">Limpiar campos</a> &nbsp;&nbsp;&nbsp;
-                                Función Actualizar / Registrar &nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Guardar cambios</button></td>
+                            <td colspan="4" style="text-align:right;"><a href="adminDocen.php" class="btn btn-danger btn-sm">Limpiar campos</a> &nbsp;&nbsp;&nbsp;
+                                Función Actualizar / Registrar &nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button></td>
                         </tr>
                     </table>
                 </form>
@@ -477,7 +474,7 @@ if(isset($_REQUEST['action']))
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center; font-size:14px;">
 					
@@ -502,7 +499,7 @@ if(isset($_REQUEST['action']))
                             <td><?php echo $r->__GET('idmaestro'); ?></td>
                             <td><?php  if(($r->__GET('roll')) == 1){echo "Administrador";}elseif(($r->__GET('roll')) == ""){echo "Sin Asignar";}elseif(($r->__GET('roll')) == 0){echo "Docente";}?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&idmaestro=<?php echo $r->idmaestro; ?>">Editar</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&idmaestro=<?php echo $r->idmaestro; ?>">Editar</a>
                             </td>
                         </tr>
                     </tbody>

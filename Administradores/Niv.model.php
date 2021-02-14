@@ -68,6 +68,7 @@ class NivModel
                 $alm->__SET('numeroControl',         $r->numeroControl);
                 $alm->__SET('estado',                $r->estado);
                 $alm->__SET('promedio',              $r->promedio);
+                $alm->__SET('promedio2',             $r->promedio2);
                 $alm->__SET('idgrupo',               $r->idgrupo);
                 $alm->__SET('comentario',            $r->comentario);
                 $alm->__SET('oportunidad',           $r->oportunidad);
@@ -192,11 +193,11 @@ public function Listar3()
 
 			$alm = new Niv();
 
-			    $alm->__SET('id',               $r->id);
-                $alm->__SET('numeroControl',    $r->numeroControl);
-                $alm->__SET('idgrupo',          $r->idgrupo);
-                $alm->__SET('estado',           $r->estado);
-                $alm->__SET('tipoProgramaBeca', $r->tipoProgramaBeca);
+			    $alm->__SET('id',                    $r->id);
+                $alm->__SET('numeroControl',         $r->numeroControl);
+                $alm->__SET('idgrupo',               $r->idgrupo);
+                $alm->__SET('estado',                $r->estado);
+                $alm->__SET('tipoProgramaBeca',      $r->tipoProgramaBeca);
                 $alm->__SET('libroPagoEstado',       $r->libroPagoEstado);
                 $alm->__SET('inscripcionPagoEstado', $r->inscripcionPagoEstado);
                 $alm->__SET('comentarioPagos',       $r->comentarioPagos);
@@ -248,6 +249,7 @@ public function Listar3()
                 $alm->__SET('estado',           $r->estado);
                 $alm->__SET('tipoProgramaBeca', $r->tipoProgramaBeca);
                 $alm->__SET('promedio',         $r->promedio);
+                $alm->__SET('promedio2',        $r->promedio2);
                 $alm->__SET('oportunidad',      $r->oportunidad);
                 $alm->__SET('comentario',       $r->comentario);
 
@@ -268,6 +270,7 @@ public function Listar3()
 						idgrupo          = ?,
                         estado           = ?,
                         promedio         = ?,
+                        promedio2        = ?,
                         comentario       = ?,
                         oportunidad      = ?,
                         tipoProgramaBeca = ?
@@ -281,6 +284,7 @@ public function Listar3()
 					$data->__GET('idgrupo'), 
                     $data->__GET('estado'),
                     $data->__GET('promedio'),
+                    $data->__GET('promedio2'),
                     $data->__GET('comentario'),
                     $data->__GET('oportunidad'),
                     $data->__GET('tipoProgramaBeca'),

@@ -178,7 +178,7 @@ if ($stmt8 = $link->prepare("SELECT COUNT(estado) FROM niveles WHERE estado = 'N
     $stmt8->close();
   }
 
-if ($stmt9 = $link->prepare("SELECT COUNT(estado) FROM niveles WHERE periodo = '$periodoActual';")) {
+if ($stmt9 = $link->prepare("SELECT COUNT(niveles.estado) FROM niveles, gruposasignados WHERE gruposasignados.periodo = '$periodoActual' AND niveles.idgrupo = gruposasignados.idgrupo;")) {
     $stmt9->execute();
 
     /* bind variables to prepared statement */
@@ -190,7 +190,7 @@ if ($stmt9 = $link->prepare("SELECT COUNT(estado) FROM niveles WHERE periodo = '
     $stmt9->close();
   }
 
-if ($stmt10 = $link->prepare("SELECT COUNT(estado) FROM niveles WHERE estado = 'No Acreditado' AND periodo = '$periodoActual';")) {
+if ($stmt10 = $link->prepare("SELECT COUNT(niveles.estado) FROM niveles, gruposasignados WHERE niveles.estado = 'No Acreditado' AND gruposasignados.periodo = '$periodoActual' AND niveles.idgrupo = gruposasignados.idgrupo;")) {
     $stmt10->execute();
 
     /* bind variables to prepared statement */
@@ -202,7 +202,7 @@ if ($stmt10 = $link->prepare("SELECT COUNT(estado) FROM niveles WHERE estado = '
     $stmt10->close();
   }
 
-if ($stmt9 = $link->prepare("SELECT COUNT(estado) FROM niveles WHERE periodo = '$periodoAnterior';")) {
+if ($stmt9 = $link->prepare("SELECT COUNT(niveles.estado) FROM niveles, gruposasignados WHERE gruposasignados.periodo = '$periodoAnterior' AND niveles.idgrupo = gruposasignados.idgrupo;")) {
     $stmt9->execute();
 
     /* bind variables to prepared statement */
@@ -214,7 +214,7 @@ if ($stmt9 = $link->prepare("SELECT COUNT(estado) FROM niveles WHERE periodo = '
     $stmt9->close();
   }
 
-if ($stmt10 = $link->prepare("SELECT COUNT(estado) FROM niveles WHERE estado = 'No Acreditado' AND periodo = '$periodoAnterior';")) {
+if ($stmt10 = $link->prepare("SELECT COUNT(niveles.estado) FROM niveles, gruposasignados WHERE niveles.estado = 'No Acreditado' AND gruposasignados.periodo = '$periodoAnterior' AND niveles.idgrupo = gruposasignados.idgrupo;")) {
     $stmt10->execute();
 
     /* bind variables to prepared statement */
@@ -696,7 +696,7 @@ if(isset($_REQUEST['action']))
                             
                             <a href="Administrador.php" class="btn btn-outline-light active" role="button" >Administradores</a>
                             
-                            <a href="AdministradorReportes.php" class="btn btn-outline-light" role="button" >Reportes</a>
+                            <a href="AdministradorEstadistica.php" class="btn btn-outline-light" role="button" >Estadística</a>
                             
                             <a href="Administrador.php" class="btn btn-outline-light" role="button" data-toggle="modal" data-target="#modal1">Cambiar contraseña</a>
                             
@@ -933,11 +933,10 @@ if(isset($_REQUEST['action']))
                           <div class="col-sm-4" style="border: 2px solid gray; border-radius: 5px; text-align:left; padding: 20px;">
 
                               <p style="font-size: 18px;"><b>Datos académicos</b></p>
-                              <p><b>Certificación: </b><?php echo $r->__GET('certificacion'); ?></p>
                               <p><b>Nivel de estudios: </b><?php echo $r->__GET('nivelAcademico'); ?></p>
                               <p><b>Estado Académinco: </b><?php echo $r->__GET('altaBaja'); ?></p>
                               <p><b>Maestro ID: </b><?php echo $r->__GET('idmaestro'); ?></p>
-                              <p><b>Certificación: </b>B2</p>
+                              <p><b>Certificación: </b><?php echo $r->__GET('certificacion'); ?></p>
                             
                               
                           </div>
@@ -965,7 +964,7 @@ if(isset($_REQUEST['action']))
                   
                   
             </div>
-              <div class="tab-pane fade" id="ITSL" role="tabpanel" aria-labelledby="ITSL-tab">
+              <div class="tab-pane fade " id="ITSL" role="tabpanel" aria-labelledby="ITSL-tab">
                      <?php foreach($model->Listar() as $r): ?> 
                       <div class="row">
                           <div class="col-sm-12" style="border: 2px solid gray; border-radius: 5px; ">
@@ -1139,6 +1138,19 @@ if(isset($_REQUEST['action']))
                        
                         <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
 
+                             <p><a href="VerCalifi.php">
+                                <img class="cuadros card"  alt="Alumnos Inforamción de Contacto" src="../imagenes/grades.png" >
+                                </a></p>
+                        </div>
+                        
+                        <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
+
+                             <p><a href="AdminPromFinal.php">
+                                <img class="cuadros card"  alt="Alumnos Inforamción de Contacto" src="../imagenes/Certi.png" >
+                                </a></p>
+                        </div>
+                        <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
+
                              <p><a href="adminAlumnContac.php">
                                 <img class="cuadros card"  alt="Alumnos Inforamción de Contacto" src="../imagenes/Contacto.png" >
                                 </a></p>
@@ -1190,7 +1202,7 @@ if(isset($_REQUEST['action']))
                     <div class= "row justify-content-center">
                         
                         <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
-                             <p><a href="adminDocen.php">
+                             <p><a href="adminDoContac.php">
                                 <img class="cuadros card"  alt="registrar / modificar Docentes." src="../imagenes/ContactoDo.png" >
                                 </a></p>
                         </div>
@@ -1235,6 +1247,26 @@ if(isset($_REQUEST['action']))
                                 <img class="cuadros card"  alt="Administrar contraseñas" src="../imagenes/adminContra.png" >
                                 </a></p>
                         </div>
+                        
+                        <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
+
+                             <p><a href="ModCerti.php">
+                                <img class="cuadros card"  alt="Certificaciones" src="../imagenes/certifi.png" >
+                                </a></p>
+                        </div>
+                        
+                        
+                        <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
+
+                             <p><a href="ModLibera.php">
+                                <img class="cuadros card"  alt="Liberación Tipo" src="../imagenes/lib.png" >
+                                </a></p>
+                        </div>
+
+                    </div>
+                    <div class= "row justify-content-center">
+
+                        
                         <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
 
                              <p><a href="EditCLEinfo.php">

@@ -179,6 +179,10 @@ if(isset($_REQUEST['action']))
 		case 'editar':
 			$alm = $model->Obtener($_REQUEST['id']);
 			break;
+            
+        case 'editar2':
+			$alm = $model->Obtener2($_REQUEST['id']);
+			break;
 	}
 }
 
@@ -188,7 +192,7 @@ if(isset($_REQUEST['action']))
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Modificar / Registrar Alumnos</title>
+    <title>Registrar e Inscribir Alumnos - Modificar</title>
     
     <link rel="stylesheet" href="../bootstrap/4.5.3/dist/css/bootstrap.min.css" 
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
@@ -345,7 +349,7 @@ if(isset($_REQUEST['action']))
 
                         <div class="btn-group" role="group">
                             
-                            <a href="adminAlumn.php" class="btn btn-outline-light active" role="button" >Registrar / Inscribir / Modificar Alumnos</a>
+                            <a href="adminAlumn.php" class="btn btn-outline-light active" role="button" >Registrar e Inscribir / Modificar Alumnos</a>
                             
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
@@ -388,7 +392,7 @@ if(isset($_REQUEST['action']))
                     <input type="hidden" name="idgrupoN" value="<?php echo $alm->__GET('idgrupoN'); ?>" />
 
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>CURP (18 caracteres)</th>
                             <th>Nombre(s)</th>
@@ -468,7 +472,7 @@ if(isset($_REQUEST['action']))
                         </tr>
                         <tr>
                             <td colspan="1" >
-                                <select class="custom-select custom-select mb-3" name="idgrupoActual">
+                                <select class="custom-select custom-select mb-3" name="idgrupoActual" required>
                                   <option value="" selected>Elige...</option>
                                    <?php foreach($model->Listar0() as $r): ?>
                                   <option value="<?php echo $r->__GET('idgrupo'); ?>" <?php if($r->__GET('idgrupo') == $alm->__GET('idgrupoActual')){echo "selected";}else{echo "";} ?>><?php echo grupoID($r->__GET('idgrupo')); ?></option>
@@ -483,9 +487,9 @@ if(isset($_REQUEST['action']))
                                   <option value="" <?php if($alm->__GET('tipoProgramaBeca')==NULL){echo "selected";}else{echo "hidden";} ?>>Sin Asignar</option>
                                 </select> 
                             </td>
-                            <td><a href="adminAlumn.php" class="btn btn-danger">Limpiar campos</a></td>
+                            <td><a href="adminAlumn.php" class="btn btn-danger btn-sm">Limpiar campos</a></td>
                             <td colspan="1" >
-                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
                             </td>
                         </tr>
                          
@@ -494,9 +498,12 @@ if(isset($_REQUEST['action']))
 				</div>
             
             
-                        </div>
-           
-        <div class="col-sm-12"style="font-size:16px;">
+            </div>
+            
+            
+            
+            
+        <div class="col-sm-6"style="font-size:16px;">
             
             <div>
                 <input type="text" id="myInput" class="form-control" placeholder="Filtro...">
@@ -505,7 +512,7 @@ if(isset($_REQUEST['action']))
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center; font-size:14px;">
 					
@@ -513,7 +520,47 @@ if(isset($_REQUEST['action']))
                             <th>Nombre completo</th>
                             <th>Número de Control</th>
                             <th>Grupo Información</th>
-                            <th>Alta / Baja</th>
+                            <th>Selector</th>
+                            
+
+
+                        </tr>
+                    </thead>
+                    <?php foreach($model->Listar4() as $r): ?>
+                    <tbody id="tab-id" style="text-align:center;">
+                        <tr>
+                            <td><?php echo $r->__GET('nombre')." ".$r->__GET('paterno')." ".$r->__GET('materno'); ?></td>
+                            <td><?php echo $r->__GET('numeroControl'); ?></td>
+                            <td><?php echo grupoID($r->__GET('idgrupoActual')); ?></td>
+                            <td>
+                                <a class="btn btn-success btn-sm" href="?action=editar2&id=<?php echo $r->id; ?>">Editar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                        
+                    <?php endforeach; ?>
+                </table>     
+              </div>
+           
+        </div>
+           
+        <div class="col-sm-6"style="font-size:16px;">
+            
+            <div>
+                <input type="text" id="myInput2" class="form-control" placeholder="Filtro...">
+            </div>
+				
+				
+             <div class=" ex3">  
+			 
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
+				
+                    <thead style="text-align:center; font-size:14px;">
+					
+                        <tr>
+                            <th>Nombre completo</th>
+                            <th>Número de Control</th>
+                            <th>Grupo Información</th>
                             <th>Selector</th>
                             
 
@@ -521,14 +568,13 @@ if(isset($_REQUEST['action']))
                         </tr>
                     </thead>
                     <?php foreach($model->Listar() as $r): ?>
-                    <tbody id="tab-id" style="text-align:center;">
+                    <tbody id="tab-id2" style="text-align:center;">
                         <tr>
                             <td><?php echo $r->__GET('nombre')." ".$r->__GET('paterno')." ".$r->__GET('materno'); ?></td>
                             <td><?php echo $r->__GET('numeroControl'); ?></td>
                             <td><?php echo grupoID($r->__GET('idgrupoActual')); ?></td>
-                            <td><?php if ($r->__GET('altaBaja')==="Alta"){ echo "Alta"; }elseif($r->__GET('altaBaja')==="Baja"){ echo "Baja"; } ?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
                             </td>
                         </tr>
                     </tbody>
@@ -623,6 +669,18 @@ if(isset($_REQUEST['action']))
         $("#myInput").on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $("#tab-id tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    });
+        
+        </script>
+        <script>
+
+    $(document).ready(function(){
+        $("#myInput2").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tab-id2 tr").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });

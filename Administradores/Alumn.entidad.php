@@ -22,6 +22,14 @@ class Alumn
     private $idgrupoN;
     private $tipoProgramaBeca;
     private $titulo;
+    private $direccion;
+    private $estado;
+    private $municipio;
+    private $localidad;
+    private $postal; 
+    private $telefono;
+    private $email;
+    
 
 
 

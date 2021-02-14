@@ -350,7 +350,7 @@ if(isset($_REQUEST['action']))
                     <input type="hidden" name="idgrupo" value="<?php echo $alm->__GET('idgrupo'); ?>" />
                     <input type="hidden" name="periodo" value="<?php echo $alm->__GET('periodo'); ?>" />
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>Nivel</th>
                             <th>Grupo</th>
@@ -369,6 +369,10 @@ if(isset($_REQUEST['action']))
                                   <option value="4" <?php if($alm->__GET('nivel')==4){echo "selected";}else{echo "";} ?>>4</option>
                                   <option value="5" <?php if($alm->__GET('nivel')==5){echo "selected";}else{echo "";} ?>>5</option>
                                   <option value="6" <?php if($alm->__GET('nivel')==6){echo "selected";}else{echo "";} ?>>6</option>
+                                  <option value="7" <?php if($alm->__GET('nivel')==7){echo "selected";}else{echo "";} ?>>7</option>
+                                  <option value="8" <?php if($alm->__GET('nivel')==8){echo "selected";}else{echo "";} ?>>8</option>
+                                  <option value="9" <?php if($alm->__GET('nivel')==9){echo "selected";}else{echo "";} ?>>9</option>
+                                  <option value="10" <?php if($alm->__GET('nivel')==10){echo "selected";}else{echo "";} ?>>10</option>
 
                                 </select>
                             </td>
@@ -434,8 +438,8 @@ if(isset($_REQUEST['action']))
                             </td>
                             
                             <td colspan="1">
-                                <a href="asigGrupos.php" class="btn btn-danger">Limpiar campos</a>
-                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                <a href="asigGrupos.php" class="btn btn-danger btn-sm">Limpiar campos</a>
+                                <button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button>
                             </td>
                             
                             
@@ -456,7 +460,7 @@ if(isset($_REQUEST['action']))
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center; font-size:14px;">
 					
@@ -477,7 +481,7 @@ if(isset($_REQUEST['action']))
                             <td><?php if($r->__GET('idmaestro')==NULL){echo "";}else{echo maestroID($r->__GET('idmaestro'));}  ?></td>
                             <td><?php echo $r->__GET('idmaestro'); ?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&idgrupo=<?php echo $r->idgrupo; ?>">Editar</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&idgrupo=<?php echo $r->idgrupo; ?>">Editar</a>
                             </td>
                         </tr>
                     </tbody>

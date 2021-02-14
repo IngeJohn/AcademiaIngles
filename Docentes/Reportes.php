@@ -45,13 +45,28 @@ if ($stmt3 = $link->prepare("SELECT  periodo FROM periodoactual")) {
     $stmt3->bind_result($periActuBD);
 
     /* fetch values */
-$stmt3->fetch();
+    $stmt3->fetch();
 
     /* close statement */
     $stmt3->close();
 }
 
+//==================================================================================================================================================
 
+if ($stmtfe = $link->prepare("SELECT fechaInicio, fechaTermino FROM parcialfechas WHERE numeroParcial = 1")) {
+        
+        $stmtfe->execute();
+
+        /* bind variables to prepared statement */
+        $stmtfe->bind_result($inicio, $termino);
+
+        /* fetch values */
+        $stmtfe->fetch();
+
+        /* close statement */
+        $stmtfe->close();
+
+}
 
 
 
@@ -73,11 +88,17 @@ if ($stmtU = $link->prepare("SELECT username FROM docentes WHERE idmaestro = '{$
 
 //================================================================================================================================================
 
-function talumnospormateria($niv,$carr,$idmaes,$perio,$uniT){
+function talumnospormateria($idg,$uniT){
     
-    global $link;
+    global $link,$termino;
     
-    if ($stmt = $link->prepare("SELECT COUNT(calificaciones.numeroControl) FROM calificaciones, gruposasignados WHERE gruposasignados.idmaestro = '{$idmaes}' AND gruposasignados.periodo = '{$perio}' AND gruposasignados.carrera = '{$carr}' AND gruposasignados.nivel = '{$niv}' AND calificaciones.idgrupo = gruposasignados.idgrupo AND calificaciones.unidadTema = '{$uniT}';")) {
+    $talumnospormateria = 0;
+    
+    if ($stmt = $link->prepare("SELECT COUNT(calificaciones.numeroControl) FROM calificaciones, gruposasignados, alumnos 
+WHERE gruposasignados.idgrupo = '$idg'
+AND calificaciones.numeroControl = alumnos.numeroControl 
+AND gruposasignados.idgrupo = calificaciones.idgrupo 
+AND calificaciones.unidadTema = '$uniT' AND alumnos.altaBaja = 'Alta'")) {
     $stmt->execute();
 
     /* bind variables to prepared statement */
@@ -87,20 +108,62 @@ function talumnospormateria($niv,$carr,$idmaes,$perio,$uniT){
     $stmt->fetch();
     /* close statement */
     $stmt->close();
+        
+        
+                        //Alumnos despues
+                //=============================================
+                    if ($stmt2 = $link->prepare("SELECT DISTINCT COUNT(altasbajas.numeroControl)
+                        FROM niveles, gruposasignados, altasbajas 
+                        WHERE gruposasignados.idgrupo = '$idg'  
+                        AND niveles.idgrupo = gruposasignados.idgrupo 
+                        AND niveles.numeroControl = altasbajas.numeroControl
+                        AND altasbajas.altaBaja = 'Baja' AND (altasbajas.fecha > '$termino') ORDER BY altasbajas.id DESC;")) {
+
+                            $stmt2->execute();
+
+                            /* bind variables to prepared statement */
+                            $stmt2->bind_result($talumnos2);
+
+                            /* fetch values */
+                            $stmt2->fetch();
+                            /* close statement */
+                            $stmt2->close();
+                          }
+
+        
+        
+        
   }
     
-    return $talumnospormateria;
+    
+    
+    
+    
+    
+    
+    
+
+    
+    return $talumnospormateria+$talumnos2;
     
 }
 
 //================================================================================================================================================
 
 
-function talumnospormateria1aOp($niv,$carr,$idmaes,$perio,$uniT){
+function talumnospormateria1aOp($idg,$uniT){
     
-    global $link;
+    global $link,$termino;
     
-    if ($stmt = $link->prepare("SELECT COUNT(calificaciones.numeroControl) FROM calificaciones, gruposasignados WHERE gruposasignados.idmaestro = '{$idmaes}' AND gruposasignados.periodo = '{$perio}' AND gruposasignados.carrera = '{$carr}' AND gruposasignados.nivel = '{$niv}' AND gruposasignados.idgrupo = calificaciones.idgrupo AND calificaciones.oportunidad = '1aOp' AND calificaciones.calificacion >= 70 AND calificaciones.unidadTema = '{$uniT}';")) {
+    $talumnos = 0;
+    
+    if ($stmt = $link->prepare("SELECT COUNT(calificaciones.numeroControl) 
+                                FROM calificaciones, gruposasignados, alumnos WHERE gruposasignados.idgrupo = '$idg' 
+                                AND gruposasignados.idgrupo = calificaciones.idgrupo 
+                                AND alumnos.numeroControl = calificaciones.numeroControl
+                                AND calificaciones.oportunidad = '1aOp' 
+                                AND calificaciones.calificacion >= 70 AND calificaciones.unidadTema = '$uniT'
+                                AND alumnos.altabaja = 'Alta';")) {
     $stmt->execute();
 
     /* bind variables to prepared statement */
@@ -110,64 +173,40 @@ function talumnospormateria1aOp($niv,$carr,$idmaes,$perio,$uniT){
     $stmt->fetch();
     /* close statement */
     $stmt->close();
+        
+        
+        
+                //Alumnos despues
+                //=============================================
+                    if ($stmt2 = $link->prepare("SELECT COUNT(altasbajas.numeroControl) FROM altasbajas, calificaciones, gruposasignados WHERE altasbajas.fecha > '$termino' 
+                                                    AND calificaciones.idgrupo = '$idg' 
+                                                    AND altasbajas.numeroControl = calificaciones.numeroControl
+                                                    AND gruposasignados.idgrupo = calificaciones.idgrupo
+                                                    AND calificaciones.unidadTema = '$uniT' 
+                                                    AND altasbajas.altaBaja = 'Baja'  AND calificaciones.oportunidad = '1aOp' AND calificaciones.calificacion >= 70;")) {
+
+                            $stmt2->execute();
+
+                            /* bind variables to prepared statement */
+                            $stmt2->bind_result($talumnos2);
+
+                            /* fetch values */
+                            $stmt2->fetch();
+                            /* close statement */
+                            $stmt2->close();
+                          }
+
+        
+        
   }
+
     
-    return $talumnos;
     
-}
-
-//================================================================================================================================================
-
-
-function talumnospormateria2aOp($niv,$carr,$idmaes,$perio,$uniT){
     
-    global $link;
     
-    if ($stmt = $link->prepare("SELECT COUNT(calificaciones.numeroControl) FROM calificaciones, gruposasignados WHERE gruposasignados.idmaestro = '{$idmaes}' AND gruposasignados.periodo = '{$perio}' AND gruposasignados.carrera = '{$carr}' AND gruposasignados.nivel = '{$niv}' AND gruposasignados.idgrupo = calificaciones.idgrupo AND calificaciones.oportunidad = '2aOp' AND calificaciones.calificacion >= 70 AND unidadTema = '{$uniT}';")) {
-    $stmt->execute();
-
-    /* bind variables to prepared statement */
-    $stmt->bind_result($talumnos);
-
-    /* fetch values */
-    $stmt->fetch();
-    /* close statement */
-    $stmt->close();
-  }
     
-    return $talumnos;
     
-}
-
-//================================================================================================================================================
-
-
-function talumnosrepro1ay2aOp($niv,$carr,$idmaes,$perio,$uniT){
     
-    global $link;
-    
-    if ($stmt = $link->prepare("SELECT COUNT(calificaciones.numeroControl) FROM calificaciones, gruposasignados WHERE gruposasignados.idmaestro = '{$idmaes}' AND gruposasignados.periodo = '{$perio}' AND gruposasignados.carrera = '{$carr}' AND gruposasignados.nivel = '{$niv}' AND calificaciones.oportunidad = '1aOp' AND calificaciones.calificacion <= 69 AND calificaciones.unidadTema = '{$uniT}';")) {
-    $stmt->execute();
-
-    /* bind variables to prepared statement */
-    $stmt->bind_result($talumnos);
-
-    /* fetch values */
-    $stmt->fetch();
-    /* close statement */
-    $stmt->close();
-  }
-    if ($stmt1 = $link->prepare("SELECT COUNT(calificaciones.numeroControl) FROM calificaciones, gruposasignados WHERE gruposasignados.idmaestro = '{$idmaes}' AND gruposasignados.periodo = '{$perio}' AND gruposasignados.carrera = '{$carr}' AND gruposasignados.nivel = '{$niv}' AND calificaciones.oportunidad = '2aOp' AND calificaciones.calificacion <= 69 AND calificaciones.unidadTema = '{$uniT}';")) {
-    $stmt1->execute();
-
-    /* bind variables to prepared statement */
-    $stmt1->bind_result($talumnos2);
-
-    /* fetch values */
-    $stmt1->fetch();
-    /* close statement */
-    $stmt1->close();
-  }
     
     return $talumnos+$talumnos2;
     
@@ -176,11 +215,199 @@ function talumnosrepro1ay2aOp($niv,$carr,$idmaes,$perio,$uniT){
 //================================================================================================================================================
 
 
-function talumnosbajas($niv,$carr,$idmaes,$perio){
+function talumnospormateria2aOp($idg,$uniT){
     
-    global $link;
+    global $link,$termino;
     
-    if ($stmt = $link->prepare("SELECT COUNT(alumnos.numeroControl) FROM alumnos, niveles, gruposasignados WHERE gruposasignados.idmaestro = '{$idmaes}' AND gruposasignados.periodo = '{$perio}' AND gruposasignados.carrera = '{$carr}' AND gruposasignados.nivel = '{$niv}' AND niveles.idgrupo = gruposasignados.idgrupo AND alumnos.altaBaja = 'Baja' ;")) {
+    $talumnos = 0;
+    
+    if ($stmt = $link->prepare("SELECT COUNT(calificaciones.numeroControl) 
+                                FROM calificaciones, gruposasignados, alumnos WHERE gruposasignados.idgrupo = '$idg' 
+                                AND gruposasignados.idgrupo = calificaciones.idgrupo 
+                                AND alumnos.numeroControl = calificaciones.numeroControl
+                                AND calificaciones.oportunidad = '2aOp' 
+                                AND calificaciones.calificacion >= 70 AND calificaciones.unidadTema = '$uniT'
+                                AND alumnos.altabaja = 'Alta';")) {
+    $stmt->execute();
+
+    /* bind variables to prepared statement */
+    $stmt->bind_result($talumnos);
+
+    /* fetch values */
+    $stmt->fetch();
+    /* close statement */
+    $stmt->close();
+        
+        
+        
+                //Alumnos despues
+                //=============================================
+                    if ($stmt2 = $link->prepare("SELECT COUNT(altasbajas.numeroControl) FROM altasbajas, calificaciones, gruposasignados WHERE altasbajas.fecha > '$termino' 
+                                                    AND calificaciones.idgrupo = '$idg' 
+                                                    AND altasbajas.numeroControl = calificaciones.numeroControl
+                                                    AND gruposasignados.idgrupo = calificaciones.idgrupo
+                                                    AND calificaciones.unidadTema = '$uniT' 
+                                                    AND altasbajas.altaBaja = 'Baja'  AND calificaciones.oportunidad = '2aOp' AND calificaciones.calificacion >= 70;")) {
+
+                            $stmt2->execute();
+
+                            /* bind variables to prepared statement */
+                            $stmt2->bind_result($talumnos2);
+
+                            /* fetch values */
+                            $stmt2->fetch();
+                            /* close statement */
+                            $stmt2->close();
+                          }
+
+        
+        
+  }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    return $talumnos+$talumnos2;
+    
+}
+
+//================================================================================================================================================
+
+
+function talumnosrepro1ay2aOp($idg, $uniT){
+    
+    global $link,$termino;
+    
+    $talumnos = 0;
+    $alumnos2 = 0;
+    $talumno3 = 0;
+    $alumnos4 = 0;
+    
+    if ($stmt = $link->prepare("SELECT COUNT(calificaciones.numeroControl) 
+                                FROM calificaciones, gruposasignados, alumnos WHERE gruposasignados.idgrupo = '$idg' 
+                                AND gruposasignados.idgrupo = calificaciones.idgrupo 
+                                AND alumnos.numeroControl = calificaciones.numeroControl
+                                AND calificaciones.oportunidad = '1aOp' 
+                                AND calificaciones.calificacion <= 69 AND calificaciones.unidadTema = '$uniT'
+                                AND alumnos.altabaja = 'Alta';")) {
+    $stmt->execute();
+
+    /* bind variables to prepared statement */
+    $stmt->bind_result($talumnos);
+
+    /* fetch values */
+    $stmt->fetch();
+    /* close statement */
+    $stmt->close();
+        
+        
+        
+                //Alumnos despues
+                //=============================================
+                    if ($stmt2 = $link->prepare("SELECT COUNT(altasbajas.numeroControl) FROM altasbajas, calificaciones, gruposasignados WHERE altasbajas.fecha > '$termino' 
+                                                    AND calificaciones.idgrupo = '$idg' 
+                                                    AND altasbajas.numeroControl = calificaciones.numeroControl
+                                                    AND gruposasignados.idgrupo = calificaciones.idgrupo
+                                                    AND calificaciones.unidadTema = '$uniT' 
+                                                    AND altasbajas.altaBaja = 'Baja'  AND calificaciones.oportunidad = '1aOp' AND calificaciones.calificacion <= 69;")) {
+
+                            $stmt2->execute();
+
+                            /* bind variables to prepared statement */
+                            $stmt2->bind_result($talumnos2);
+
+                            /* fetch values */
+                            $stmt2->fetch();
+                            /* close statement */
+                            $stmt2->close();
+                          }
+
+        
+        
+  }
+    
+    
+    if ($stmt3 = $link->prepare("SELECT COUNT(calificaciones.numeroControl) 
+                                FROM calificaciones, gruposasignados, alumnos WHERE gruposasignados.idgrupo = '$idg' 
+                                AND gruposasignados.idgrupo = calificaciones.idgrupo 
+                                AND alumnos.numeroControl = calificaciones.numeroControl
+                                AND calificaciones.oportunidad = '2aOp' 
+                                AND calificaciones.calificacion <= 69 AND calificaciones.unidadTema = '$uniT'
+                                AND alumnos.altabaja = 'Alta';")) {
+    $stmt3->execute();
+
+    /* bind variables to prepared statement */
+    $stmt3->bind_result($talumnos3);
+
+    /* fetch values */
+    $stmt3->fetch();
+    /* close statement */
+    $stmt3->close();
+        
+        
+        
+                //Alumnos despues
+                //=============================================
+                    if ($stmt4 = $link->prepare("SELECT COUNT(altasbajas.numeroControl) FROM altasbajas, calificaciones, gruposasignados WHERE altasbajas.fecha > '$termino' 
+                                                    AND calificaciones.idgrupo = '$idg' 
+                                                    AND altasbajas.numeroControl = calificaciones.numeroControl
+                                                    AND gruposasignados.idgrupo = calificaciones.idgrupo
+                                                    AND calificaciones.unidadTema = '$uniT' 
+                                                    AND altasbajas.altaBaja = 'Baja'  AND calificaciones.oportunidad = '2aOp' AND calificaciones.calificacion <= 69;")) {
+
+                            $stmt4->execute();
+
+                            /* bind variables to prepared statement */
+                            $stmt4->bind_result($talumnos4);
+
+                            /* fetch values */
+                            $stmt4->fetch();
+                            /* close statement */
+                            $stmt4->close();
+                          }
+
+        
+        
+  }
+    
+    
+    
+    
+    
+    
+    
+    return $talumnos + $talumnos2 + $talumnos3 + $talumnos4;
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+}
+
+//================================================================================================================================================
+
+
+function talumnosbajas($idg){
+    
+    global $link,$inicio,$termino;
+    
+    if ($stmt = $link->prepare("SELECT DISTINCT COUNT(altasbajas.numeroControl)
+FROM niveles, gruposasignados, altasbajas 
+WHERE gruposasignados.idgrupo = '$idg'  
+AND niveles.idgrupo = gruposasignados.idgrupo 
+AND niveles.numeroControl = altasbajas.numeroControl
+AND altasbajas.altaBaja = 'Baja' AND (altasbajas.fecha BETWEEN '$inicio' AND '$termino') ORDER BY altasbajas.id DESC;")) {
+        
     $stmt->execute();
 
     /* bind variables to prepared statement */
@@ -195,6 +422,8 @@ function talumnosbajas($niv,$carr,$idmaes,$perio){
     return $talumnos;
     
 }
+
+
 
 //================================================================================================================================================
 
@@ -339,9 +568,7 @@ function romanos($numer){
 
 
 
-
-
-$query = "SELECT DISTINCT gruposasignados.nivel, gruposasignados.carrera, calificaciones.unidadTema FROM gruposasignados, calificaciones WHERE gruposasignados.idmaestro =         {$_SESSION["idmaestro"]} AND gruposasignados.periodo = '{$periActuBD}' AND gruposasignados.idgrupo = calificaciones.idgrupo ORDER BY unidadTema ASC ;";
+$query = "SELECT DISTINCT gruposasignados.nivel, gruposasignados.carrera, calificaciones.unidadTema, gruposasignados.grupo, gruposasignados.idgrupo FROM gruposasignados, calificaciones WHERE gruposasignados.idmaestro = {$_SESSION["idmaestro"]} AND gruposasignados.periodo = '{$periActuBD}' AND (calificaciones.fecha BETWEEN '$inicio' AND '$termino') AND gruposasignados.idgrupo = calificaciones.idgrupo ORDER BY nivel ASC, unidadTema ASC;";
 
 $result = mysqli_query($link, $query);
 
@@ -357,30 +584,72 @@ $dataRow = "";
 
 while($row = mysqli_fetch_array($result))
 {
-    $talumnospormateria = talumnospormateria($row[0],$row[1],$_SESSION['idmaestro'],$periActuBD,$row[2]);
-    $talumnospormateria1aOp = talumnospormateria1aOp($row[0],$row[1],$_SESSION['idmaestro'],$periActuBD,$row[2]);
-    $talumnospormateria2aOp = talumnospormateria2aOp($row[0],$row[1],$_SESSION['idmaestro'],$periActuBD,$row[2]);
-    $talumnosrepro1ay2aOp = talumnosrepro1ay2aOp($row[0],$row[1],$_SESSION['idmaestro'],$periActuBD,$row[2]);
-    $talumnosbajas = talumnosbajas($row[0],$row[1],$_SESSION['idmaestro'],$periActuBD);
+    
+    $F = talumnosbajas($row[4]);
+    
+    //A = TOTAL DE ALUMNOS(AS) POR MATERIA
+    $A = talumnospormateria($row[4],$row[2]);  
+    
+    $A = $A + $F;
+    
+    //B = NO. DE ALUMNOS(AS) QUE ALCANZARON LAS COMPETENCIAS (EP= EVALUACIÓN DE PRIMERA OPORTUNIDAD, 
+    
+    $B1aOp = talumnospormateria1aOp($row[4],$row[2]);
+    
+    //B - ES= EVALUACIÓN DE SEGUNDA OPORTUNIDAD).
+    
+    $B2aOp = talumnospormateria2aOp($row[4],$row[2]);
+    
+    // C = % DE ALUMNOS(AS) QUE ALCANZARON LAS COMPETENCIAS POR UNIDAD O UNIDADES TEMÁTICAS EN AMBAS OPORTUNIDADES (EP+ES). SOLAMENTE EN EL REPORTE FINAL
+    
+    $div = 0;
+    
+    if(isset($A) && $A != 0){ $div = 100/$A;   }else{$div = 0;} 
+    
+   
+    $C = round( $div *($B1aOp+$B2aOp),2);
+    
+    //D = NO. DE ALUMNOS(AS) QUE NO ALCANZARON LAS COMPETENCIAS EN EVALUACIÓN DE PRIMERA OPORTUNIDAD O EN SU CASO EN AMBAS OPORTUNIDADES
+    
+    $D = talumnosrepro1ay2aOp($row[4],$row[2]); 
+    
+    //E = % DE ALUMNOS(AS) QUE NO ALCANZARON LAS COMPETENCIAS POR UNIDAD O UNIDADES TEMÁTICAS PARA EL REPORTE FINAL.
+    
+    
+    $E = round( $div *$D,2);
+    
+    //F = NO. DE ALUMNOS(AS) QUE DESERTARON DURANTE EL SEMESTRE EN LA MATERIA (ALUMNOS DADOS DE BAJA).
+    
+    
+    
+    //G = % DE ALUMNOS(AS) QUE DESERTARON EN LA MATERIA, TOMANDO COMO DESERCIÓN CUANDO EL ALUMNO(A) SE DA DE BAJA DE LA MATERIA O BAJA DEFINITIVA DURANTE EL CICLO ESCOLAR
+    
+    //$G = round($F / ( $A / 100 ),2);
+    
+    
+    if(isset($A) && $A != 0){  $G = round($F / ( $A / 100 ),2); }else{$G = 0;}
+    
+    
+    
     $numeroparciales = numeroparciales($row[0],$row[1],$_SESSION['idmaestro'],$periActuBD);
     $carreraAv =  carreraAv($row[1]);
     $romanos = romanos($row[2]);
-    $C = (100/$talumnospormateria)*$talumnosrepro1ay2aOp;
-    $E = (100/$talumnospormateria)*($talumnospormateria1aOp+$talumnospormateria2aOp);
-    $porcenbajas = round($talumnosbajas / ( $talumnospormateria / 100 ),2);
+    
+    
+    
     
     $dataRow = $dataRow."<tr style='text-align:center;'>
                                 <td>Inglés $row[0]</td>
-                                <td>$romanos / $row[0]º</td>
+                                <td>$romanos / $row[0]º $row[3]</td>
                                 <td>$carreraAv</td>
-                                <td>$talumnospormateria</td> 
-                                <td>$talumnospormateria1aOp</td>
-                                <td>$talumnospormateria2aOp</td>
+                                <td>$A</td> 
+                                <td>$B1aOp</td>
+                                <td>$B2aOp</td>
                                 <td>$C%</td>
-                                <td>$talumnosrepro1ay2aOp</td>
-                                <td>$E</td>
-                                <td>$talumnosbajas</td>
-                                <td>$porcenbajas%</td>
+                                <td>$D</td>
+                                <td>$E%</td>
+                                <td>$F</td>
+                                <td>$G%</td>
                             </tr>";
     
 
@@ -410,7 +679,7 @@ $dataRow2 = "<tr style='text-align:center;'>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Docentes</title>
+    <title>Reporte Parcial 1</title>
     
     <link rel="stylesheet" href="../bootstrap/4.5.3/dist/css/bootstrap.min.css" 
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
@@ -560,13 +829,13 @@ $dataRow2 = "<tr style='text-align:center;'>
                             
                             <a href="Reportes.php" class="btn btn-outline-light active" role="button" >Reporte 1</a>
                             
-                            <a href="Reportes.php" class="btn btn-outline-light" role="button" >Reporte 2</a>
+                            <a href="Reportes_2.php" class="btn btn-outline-light" role="button" >Reporte 2</a>
                             
-                            <a href="Reportes.php" class="btn btn-outline-light" role="button" >Reporte 3</a>
+                            <a href="Reportes_3.php" class="btn btn-outline-light" role="button" >Reporte 3</a>
                             
-                            <a href="Reportes.php" class="btn btn-outline-light" role="button" >Reporte 4</a>
+                            <a href="Reportes_4.php" class="btn btn-outline-light" role="button" >Reporte 4</a>
                             
-                            <a href="Reportes.php" class="btn btn-outline-light" role="button" >Reporte Final</a>
+                            <a href="Reportes_final.php" class="btn btn-outline-light" role="button" >Reporte Final</a>
                             
                             <a href="logoutDo.php" class="btn btn-outline-light" role="button">Cerrar sesión</a>
 

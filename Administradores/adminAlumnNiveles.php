@@ -161,6 +161,7 @@ if(isset($_REQUEST['action']))
             $alm->__SET('numeroControl',    $_REQUEST['numeroControl']);
             $alm->__SET('estado',           $_REQUEST['estado']);
             $alm->__SET('promedio',         $_REQUEST['promedio']);
+            $alm->__SET('promedio2',         $_REQUEST['promedio2']);
 			$alm->__SET('comentario',       $_REQUEST['comentario']);
             $alm->__SET('oportunidad',      $_REQUEST['oportunidad']);
             $alm->__SET('tipoProgramaBeca', $_REQUEST['tipoProgramaBeca']);
@@ -384,7 +385,7 @@ if(isset($_REQUEST['action']))
                     <input type="hidden" name="id" value="<?php echo $alm->__GET('id'); ?>" />
 
                     
-                    <table class="table table-bordered table-dark"  >
+                    <table class="table table-bordered table-dark table-sm"  >
                         <tr>
                             <th>Nombre Alumno</th>
                             <th>Número de Control</th>
@@ -423,8 +424,8 @@ if(isset($_REQUEST['action']))
                         
                         <tr>
                             
-                            <th>Calificación Final</th>
-                            <th>Tipo de Calificación</th>
+                            <th>Calificación 1aOp</th>
+                            <th>Calificación 2aOp</th>
                             <th colspan="2">Comentario calificación</th>
                             
                         </tr>
@@ -434,12 +435,7 @@ if(isset($_REQUEST['action']))
                                 <input type="text" name="promedio" class="form-control" value="<?php  echo $alm->__GET('promedio');?>">
                             </td>
                             <td >  
-                                <select class='form-control' name= 'oportunidad' >
-                                    <option value="" selected>Elige...</option>
-                                    <option value="1aOp" <?php if($alm->__GET('oportunidad')==='1aOp'){echo "selected";}else{echo "";} ?>>1aOp</option>
-                                    <option value="2aOp" <?php if($alm->__GET('oportunidad')==='2aOp'){echo "selected";}else{echo "";} ?>>2aOp</option>
-                                  <option value="" <?php if($alm->__GET('oportunidad')==NULL){echo "selected";}else{echo "hidden";} ?>>Sin Asignar</option>
-                                </select> 
+                                <input type="text" name="promedio2" class="form-control" value="<?php  echo $alm->__GET('promedio2');?>">
                             </td>
                             <td rowspan="2" colspan="2">  
                                  <textarea class="form-control" rows="5" id="comentario" name="comentario"><?php  echo $alm->__GET('comentario');?></textarea>
@@ -451,7 +447,7 @@ if(isset($_REQUEST['action']))
                             
                             
                             <th>Programa o Beca</th>
-                            <th></th>
+                            <th>Tipo de Calificación</th>
                         </tr>
                          <tr>
                             <td >  
@@ -463,10 +459,18 @@ if(isset($_REQUEST['action']))
                                 </select> 
                                
                             </td>
-                             <td></td>
+                             <td>
+                                <select class='form-control' name= 'oportunidad' >
+                                    <option value="" selected>Elige...</option>
+                                    <option value="1aOp" <?php if($alm->__GET('oportunidad')==='1aOp'){echo "selected";}else{echo "";} ?>>1aOp</option>
+                                    <option value="2aOp" <?php if($alm->__GET('oportunidad')==='2aOp'){echo "selected";}else{echo "";} ?>>2aOp</option>
+                                  <option value="" <?php if($alm->__GET('oportunidad')==NULL){echo "selected";}else{echo "hidden";} ?>>Sin Asignar</option>
+                                </select> 
+                             
+                             </td>
                             <td colspan="2" style="text-align:right;">
-                                <a href="adminAlumnNiveles.php" class="btn btn-light">Limpiar campos</a> &nbsp;&nbsp;&nbsp;
-                                Función Actualizar / Registrar &nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                <a href="adminAlumnNiveles.php" class="btn btn-light btn-sm">Limpiar campos</a> &nbsp;&nbsp;&nbsp;
+                                Función Actualizar / Registrar &nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button>
                             </td>
                         </tr>
                     </table>
@@ -485,7 +489,7 @@ if(isset($_REQUEST['action']))
 				
              <div class=" ex3">  
 			 
-                <table class="table table-bordered table-dark"  id="myTable" >
+                <table class="table table-bordered table-dark table-sm"  id="myTable" >
 				
                     <thead style="text-align:center; font-size:14px;">
 					
@@ -505,10 +509,10 @@ if(isset($_REQUEST['action']))
                         <tr>
                             <td><?php if($r->__GET('numeroControl')==""){ }else{echo NombreAlumno($r->__GET('numeroControl'));}?></td>
                             <td><?php echo $r->__GET('numeroControl'); ?></td>
-                            <td><?php echo $r->__GET('numeroControl'); ?></td>
+                            <td><?php echo $r->__GET('estado'); ?></td>
                             <td><?php echo grupoID($r->__GET('idgrupo')); ?></td>
                             <td>
-                                <a class="btn btn-success" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
+                                <a class="btn btn-success btn-sm" href="?action=editar&id=<?php echo $r->id; ?>">Editar</a>
                             </td>
                         </tr>
                     </tbody>

@@ -318,7 +318,12 @@ if (mysqli_num_rows($result2)==0) {
         }
 
 
-        $datos = "<table style='width:100%'>
+        $datos = "<table class='table' style='width:100%'>
+                            <tr>
+                                <th class='table-secondary 'style='width:100%' ><th>
+                            </tr>
+                          </table>
+                          <table class='table table-sm' style='width:100%'>
                               <tr>
                                 <th>#".$j."</th>
                                 
@@ -433,7 +438,12 @@ if (mysqli_num_rows($result2)==0) {
                 }
 
 
-                $datos = "<table style='width:100%'>
+                $datos = "<table class='table' style='width:100%'>
+                            <tr>
+                                <th class='table-secondary 'style='width:100%' ><th>
+                            </tr>
+                          </table>
+                                <table class='table table-sm' style='width:100%'>
                                       <tr>
                                         <th>#".$j."</th>
                                         <th>|</th>
@@ -480,7 +490,7 @@ if (mysqli_num_rows($result2)==0) {
                                         <td>Comentarios:<br></td>
                                       </tr>
                                 </table>
-                                <table style='width:100%; border: 1px solid gray;'>
+                                <table class='table table-sm' style='width:100%; border: 1px solid gray;'>
                                       
                                       <tr>
                                         <td>".$comentario."</td>
@@ -489,7 +499,25 @@ if (mysqli_num_rows($result2)==0) {
                                         <td></td>
                                       </tr>
                                     </table><br>
-                                    <p><b>Promedio: </b>".$p."<br><b>Estado: </b>".$e."<br><b>Comentario final: </b>".$c."<br><b>Tipo de Calificación: </b>".$o."</p>";
+                                    <p><b>Promedio: </b>".$p."<br><b>Estado: </b>".$e."<br>
+                                    
+                                    
+                                    <b>Tipo de Calificación: </b>".$o."<br><b>Comentario final: </b></p>
+                                    
+                                    <table class='table table-sm' style='width:100%; border: 1px solid gray;'>
+                                      
+                                      <tr>
+                                        <td>".$c."</td>
+                                      </tr>
+                                      <tr>
+                                        <td></td>
+                                      </tr>
+                                    </table><br>
+                                    
+                                    
+                                    
+                                    
+                                    ";
 
 
         }
@@ -830,7 +858,7 @@ function promediar($numcon, $idg , $comen){
     
     
     // Prepare a select statement
-        $sql2 = "SELECT id FROM niveles WHERE numeroControl = '{$numcon}' AND idgrupo = '{$idg}';";
+        $sql2 = "SELECT id, comentario FROM niveles WHERE numeroControl = '{$numcon}' AND idgrupo = '{$idg}';";
     
         
         // result
@@ -846,7 +874,12 @@ function promediar($numcon, $idg , $comen){
 
         if(isset($row2[0])){
             $id = $row2[0];
+            $oldcom = $row2[1];
         }
+        
+            
+        $timestamp = date("Y-m-d H:i:s");
+        
         
         
         if($stmt = mysqli_prepare($link, $sql2)){
@@ -868,9 +901,11 @@ function promediar($numcon, $idg , $comen){
                     if($stmt = mysqli_prepare($link, $sql3)){
                         // Bind variables to the prepared statement as parameters
                         mysqli_stmt_bind_param($stmt, "s", $param_comentario);
+                        
+                        if($comen === ''){$comen = "Sin comentario";}
 
                         // Set parameters
-                        $param_comentario = $comen;
+                        $param_comentario = $oldcom."<br>".$timestamp." - ".$comen;
 
                         // Attempt to execute the prepared statement
                         if(mysqli_stmt_execute($stmt)){
@@ -895,9 +930,12 @@ function promediar($numcon, $idg , $comen){
                        // echo "si entro";
                         // Bind variables to the prepared statement as parameters
                         mysqli_stmt_bind_param($stmt, "s",$param_comentario);
+                        
+                        
+                        if($comen === ''){$comen = "Sin comentario";}
 
                         // Set parameters
-                        $param_comentario = $comen;
+                        $param_comentario = $timestamp." - ".$comen;
 
                         // Attempt to execute the prepared statement
                         if(mysqli_stmt_execute($stmt)){
@@ -1069,9 +1107,7 @@ function modales($mod1, $mod2, $mod3, $idmodal1, $idmodal2, $idmodal3, $numcon, 
                     
                                                 <label>Primera / Segunda Oportunidad</label>
                                                 <select class='form-control' name= 'oportunidad' >
-                                                    <option value =''>Elige una opción</option>
                                                     <option value ='1aOp' selected> Primera oportunidad </option>
-                                                    <option value ='2aOp'> Segunda oportunidad </option>
                                                 </select> 
                             
                                             </div>
@@ -1150,9 +1186,7 @@ function modales($mod1, $mod2, $mod3, $idmodal1, $idmodal2, $idmodal3, $numcon, 
                     
                                                 <label>Primera / Segunda Oportunidad</label>
                                                 <select class='form-control' name= 'oportunidad' >
-                                                    <option value =''>Elige una opción</option>
                                                     <option value ='1aOp' selected> Primera oportunidad </option>
-                                                    <option value ='2aOp'> Segunda oportunidad </option>
                                                 </select> 
                             
                                             </div>
@@ -1779,6 +1813,7 @@ if(isset($_REQUEST['action']))
                                 echo  "<a href='SubirCalifiDo.php' class='btn btn-success' role='button' data-toggle='modal' data-target='#modalc".$i."'>Calificar</a>
                                     <a href='SubirCalifiDo.php' class='btn btn-warning' role='button' data-toggle='modal' data-target='#modalm".$i."'>Modificar</a>
                                     <a href='SubirCalifiDo.php' class='btn btn-primary' role='button' data-toggle='modal' data-target='#modalp".$i."'>Calcular y Registrar Promedio</a>";
+                                
                                 
                                              //$mod1, $mod2, $mod3, $idmodal1, $idmodal2, $idmodal3, $numcon, $idg
                                 echo modales( "btnPostMec".$i, "btnPostMem".$i, "btnPostMep".$i, "modalc".$i, "modalm".$i,"modalp".$i,$numeros1[$i],$dataRow1[5]);
