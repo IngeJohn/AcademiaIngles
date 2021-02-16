@@ -202,8 +202,8 @@ echo $dataRow;
 //======================================================================================================================================================================
 
 
-require_once 'Horario.entidad.php';
-require_once 'Horario.model.php';
+require_once 'utilities/Horario.entidad.php';
+require_once 'utilities/Horario.model.php';
 
 // Logica
 $alm = new Horario();
@@ -456,10 +456,7 @@ if(isset($_REQUEST['action']))
               </div>
               <div class="modal-body" style="padding:35px;">
                   
-                <p>Para registra un nuevo horario:<br>
-                  Elige un Docente y selecciona el nivel, grupo, carrera y modalidad<br>
-                  No es necesario introducir el periodo, este se registrará automaticamente.<br>
-                  Por último, elegir los horarios predefinidos para cada día y presionar el botón de guardar cambios. </p>
+                <p>Esta página te permite ver los horarios pertenecientes a cada docente.</p>
 
                       
               </div>

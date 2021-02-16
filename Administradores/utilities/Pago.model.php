@@ -1,16 +1,18 @@
 <?php
+// Include config file
+require_once "../Require/config.php";
 
 
-
-class HorarioModel
+class PagoModel
 {
 	private $pdo;
 
 	public function __CONSTRUCT()
 	{
+		global $host,$db,$pss,$us;
 		try
 		{
-			$this->pdo = new PDO('mysql:host=localhost;dbname=academia_ingles', 'academia_ingles', 'a98450153_-');
+			$this->pdo = new PDO($host,$us,$pss);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);		        
 		}
 		catch(Exception $e)
@@ -20,19 +22,19 @@ class HorarioModel
 	}
     
     
-    
- public function Listar0()
+        
+    public function Listar0()
 	{
 		try
 		{
 			$result = array();
 
-			$stm = $this->pdo->prepare("SELECT idgrupo, carrera FROM gruposasignados WHERE NOT EXISTS (SELECT idgrupo FROM horarios WHERE gruposasignados.idgrupo = horarios.idgrupo AND gruposasignados.periodo = '".$_SESSION['periodoDB']."');");
+			$stm = $this->pdo->prepare("SELECT * FROM gruposasignados WHERE periodo = '".$_SESSION['periodoDB']."'");
 			$stm->execute();
 
 			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
 			{
-				$alm = new Horario();
+				$alm = new Pago();
 				
 				$alm->__SET('idgrupo',          $r->idgrupo);
                 $alm->__SET('nivel',            $r->nivel);
@@ -55,6 +57,7 @@ class HorarioModel
     
     
     
+    
 
 	public function Listar()
 	{
@@ -62,22 +65,19 @@ class HorarioModel
 		{
 			$result = array();
 
-			$stm = $this->pdo->prepare("SELECT horarios.id, horarios.idgrupo, horarios.lunes, horarios.martes, horarios.miercoles, horarios.jueves, horarios.viernes, horarios.sabadoC, horarios.sabadoT FROM horarios, gruposasignados WHERE horarios.idgrupo = gruposasignados.idgrupo AND gruposasignados.periodo = '".$_SESSION['periodoDB']."' ORDER BY horarios.id DESC");
+			$stm = $this->pdo->prepare("SELECT * FROM niveles");
 			$stm->execute();
 
 			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
 			{
-				$alm = new Horario();
+				$alm = new Pago();
 				
 				$alm->__SET('id',                     $r->id);
+                $alm->__SET('numeroControl',          $r->numeroControl);
                 $alm->__SET('idgrupo',                $r->idgrupo);
-                $alm->__SET('lunes',                  $r->lunes);
-                $alm->__SET('martes',                 $r->martes);
-                $alm->__SET('miercoles',              $r->miercoles);
-                $alm->__SET('jueves',                 $r->jueves);
-                $alm->__SET('viernes',                $r->viernes);
-                $alm->__SET('sabadoC',                $r->sabadoC);
-                $alm->__SET('sabadoT',                $r->sabadoT);
+                $alm->__SET('inscripcionPagoEstado',  $r->inscripcionPagoEstado);
+                $alm->__SET('libroPagoEstado',        $r->libroPagoEstado);
+                $alm->__SET('comentarioPagos',        $r->comentarioPagos);
 
 				$result[] = $alm;
 			}
@@ -101,12 +101,15 @@ class HorarioModel
 
 			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
 			{
-				$alm = new Horario();
+				$alm = new Pago();
 				
 				$alm->__SET('nombre',    $r->nombre);
 				$alm->__SET('paterno',   $r->paterno);
 				$alm->__SET('materno',   $r->materno);
 				$alm->__SET('idmaestro', $r->idmaestro);
+                $alm->__SET('roll',      $r->roll);
+                $alm->__SET('titulo',    $r->titulo);
+
 				$result[] = $alm;
 			}
 
@@ -117,6 +120,7 @@ class HorarioModel
 			die($e->getMessage());
 		}
 	}
+    
     
     
     public function Listar3()
@@ -130,12 +134,45 @@ class HorarioModel
 
 			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
 			{
-				$alm = new Horario();
+				$alm = new Pago();
 				
 				$alm->__SET('nombre',    $r->nombre);
 				$alm->__SET('paterno',   $r->paterno);
 				$alm->__SET('materno',   $r->materno);
 				$alm->__SET('idmaestro', $r->idmaestro);
+                $alm->__SET('roll',      $r->roll);
+
+				$result[] = $alm;
+			}
+
+			return $result;
+		}
+		catch(Exception $e)
+		{
+			die($e->getMessage());
+		}
+	}
+    
+    
+    public function Listar4()
+	{
+		try
+		{
+			$result = array();
+
+			$stm = $this->pdo->prepare("SELECT * FROM niveles, gruposasignados WHERE gruposasignados.periodo = '".$_SESSION['periodoDB']."' AND gruposasignados.idgrupo = niveles.idgrupo ORDER BY id DESC;");
+			$stm->execute();
+
+			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
+			{
+				$alm = new Pago();
+				
+				$alm->__SET('id',                     $r->id);
+                $alm->__SET('numeroControl',          $r->numeroControl);
+                $alm->__SET('idgrupo',                $r->idgrupo);
+                $alm->__SET('inscripcionPagoEstado',  $r->inscripcionPagoEstado);
+                $alm->__SET('libroPagoEstado',        $r->libroPagoEstado);
+                $alm->__SET('comentarioPagos',        $r->comentarioPagos);
 
 				$result[] = $alm;
 			}
@@ -153,23 +190,20 @@ class HorarioModel
 	{
 		try 
 		{
-			$stm = $this->pdo->prepare("SELECT * FROM horarios WHERE id = ?");
+			$stm = $this->pdo->prepare("SELECT * FROM niveles WHERE id = ?");
 			          
 
 			$stm->execute(array($id));
 			$r = $stm->fetch(PDO::FETCH_OBJ);
 
-			$alm = new Horario();
+			$alm = new Pago();
 
 			    $alm->__SET('id',                     $r->id);
+                $alm->__SET('numeroControl',          $r->numeroControl);
                 $alm->__SET('idgrupo',                $r->idgrupo);
-                $alm->__SET('lunes',                  $r->lunes);
-                $alm->__SET('martes',                 $r->martes);
-                $alm->__SET('miercoles',              $r->miercoles);
-                $alm->__SET('jueves',                 $r->jueves);
-                $alm->__SET('viernes',                $r->viernes);
-                $alm->__SET('sabadoC',                $r->sabadoC);
-                $alm->__SET('sabadoT',                $r->sabadoT);
+                $alm->__SET('inscripcionPagoEstado',  $r->inscripcionPagoEstado);
+                $alm->__SET('libroPagoEstado',        $r->libroPagoEstado);
+                $alm->__SET('comentarioPagos',        $r->comentarioPagos);
 
 			return $alm;
 		} catch (Exception $e) 
@@ -191,33 +225,23 @@ class HorarioModel
 		}
 	}
 
-	public function Actualizar(Horario $data)
+	public function Actualizar(Pago $data)
 	{
 		try 
 		{
-			$sql = "UPDATE horarios SET  
-                        idgrupo         = ?,
-                        lunes           = ?,
-                        martes          = ?,
-                        miercoles       = ?,
-                        jueves          = ?, 
-                        viernes         = ?,
-                        sabadoC         = ?,
-                        sabadoT         = ?
+			$sql = "UPDATE niveles SET  
+                        inscripcionPagoEstado = ?,
+                        libroPagoEstado       = ?,
+                        comentarioPagos       = ? 
 				    WHERE id = ?";
 
 			$this->pdo->prepare($sql)
 			     ->execute(
 				array(
                     
-                    $data->__GET('idgrupo'),
-                    $data->__GET('lunes'),
-                    $data->__GET('martes'),
-                    $data->__GET('miercoles'),
-                    $data->__GET('jueves'),
-                    $data->__GET('viernes'),
-                    $data->__GET('sabadoC'),
-                    $data->__GET('sabadoT'),
+                    $data->__GET('inscripcionPagoEstado'),
+                    $data->__GET('libroPagoEstado'),
+                    $data->__GET('comentarioPagos'),
                     $data->__GET('id')
 					)
 				);
@@ -227,27 +251,25 @@ class HorarioModel
 		}
 	}
 
-	public function Registrar(Horario $data)
+	public function Registrar(Pago $data)
 	{
 		try 
 		{
-            $sql = "INSERT INTO horarios (idgrupo,lunes,martes,miercoles,jueves,viernes,sabadoC,sabadoT) 
-		        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            
+        
 
             $this->pdo->prepare($sql)
                  ->execute(
                 array(
+                        $data->__GET('numeroControl'),
+                        $data->__GET('carrera'),
                         $data->__GET('idgrupo'),
-                        $data->__GET('lunes'),
-                        $data->__GET('martes'),
-                        $data->__GET('miercoles'),
-                        $data->__GET('jueves'),
-                        $data->__GET('viernes'),
-                        $data->__GET('sabadoC'),
-                        $data->__GET('sabadoT')
+                        $data->__GET('inscripcionPagoEstado'),
+                        $data->__GET('libroPagoEstado'),
+                        $data->__GET('comentarioPagos')
                     )
                 );
-        
+          
         
 		
 		} catch (Exception $e) 

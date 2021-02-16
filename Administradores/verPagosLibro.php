@@ -146,8 +146,8 @@ function grupoID($idg){
 //====================================================================================================
 
 
-require_once 'Pago.entidad.php';
-require_once 'Pago.model.php';
+require_once 'utilities/Pago.entidad.php';
+require_once 'utilities/Pago.model.php';
 
 // Logica
 $alm = new Pago();

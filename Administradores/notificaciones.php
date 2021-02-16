@@ -61,17 +61,33 @@ if( $periActuBD !== $periodoActu ){
     if($stmt4 = mysqli_prepare($link, $sql2)){
         $stmt4->execute();
     }
-    //echo("<p><script>alert('¡Periodo actualizado!');</script></p>");
 }
 //=================================================================================================================================================================================
 
+function maestroID($id){
+    
+    global $link;
+    
+    $nombre = $paterno = $materno = $titulo = "";
+    
+    if ($stmtm = $link->prepare("SELECT nombre, paterno, materno, titulo FROM docentes WHERE idmaestro = '{$id}'")) {
+        
+        $stmtm->execute();
 
+        /* bind variables to prepared statement */
+        $stmtm->bind_result($nombre, $paterno, $materno, $titulo);
+
+        /* fetch values */
+        $stmtm->fetch();
+
+        /* close statement */
+        //$stmtm->close();
+        
+        return $titulo." ".$nombre." ".$paterno." ".$materno;
+    }
+
+}
  
-    // Close connection
-    mysqli_close($link);
-
-
-//=========================================================================================================
 
 
 
@@ -79,34 +95,35 @@ if( $periActuBD !== $periodoActu ){
 $param_contrase = "";
 
 
-require_once 'utilities/certi.entidad.php';
-require_once 'utilities/certi.model.php';
+require_once 'utilities/noti.entidad.php';
+require_once 'utilities/noti.model.php';
 
 // Logica
-$alm = new certi();
-$model = new certiModel();
+$alm = new noti();
+$model = new notiModel();
 
 if(isset($_REQUEST['action']))
 {
-    
+
 	switch($_REQUEST['action'])
 	{
 		case 'actualizar':
-			$alm->__SET('id',               $_REQUEST['id']);
-			$alm->__SET('certificacion',    $_REQUEST['certificacion']);
-            $alm->__SET('descripcion',      $_REQUEST['descripcion']);
+			$alm->__SET('idmaestro',         $_SESSION['idmaestro']);
+            $alm->__SET('mensaje',           $_REQUEST['mensaje']);
+            $alm->__SET('tipomensaje',       $_REQUEST['tipomensaje']);
+            $alm->__SET('id',                $_REQUEST['id']);
 
 			$model->Actualizar($alm);
-			header('Location: ModCerti.php');
+			header('Location: notificaciones.php');
 			break;
             
-            
         case 'registrar':
-			$alm->__SET('certificacion',    $_REQUEST['certificacion']);
-            $alm->__SET('descripcion',      $_REQUEST['descripcion']);
+			$alm->__SET('idmaestro',         $_SESSION['idmaestro']);
+            $alm->__SET('mensaje',           $_REQUEST['mensaje']);
+            $alm->__SET('tipomensaje',       $_REQUEST['tipomensaje']);
 
 			$model->Registrar($alm);
-			header('Location: ModCerti.php');
+			header('Location: notificaciones.php');
 			break;
             
 
@@ -125,7 +142,7 @@ if(isset($_REQUEST['action']))
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Modificar Certificaciones</title>
+    <title>Publicar Notificaciones</title>
     
     <link rel="stylesheet" href="../bootstrap/4.5.3/dist/css/bootstrap.min.css" 
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" 
@@ -260,7 +277,9 @@ if(isset($_REQUEST['action']))
 
                         <div class="btn-group" role="group">
                             
-                            <a href="ModCerti.php" class="btn btn-outline-light active" role="button" >Modificar / Agregar Certificaciones</a>
+                            <a href="adminContra.php" class="btn btn-outline-light active" role="button" >Publicar Notificaciones</a>
+                            
+                            <a href="adminContraAl.php" class="btn btn-outline-light" role="button" >Modificar Contraseña Alumnos</a>
                             
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
@@ -279,7 +298,7 @@ if(isset($_REQUEST['action']))
         </div>
 </header>
     
-                    <!-- Large modal -->
+            <!-- Large modal -->
         
 
         <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -293,7 +312,7 @@ if(isset($_REQUEST['action']))
               </div>
               <div class="modal-body" style="padding:35px;">
                   
-                <p>Esta página te permite registrar el nombre de alguna certificación, la cual después podrás ser utilizada como opción en el registro y actualización de la información de los docentes. <br><br>Para registrar una nueva certificación, solo tienes que poner el nombre de la certificación en el cuadro de texto denominado "Nombre de la Certificación" y poner una breve descripción de la misma. Presiona el botón azul para guardar cambios. <br>Para modificar alguna certificación, previamente registrada, solo debes seleccionar una de la tabla de la derecha dándole clic al botón verde que le corresponde. Esto cargará la información en la tabla de la izquierda donde podrás hacer modificaciones. Presiona el botón azul para guardar cambios.</p>
+                <p>Esta página te permite cambiar la contraseña de algún docente que la haya perdido. Solo selecciona el docente de la tabla de la derecha dándole clic al botón verde correspondiente de cada docente y esto carga la información en la tabla de edición de la izquierda donde podrás introducir una nueva contraseña. Presiona el botón azul para guardar cambios. </p>
 
 
                       
@@ -322,7 +341,7 @@ if(isset($_REQUEST['action']))
         <div class="col-sm-6" style="font-size:16px;">
    
               <div>  
-                  <p>Modificar Certificaciones</p>
+                  <p>Publicar Mensaje</p>
                 <form action="?action=<?php echo $alm->id > 0 ? 'actualizar' : 'registrar'; ?>" method="post" onsubmit="return confirm('Presiona OK para continuar.');">
                     
                     
@@ -330,37 +349,39 @@ if(isset($_REQUEST['action']))
                     <input type="hidden" name="id" value="<?php echo $alm->__GET('id'); ?>" />
                     
                     <table class="table table-bordered table-dark table-sm"  >
-                       
                         <tr>
+                            
                             <th>
                                 
-                               Nombre de la Certificación
+                               Notifiación:
                             </th>
-                            <th>
-                                
-                               Función
-                            </th>
-                            </tr>
-                        <tr>
-                            <td><input type="text" name="certificacion" class="form-control" value="<?php  echo $alm->__GET('certificacion');?>" required></td>
                             <th style="text-align:right;">
-                                <a href="mODcERTI.php" class="btn btn-danger btn-sm">Limpiar campos</a>
-                               <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                               Fumnción: &nbsp;&nbsp;&nbsp;<a href="notificaciones.php" class="btn btn-danger btn-sm">Limpiar</a><button type="submit" class="btn btn-primary btn-sm">Publicar - Modificar</button>&nbsp;
                             </th>
                         </tr>
                         <tr>
-                            
-                            <th colspan="2">Descripción:  </th>
-                            
-                        </tr>
-                        
-                        <tr>
-                            
-                            <td rowspan="2" colspan="2">  
-                                 <textarea class="form-control" rows="5" id="descripcion" name="descripcion"><?php  echo $alm->__GET('descripcion');?></textarea>
+                           
+                           <td rowspan="2" colspan="2">  
+                                 <textarea class="form-control" rows="5" id="mensaje" name="mensaje"><?php  echo $alm->__GET('mensaje');?></textarea>
                             </td>
                             
                         </tr>
+                        <tr>
+                        </tr><tr>
+                            <th>¿A quien va dirigido?</th>
+                            <td>
+                                <select class="custom-select custom-select mb-3" name="tipomensaje">
+                                  <option value="" selected>Elige...</option>
+                                  <option value="Para todos" <?php if($alm->__GET('tipomensaje')==='Para todos'){echo "selected";}else{echo "";} ?>>Para todos</option>
+                                  <option value="Docentes" <?php if($alm->__GET('tipomensaje')==='Docentes'){echo "selected";}else{echo "";} ?>>Docentes</option>
+                                  <option value="" <?php if($alm->__GET('tipomensaje')==NULL){echo "selected";}else{echo "hidden";} ?>>Sin Asignar</option>
+
+                                </select>
+                                
+                            </td>
+                        </tr>
+                       
+                        
                     </table>
                 </form>
 				</div>
@@ -372,7 +393,7 @@ if(isset($_REQUEST['action']))
         <div class="col-sm-6 "style="font-size:16px;">
             
            
-            <p>Tabla Certificaciones</p>
+            <p>Tabla Notificaciones</p>
             <div>
                 <input type="text" id="myInput" class="form-control" placeholder="Filtrar por Nombre...">
             </div>
@@ -385,8 +406,8 @@ if(isset($_REQUEST['action']))
                     <thead style="text-align:center;">
 					
                         <tr>
-                            <th>Certificacion</th>
-                            <th>ID </th>
+                            <th>Nombre del Administrador</th>
+                            <th>Fecha de Publicación</th>
                             <th>Selector</th>
 
 
@@ -395,8 +416,8 @@ if(isset($_REQUEST['action']))
                     <?php foreach($model->Listar() as $r): ?>
                     <tbody id="tab-id" style="text-align:center;">
                         <tr>
-                            <td><?php echo $r->__GET('certificacion'); ?></td>
-                            <td><?php echo $r->__GET('id'); ?></td>
+                            <td><?php echo maestroID($r->__GET('idmaestro')); ?></td>
+                            <td><?php echo $r->__GET('fecha'); ?></td>
                             <td>
                                 <a class="btn btn-success btn-sm" href="?action=editar&id=<?php echo $r->id; ?>">Seleccionar</a>
                             </td>
@@ -412,7 +433,10 @@ if(isset($_REQUEST['action']))
     </div>
  </div>
    
-
+<?php     // Close connection
+    mysqli_close($link);
+    
+    ?>
     
     <hr>
     

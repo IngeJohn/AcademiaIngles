@@ -79,8 +79,8 @@ if( $periActuBD !== $periodoActu ){
 $param_contrase = "";
 
 
-require_once 'certi.entidad.php';
-require_once 'certi.model.php';
+require_once 'utilities/certi.entidad.php';
+require_once 'utilities/certi.model.php';
 
 // Logica
 $alm = new certi();
@@ -265,6 +265,8 @@ if(isset($_REQUEST['action']))
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
                             <a href="logoutAd.php" class="btn btn-outline-light" role="button">Cerrar Sesión</a>
+                            
+                            <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target=".bd-example-modal-lg"> ? </button>
 
                         </div>    
                     </div>
@@ -276,6 +278,32 @@ if(isset($_REQUEST['action']))
             </div>
         </div>
 </header>
+    
+                        <!-- Large modal -->
+        
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="padding:35px;">
+                  
+                <p>Esta página te permite registrar el nombre de algún tipo de liberación para los estudiantes, lo cual después podrá ser utilizado como opción en el registro y actualización de la información de los alumnos. <br><br>Para registrar un nuevo tipo de liberación, solo tienes que poner el nombre en el cuadro de texto denominado "Tipo Liberación" y poner una breve descripción del mismo. Presiona el botón azul para guardar cambios. <br>Para modificar alguno previamente registrado, solo debes seleccionarlo de la tabla de la derecha, dándole clic al botón verde que le corresponde. Esto cargará la información en la tabla de la izquierda donde podrás hacer modificaciones. Presiona el botón azul para guardar cambios. </p>
+
+
+                      
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <div class="container">
         <div class="row"> 

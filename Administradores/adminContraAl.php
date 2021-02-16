@@ -79,8 +79,8 @@ if( $periActuBD !== $periodoActu ){
 
 
 
-require_once 'contraAl.entidad.php';
-require_once 'contraAl.model.php';
+require_once 'utilities/contraAl.entidad.php';
+require_once 'utilities/contraAl.model.php';
 
 // Logica
 $alm = new contraAl();
@@ -272,6 +272,8 @@ if(isset($_REQUEST['action']))
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
                             <a href="logoutAd.php" class="btn btn-outline-light" role="button">Cerrar Sesión</a>
+                            
+                            <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target=".bd-example-modal-lg"> ? </button>
 
                         </div>    
                     </div>
@@ -283,6 +285,33 @@ if(isset($_REQUEST['action']))
             </div>
         </div>
 </header>
+    
+    
+                <!-- Large modal -->
+        
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="padding:35px;">
+                  
+                <p>Esta página te permite cambiar la contraseña de algún alumno(a) que la haya perdido. Solo selecciona el alumno(a) de la tabla de la derecha dándole clic al botón verde correspondiente de cada alumno(a) y esto carga la información en la tabla de edición de la izquierda donde podrás introducir una nueva contraseña. Presiona el botón azul para guardar cambios. </p>
+
+
+                      
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <div class="container">
         <div class="row"> 

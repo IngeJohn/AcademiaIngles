@@ -861,7 +861,7 @@ $dataRow2 = "<tr style='text-align:center;'>
                 <p><b>Profesor(a): Ing. </b><?php echo $_SESSION['nombre']." ".$_SESSION['paterno']." ".$_SESSION['materno']; ?></p>
                 <p><b>No. de Grupos Atendidos: </b><?php echo numerogrupos($_SESSION['idmaestro'],$periActuBD,$link); ?> <b>| No. de Asignaturas diferentes: </b><?php echo asignaturasdiferentes($_SESSION['idmaestro'],$periActuBD,$link); ?></p>
                 
-                <table class="table table-bordered table-dark">
+                <table class="table table-bordered table-dark table-sm">
                     <thead>
                         <tr style="text-align:center;">
                             <th rowspan="2">ASIGNATURA</th>

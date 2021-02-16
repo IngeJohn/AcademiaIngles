@@ -642,13 +642,13 @@ $model = new alumnoModel();
                 
                     <div class="form-group <?php echo (!empty($numeroControl_err)) ? 'has-error' : ''; ?> col-sm-3">
 						<label>Número de control*</label>
-						<input type="number" name="numeroControl" maxlength="8" class="form-control" value="<?php echo $numeroControl; ?>" autocomplete="off">
+						<input type="text" name="numeroControl" pattern="\d*" maxlength="8" class="form-control" value="<?php echo $numeroControl; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $numeroControl_err; ?></span>
 					</div>   
                     
                     <div class="form-group <?php echo (!empty($confirm_numeroControl_err)) ? 'has-error' : ''; ?> col-sm-3">
 						<label>Confirma Número de Control*</label>
-						<input type="number" name="confirm_numeroControl" maxlength="8" class="form-control" value="<?php echo $confirm_numeroControl; ?>" autocomplete="off">
+						<input type="text" name="confirm_numeroControl" pattern="\d*" maxlength="8" class="form-control" value="<?php echo $confirm_numeroControl; ?>" autocomplete="off">
 						<span class="text-danger"><?php echo $confirm_numeroControl_err; ?></span>
 					</div>  
                 
@@ -667,7 +667,7 @@ $model = new alumnoModel();
                     
                     <div class="form-group col-md-6">
                         <label>&nbsp;&nbsp;¿Cuentas con alguna Beca o Programa?</label>
-						<select class="form-control" name= "tipoProgramaBeca" >
+						<select class="form-control" required name= "tipoProgramaBeca" >
                             <option value ="">Elije una opción</option>
 							<option value ="Con Beca">Si</option>
 							<option value ="Sin Beca">No</option>
@@ -691,7 +691,7 @@ $model = new alumnoModel();
                 
                   <div class="col-sm-3 form-group">
                         <label for="validationCustom03">Estado:</label>
-                          <select class="form-control" name="estado" id="validationCustom03" onchange="ChangeEstList()" required value ="<?php echo $estado; ?>">
+                          <select class="form-control" name="estado" id="validationCustom03" onchange="ChangeEstList()" value ="<?php echo $estado; ?>">
                             <option value="<?php if($estado !== ""){echo $estado;}else{echo "";} ?>"><?php if($estado !== ""){echo $estado;}else{echo "Elige una opción";} ?></option>
                             <option value="Aguascalientes">Aguascalientes</option>
                             <option value="Zacatecas">Zacatecas</option>
@@ -702,7 +702,7 @@ $model = new alumnoModel();
                       </div>
                       <div class="col-sm-3 form-group">
                         <label for="validationCustom04">Municipio:</label>
-                         <select class="form-control" id="validationCustom04" name="municipio" onchange="ChangeMuniList()" required>
+                         <select class="form-control" id="validationCustom04" name="municipio" onchange="ChangeMuniList()">
                              <option value ="<?php if($estado !== ""){echo $municipio;}else{echo "";} ?>"><?php if($municipio !== ""){echo $municipio;}else{echo "Elige una opción";} ?></option>
                           </select>
                         <div class="invalid-feedback">
@@ -713,7 +713,7 @@ $model = new alumnoModel();
                 
                         <div class="col-sm-4 <?php echo (!empty($localidad_err)) ? 'has-error' : ''; ?> form-group">
                         <label for="validationCustom05">Localidad:</label>
-                         <select class="form-control" id="validationCustom05" name="localidad" required>
+                         <select class="form-control" id="validationCustom05" name="localidad">
                              <option value ="<?php if($estado !== ""){echo $localidad;}else{echo "";} ?>"><?php if($localidad !== ""){echo $localidad;}else{echo "Elige una opción";} ?></option>
                             </select>
                         <div class="invalid-feedback">

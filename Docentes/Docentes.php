@@ -298,12 +298,73 @@ if(isset($_POST['boton2'])){
     }
     
     // Close connection
-    mysqli_close($link);
+
 }
 
+
+
+
+
+function maestroID($id){
+    
+    global $link;
+    
+    $nombre = $paterno = $materno = $titulo = "";
+    
+    if ($stmtm = $link->prepare("SELECT nombre, paterno, materno, titulo FROM docentes WHERE idmaestro = '{$id}'")) {
+        
+        $stmtm->execute();
+
+        /* bind variables to prepared statement */
+        $stmtm->bind_result($nombre, $paterno, $materno, $titulo);
+
+        /* fetch values */
+        $stmtm->fetch();
+
+        /* close statement */
+        //$stmtm->close();
+        
+        return $titulo." ".$nombre." ".$paterno." ".$materno;
+    }
+
+}
+
+$dataRow = "";
+
+$nombreM = "";
+
+   $query = "SELECT  mensaje, fecha, idmaestro, tipomensaje FROM mensajes ORDER BY fecha DESC;";
+    
+    $result = mysqli_query($link, $query);
+
+    if (!$result) {
+        $message  = 'Invalid query: ' . mysqli_error() . "\n";
+        $message .= 'Whole query: ' . $query;
+        die($message);
+    }
+    
+    while($row = mysqli_fetch_array($result)){
+        
+        $nombreM = maestroID($row[2]);
+  
+        $dataRow = $dataRow."<div>
+                                <p><b>$nombreM </b>@TecNMcampusLoreto · ".$row[1]." · Destinatarios: ".$row[3]."</p>
+                                
+                                
+                                <p>".$row[0]."</p>
+                            </div><hr>";
+        
+
+
+    }
+
+
+
+
+
 //=========================================================================================================
-require_once 'docente.entidad.php';
-require_once 'docente.model.php';
+require_once 'utilities/docente.entidad.php';
+require_once 'utilities/docente.model.php';
 
 // Logica
 $alm = new Docente();
@@ -764,6 +825,7 @@ if(isset($_REQUEST['action']))
                             <a class="nav-item nav-link active" id="nav-datos-tab" data-toggle="tab" href="#nav-datos" role="tab" aria-controls="nav-datos" aria-selected="true">Datos del Docente</a>
                             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-grupos" role="tab" aria-controls="nav-grupos" aria-selected="false">Grupos Asignados</a>
                             <a class="nav-item nav-link" id="nav-horarios-tab" data-toggle="tab" href="#nav-horarios" role="tab" aria-controls="nav-horarios" aria-selected="false">Horarios</a>
+                            <a class="nav-item nav-link" id="nav-notificaciones-tab" data-toggle="tab" href="#nav-notificaciones" role="tab" aria-controls="nav-notificaciones" aria-selected="false">Notificaciones</a>
                         </div>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
@@ -871,6 +933,15 @@ if(isset($_REQUEST['action']))
                               </div>
                             
                         </div>
+                        <div class="tab-pane fade" id="nav-notificaciones" role="tabpanel" aria-labelledby="nav-notificaciones-tab">
+                            
+                            <p style="font-size:24px;">Anuncios y Notificaciones de la Academia de Inglés del TecNMcampusLoreto</p>
+                              <div class="col-sm-9 ex3" >
+                                  <hr>
+                                    <?php echo $dataRow; ?>
+                              </div>
+                            
+                        </div>
                     </div>
                 
             </div>
@@ -878,7 +949,7 @@ if(isset($_REQUEST['action']))
     </div>
     
     
-
+<?php     mysqli_close($link);?>
         
     
     <hr>

@@ -14,12 +14,42 @@ if($_SESSION["roll"] !== 1){
     header("location: logoutAd.php");
 }
 
+require_once "../Require/config.php";
+
+
+function nombreAdmin($id){
+    
+    global $link;
+    
+    $nombre = $paterno = $materno = $titulo = "";
+    
+    if ($stmtm = $link->prepare("SELECT titulo, nombre, paterno, materno FROM docentes WHERE idmaestro = '{$id}'")) {
+        
+        $stmtm->execute();
+
+        /* bind variables to prepared statement */
+        $stmtm->bind_result($titulo, $nombre, $paterno, $materno);
+
+        /* fetch values */
+        $stmtm->fetch();
+
+        /* close statement */
+        //$stmtm->close();
+        
+        echo $titulo." ".$nombre." ".$paterno." ".$materno;
+    }
+
+}
+
+
+
+
 
 //==========================================================================================================
 
 
-require_once 'Historial.entidad.php';
-require_once 'Historial.model.php';
+require_once 'utilities/Historial.entidad.php';
+require_once 'utilities/Historial.model.php';
 
 // Logica
 $alm = new Historial();
@@ -232,9 +262,9 @@ if(isset($_REQUEST['action']))
                     <thead style="text-align:center; font-size:14px;">
 					
                         <tr>
-                            <th>ID</th>
+                            <th>Registro ID</th>
                             <th>Periodo</th>
-                            <th>Comentario</th>
+                            <th>Registro generado por:</th>
                             <th>Fecha</th>
                             <th>Seleccionar</th>
                             
@@ -247,7 +277,7 @@ if(isset($_REQUEST['action']))
                         <tr>
                             <td><?php echo $r->__GET('id'); ?></td>
                             <td><?php echo $r->__GET('periodo'); ?></td>
-                            <td><?php echo $r->__GET('comentario'); ?></td>
+                            <td><?php echo nombreAdmin($r->__GET('idmaestro')); ?></td>
                             <td><?php echo $r->__GET('fecha'); ?></td>
                             <td>
                                 <a class="btn btn-success  btn-sm" href="?action=editar&id=<?php echo $r->id; ?>">Seleccionar</a>

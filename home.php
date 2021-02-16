@@ -40,6 +40,69 @@ if(isset($_SESSION["loggedinAd"]) && $_SESSION["loggedinAd"] === true){
     session_destroy();
 }
 
+//============================================================================================================================
+// Include config file
+require_once "Require/config.php";
+
+
+
+
+function maestroID($id){
+    
+    global $link;
+    
+    $nombre = $paterno = $materno = $titulo = "";
+    
+    if ($stmtm = $link->prepare("SELECT nombre, paterno, materno, titulo FROM docentes WHERE idmaestro = '{$id}'")) {
+        
+        $stmtm->execute();
+
+        /* bind variables to prepared statement */
+        $stmtm->bind_result($nombre, $paterno, $materno, $titulo);
+
+        /* fetch values */
+        $stmtm->fetch();
+
+        /* close statement */
+        //$stmtm->close();
+        
+        return $titulo." ".$nombre." ".$paterno." ".$materno;
+    }
+
+}
+
+
+
+
+$dataRow = "";
+
+$nombreM = "";
+
+   $query = "SELECT  mensaje, fecha, idmaestro FROM mensajes WHERE tipomensaje = 'Para todos' ORDER BY fecha DESC;";
+    
+    $result = mysqli_query($link, $query);
+
+    if (!$result) {
+        $message  = 'Invalid query: ' . mysqli_error() . "\n";
+        $message .= 'Whole query: ' . $query;
+        die($message);
+    }
+    
+    while($row = mysqli_fetch_array($result)){
+        
+        $nombreM = maestroID($row[2]);
+  
+        $dataRow = $dataRow."<div>
+                                <p><b>$nombreM </b>@TecNMcampusLoreto · ".$row[1]." </p>
+                                
+                                
+                                <p>".$row[0]."</p>
+                            </div><hr>";
+        
+
+
+    }
+
 
 ?>
 
@@ -153,6 +216,12 @@ if(isset($_SESSION["loggedinAd"]) && $_SESSION["loggedinAd"] === true){
             border-right-width: 1px;
             margin: 20px 0 20px 0;
             height: 150px;
+        }
+        div.ex3 {
+          background-color: white;
+          width: 100%;
+          height:400px;
+          overflow: auto;
         }
         
 
@@ -567,10 +636,15 @@ if(isset($_SESSION["loggedinAd"]) && $_SESSION["loggedinAd"] === true){
         </div>
     </div>
 
-    <div class="container-fluid">
-        <div class="row" >
-                      <div class="col-sm-12" >
-                            <img src="imagenes/itslnobreLargo.png" width="100%" height="auto" style="padding-left:80px; padding-right:20px; padding-top:5px;">
+    <div class="container">
+        <div class="row  justify-content-center" style="font-size:20px; ">
+            <br>
+            
+            <br>
+            <p style="font-size:24px;">Anuncios y Notificaciones de la Academia de Inglés del TecNMcampusLoreto</p>
+                      <div class="col-sm-8 ex3" >
+                          <hr>
+                            <?php echo $dataRow; ?>
                       </div>
         </div>
     </div>

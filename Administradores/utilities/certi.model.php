@@ -1,13 +1,18 @@
 <?php
+
+// Include config file
+require_once "../Require/config.php";
+
 class certiModel
 {
 	private $pdo;
 
 	public function __CONSTRUCT()
 	{
+		global $host,$db,$pss,$us;
 		try
 		{
-			$this->pdo = new PDO('mysql:host=localhost;dbname=academia_ingles', 'academia_ingles', 'a98450153_-');
+			$this->pdo = new PDO($host,$us,$pss);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);		        
 		}
 		catch(Exception $e)

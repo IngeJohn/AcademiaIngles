@@ -1,13 +1,18 @@
 <?php
+
+// Include config file
+require_once "../Require/config.php";
+
 class HistorialModel
 {
 	private $pdo;
 
 	public function __CONSTRUCT()
 	{
+		global $host,$db,$pss,$us;
 		try
 		{
-			$this->pdo = new PDO('mysql:host=localhost;dbname=academia_ingles', 'academia_ingles', 'a98450153_-');
+			$this->pdo = new PDO($host,$us,$pss);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);		        
 		}
 		catch(Exception $e)
@@ -37,6 +42,7 @@ class HistorialModel
                 $alm->__SET('periodo',       $r->periodo);
                 $alm->__SET('comentario',    $r->comentario);
                 $alm->__SET('fecha',         $r->fecha);
+                $alm->__SET('idmaestro',     $r->idmaestro);
 
 				$result[] = $alm;
 			}
@@ -70,6 +76,7 @@ class HistorialModel
                 $alm->__SET('periodo',       $r->periodo);
                 $alm->__SET('comentario',    $r->comentario);
                 $alm->__SET('fecha',         $r->fecha);
+                $alm->__SET('idmaestro',     $r->idmaestro);
 
 			return $alm;
             
@@ -106,15 +113,16 @@ class HistorialModel
 		try 
 		{
                 
-                 $sql = "INSERT INTO historiales_estadisticos (estadistico,periodo,comentario) 
-		        VALUES (?, ?, ?)";
+                 $sql = "INSERT INTO historiales_estadisticos (estadistico,periodo,comentario,idmaestro) 
+		        VALUES (?, ?, ?, ?)";
 
                 $this->pdo->prepare($sql)
                      ->execute(
                     array(
                         $data->__GET('estadistico'), 
                         $data->__GET('periodo'), 
-                        $data->__GET('comentario')
+                        $data->__GET('comentario'),
+                        $data->__GET('idmaestro')
                         )
                     );
 		

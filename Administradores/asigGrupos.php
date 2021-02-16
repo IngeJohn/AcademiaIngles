@@ -102,8 +102,8 @@ function maestroID($id){
 //=========================================================================================================
 
 
-require_once 'Grupos.entidad.php';
-require_once 'Grupos.model.php';
+require_once 'utilities/Grupos.entidad.php';
+require_once 'utilities/Grupos.model.php';
 
 // Logica
 $alm = new Grupos();
@@ -314,6 +314,8 @@ if(isset($_REQUEST['action']))
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
                             <a href="logoutAd.php" class="btn btn-outline-light" role="button">Cerrar Sesión</a>
+                            
+                            <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target=".bd-example-modal-lg"> ? </button>
 
                         </div>    
                     </div>
@@ -325,6 +327,33 @@ if(isset($_REQUEST['action']))
             </div>
         </div>
 </header>
+    
+    
+                <!-- Large modal -->
+        
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="padding:35px;">
+                  
+                <p>En esta página podrás crear los grupos que estarán posteriormente disponibles a los alumnos. <br>El primer paso es seleccionar un nivel, un grupo, a qué carrera corresponde, la modalidad y por último deberás seleccionar el maestro que atenderá a dicho grupo. <br>Una vez creado el grupo, te aparecerá en lista en la tabla inferior en donde podrás seleccionarlo nuevamente en caso de que requieras modificar la información. <br>Para modificar la información, dale clic al botón verde correspondiente de cada docente para cargar la información en la tabla superior donde podrás modificar la información. Dale clic al botón azul para guardar cambios.</p>
+
+                      
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    
 
     <div class="container">
         <div class="row"> 

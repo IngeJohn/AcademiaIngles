@@ -380,9 +380,9 @@ function talumnosrepro1ay2aOp($idg, $uniT){
     
     
     
-    
-    return $talumnos + $talumnos2 + $talumnos3 + $talumnos4;
-    
+
+    //return $talumnos + $talumnos2 + $talumnos3 + $talumnos4;
+    return $talumnos3 + $talumnos4;
     
     
     
@@ -589,9 +589,7 @@ while($row = mysqli_fetch_array($result))
     
     //A = TOTAL DE ALUMNOS(AS) POR MATERIA
     $A = talumnospormateria($row[4],$row[2]);  
-    
     $A = $A + $F;
-    
     //B = NO. DE ALUMNOS(AS) QUE ALCANZARON LAS COMPETENCIAS (EP= EVALUACIÓN DE PRIMERA OPORTUNIDAD, 
     
     $B1aOp = talumnospormateria1aOp($row[4],$row[2]);
@@ -861,7 +859,7 @@ $dataRow2 = "<tr style='text-align:center;'>
                 <p><b>Profesor(a): Ing. </b><?php echo $_SESSION['nombre']." ".$_SESSION['paterno']." ".$_SESSION['materno']; ?></p>
                 <p><b>No. de Grupos Atendidos: </b><?php echo numerogrupos($_SESSION['idmaestro'],$periActuBD,$link); ?> <b>| No. de Asignaturas diferentes: </b><?php echo asignaturasdiferentes($_SESSION['idmaestro'],$periActuBD,$link); ?></p>
                 
-                <table class="table table-bordered table-dark">
+                <table class="table table-bordered table-dark table-sm">
                     <thead>
                         <tr style="text-align:center;">
                             <th rowspan="2">ASIGNATURA</th>

@@ -53,16 +53,6 @@ $stmt3->fetch();
 }
 
 
-
-if( $periActuBD !== $periodoActu ){
-    
-    $sql2 = "UPDATE periodoactual SET periodo ='$periodoActu', periodoAnterior ='$periActuBD';";
-    
-    if($stmt4 = mysqli_prepare($link, $sql2)){
-        $stmt4->execute();
-    }
-    
-}
 //================================================================================================================================================
 
 
@@ -127,8 +117,8 @@ function grupoID($idg){
 
 
 
-require_once 'Alumn.entidad.php';
-require_once 'Alumn.model.php';
+require_once 'utilities/Alumn.entidad.php';
+require_once 'utilities/Alumn.model.php';
 
 // Logica
 $alm = new Alumn();
@@ -354,6 +344,8 @@ if(isset($_REQUEST['action']))
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
                             <a href="logoutAd.php" class="btn btn-outline-light" role="button">Cerrar Sesión</a>
+                            
+                            <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target=".bd-example-modal-lg"> ? </button>
 
                         </div>    
                     </div>
@@ -365,6 +357,47 @@ if(isset($_REQUEST['action']))
             </div>
         </div>
 </header>
+    
+    
+        <!-- Large modal -->
+        
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="padding:35px;">
+                  
+                <p>Para inscribir un alumno:</p>
+                <p>Buscar en la tabla "Filtro Alumnos con inscripción pendiente" para alumnos que ya se encuentren registrados(a) en el sistema pero que tienen pendiente la inscripción o asignación a un grupo, después seleccionar con el botón verde de editar y la información del alumno se cargará en la tabla de edición de datos. <br>Una vez hecho esto, se puede editar la información para actualizar o corregir algún dato del alumno previamente registrado o se puede inscribir o asignar al nivel correspondiente seleccionando un grupo en la opción de "Grupo Información. Después se le da clic en la opción del botón azul de guardar para terminar el proceso de inscripción."</p>
+                <p>Para registrar un Alumno en el sistema por primera vez:</p>
+                <p>Registrar la información del alumno en los campos requeridos y seleccionar el grupo en el que se inscribe al alumno, después y presionar el botón azul para guardar cambios. <br>
+Nota: si el proceso es solo para registrar al alumno sin asignarlo a un grupo; es necesario seleccionar la opción "Inscripción Pendiente" del menú de opciones del apartado de "Grupo Información" y presionar el botón azul para guardar cambios.
+</p>
+
+                      
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     <div class="container">
         <div class="row"> 
@@ -506,7 +539,7 @@ if(isset($_REQUEST['action']))
         <div class="col-sm-6"style="font-size:16px;">
             
             <div>
-                <input type="text" id="myInput" class="form-control" placeholder="Filtro...">
+                <input type="text" id="myInput" class="form-control" placeholder="Filtro Alumnos con inscripción pendiente...">
             </div>
 				
 				
@@ -547,7 +580,7 @@ if(isset($_REQUEST['action']))
         <div class="col-sm-6"style="font-size:16px;">
             
             <div>
-                <input type="text" id="myInput2" class="form-control" placeholder="Filtro...">
+                <input type="text" id="myInput2" class="form-control" placeholder="Filtro Alumnos Inscritos...">
             </div>
 				
 				

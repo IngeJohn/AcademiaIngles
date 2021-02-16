@@ -12,33 +12,6 @@ if(!isset($_SESSION["loggedinAl"]) || $_SESSION["loggedinAl"] !== true){
 require_once "../Require/config.php";
 
 
-//// php populate html table from mysql database
-//date_default_timezone_set('UTC');
-//
-//    $peri = "";  
-//    $per = "";  
-//    $mes = date("n"); 
-//    $year = date("Y"); 
-//
-//if ($mes >= 1 && $mes <= 6){
-//    $per = 1;
-//    $_SESSION["periodo"] = $peri = $per."-".$year;
-//}else if($mes >= 8 && $mes <= 12){
-//    $per = 2;
-//    $_SESSION["periodo"] = $peri = $per."-".$year;
-//}
-
-
-//================================================================================================================
-
-
-
-
-
-
-
-
-
 function nivel( $numcon, $idg ){
     
     

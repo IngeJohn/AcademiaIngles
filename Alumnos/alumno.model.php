@@ -3,34 +3,19 @@
 // Include config file
 require_once "../Require/config.php";
 
-
-//===========================================================================================================================
-
-
-if ($stmt3 = $link->prepare("SELECT  periodo FROM periodoactual")) {
-    $stmt3->execute();
-
-    /* bind variables to prepared statement */
-    $stmt3->bind_result($periActuBD);
-
-    /* fetch values */
-$stmt3->fetch();
-
-    /* close statement */
-    $stmt3->close();
-}
-
-
-
-class AlumnoModel
+class AlumnoModel 
 {
 	private $pdo;
-
+    
 	public function __CONSTRUCT()
 	{
+        
+         global $host,$db,$pss,$us;
+        
+        
 		try
 		{
-			$this->pdo = new PDO('mysql:host=localhost;dbname=academia_ingles', 'academia_ingles', 'a98450153_-');
+			$this->pdo = new PDO($host,$us,$pss);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);		        
 		}
 		catch(Exception $e)

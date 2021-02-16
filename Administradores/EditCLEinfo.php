@@ -79,8 +79,8 @@ if( $periActuBD !== $periodoActu ){
 
 
 
-require_once 'CLE.entidad.php';
-require_once 'CLE.model.php';
+require_once 'utilities/CLE.entidad.php';
+require_once 'utilities/CLE.model.php';
 
 // Logica
 $alm = new CLE();
@@ -307,6 +307,8 @@ if(isset($_REQUEST['action']))
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
                             <a href="logoutAd.php" class="btn btn-outline-light" role="button">Cerrar Sesión</a>
+                            
+                            <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target=".bd-example-modal-lg"> ? </button>
 
                         </div>    
                     </div>
@@ -318,6 +320,33 @@ if(isset($_REQUEST['action']))
             </div>
         </div>
 </header>
+    
+    
+            <!-- Large modal -->
+        
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="padding:35px;">
+                  
+                <p>Esta página te permite actualizar la información de los jefes, encargados y Coordinadores de la Academia de Inglés. Solo presiona el botón verde de la tabla inferior para cargar la información en la tabla de edición que se encuentra en la parte superior.  <br>Has las modificaciones necesarias y presiona el botón azul para guardar cambios. </p>
+
+
+                      
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <div class="container">
         <div class="row"> 

@@ -1,13 +1,18 @@
 <?php
-class AdminModel
+
+// Include config file
+require_once "../Require/config.php";
+
+class notiModel
 {
 	private $pdo;
 
 	public function __CONSTRUCT()
 	{
+		global $host,$db,$pss,$us;
 		try
 		{
-			$this->pdo = new PDO('mysql:host=localhost;dbname=academia_ingles', 'academia_ingles', 'a98450153_-');
+			$this->pdo = new PDO($host,$us,$pss);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);		        
 		}
 		catch(Exception $e)
@@ -22,19 +27,19 @@ class AdminModel
 		{
 			$result = array();
 
-			$stm = $this->pdo->prepare("SELECT * FROM docentes ");
+			$stm = $this->pdo->prepare("SELECT * FROM mensajes ORDER BY fecha DESC ");
 			$stm->execute();
 
 			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
 			{
-				$alm = new Admin();
+				$alm = new noti();
 				
-				$alm->__SET('nombre', $r->nombre);
-				$alm->__SET('paterno', $r->paterno);
-				$alm->__SET('materno', $r->materno);
+				$alm->__SET('id', $r->id);
+				$alm->__SET('mensaje', $r->mensaje);
+				$alm->__SET('fecha', $r->fecha);
 				$alm->__SET('idmaestro', $r->idmaestro);
-                $alm->__SET('roll', $r->roll);
-                $alm->__SET('titulo', $r->titulo);
+                $alm->__SET('tipomensaje', $r->tipomensaje);
+
 
 				$result[] = $alm;
 			}
@@ -47,7 +52,7 @@ class AdminModel
 		}
 	}
     
-    	public function Listar2()
+    public function Listar2()
 	{
 		try
 		{
@@ -58,7 +63,7 @@ class AdminModel
 
 			foreach($stm->fetchAll(PDO::FETCH_OBJ) as $r)
 			{
-				$alm = new Admin();
+				$alm = new noti();
 				
 				$alm->__SET('nombre', $r->nombre);
 				$alm->__SET('paterno', $r->paterno);
@@ -78,26 +83,24 @@ class AdminModel
 		}
 	}
 
-	public function Obtener($idmaestro)
+	public function Obtener($id)
 	{
 		try 
 		{
 			$stm = $this->pdo
-			          ->prepare("SELECT * FROM docentes WHERE idmaestro = ?");
+			          ->prepare("SELECT * FROM mensajes WHERE id = ?");
 			          
 
-			$stm->execute(array($idmaestro));
+			$stm->execute(array($id));
 			$r = $stm->fetch(PDO::FETCH_OBJ);
 
-			$alm = new Admin();
+			$alm = new noti();
 
-			$alm->__SET('idmaestro', $r->idmaestro);
-			$alm->__SET('nombre', $r->nombre);
-			$alm->__SET('paterno', $r->paterno);
-			$alm->__SET('materno', $r->materno);
-			$alm->__SET('idmaestro', $r->idmaestro);
-            $alm->__SET('roll', $r->roll);
-            $alm->__SET('titulo', $r->titulo);
+			$alm->__SET('id', $r->id);
+            $alm->__SET('mensaje', $r->mensaje);
+            $alm->__SET('fecha', $r->fecha);
+            $alm->__SET('idmaestro', $r->idmaestro);
+            $alm->__SET('tipomensaje', $r->tipomensaje);
 
 			return $alm;
 		} catch (Exception $e) 
@@ -111,7 +114,7 @@ class AdminModel
 		try 
 		{
 			$stm = $this->pdo
-			          ->prepare("UPDATE docentes SET roll = '0' WHERE id = ?");			          
+			          ->prepare("UPDATE docentes SET roll = '0' WHERE idmaestro = ?");			          
 
 			$stm->execute(array($id));
 		} catch (Exception $e) 
@@ -120,19 +123,23 @@ class AdminModel
 		}
 	}
 
-	public function Actualizar(Admin $data)
+	public function Actualizar(noti $data)
 	{
 		try 
 		{
-			$sql = "UPDATE docentes SET  
-						roll = ?
-				    WHERE idmaestro = ?";
+			$sql = "UPDATE mensajes SET  
+						mensaje      = ?,
+                        idmaestro   = ?,
+                        tipomensaje = ?
+				    WHERE id = ?";
 
 			$this->pdo->prepare($sql)
 			     ->execute(
 				array(
-					$data->__GET('roll'),
-					$data->__GET('idmaestro')
+					$data->__GET('mensaje'),
+                    $data->__GET('idmaestro'),
+                    $data->__GET('tipomensaje'),
+					$data->__GET('id')
 					)
 				);
 		} catch (Exception $e) 
@@ -140,22 +147,20 @@ class AdminModel
 			die($e->getMessage());
 		}
 	}
-
-	public function Registrar(Admin $data)
+    
+	public function Registrar(noti $data)
 	{
 		try 
 		{
-		$sql = "INSERT INTO docentes (nombre,paterno,materno,idmaestro,roll) 
-		        VALUES (?, ?, ?, ?, ?)";
+		$sql = "INSERT INTO mensajes (mensaje,idmaestro,tipomensaje) 
+		        VALUES (?, ?, ?)";
 
 		$this->pdo->prepare($sql)
 		     ->execute(
 			array(
-				$data->__GET('nombre'), 
-				$data->__GET('paterno'), 
-				$data->__GET('materno'),
-                $data->__GET('roll'),
-				$data->__GET('idmaestro')
+				$data->__GET('mensaje'), 
+				$data->__GET('idmaestro'), 
+				$data->__GET('tipomensaje')
 				)
 			);
 		} catch (Exception $e) 

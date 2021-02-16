@@ -123,14 +123,14 @@ function grupoID($idg){
     
     global $link;
     
-    $nivel = $grupo = $carrera = $modalidad = "";
+    $nivel = $grupo = $carrera = $modalidad = $periodo = "";
     
-    if ($stmtg = $link->prepare("SELECT nivel, grupo, carrera, modalidad FROM gruposasignados WHERE idgrupo = '{$idg}'")) {
+    if ($stmtg = $link->prepare("SELECT nivel, grupo, carrera, modalidad, periodo FROM gruposasignados WHERE idgrupo = '{$idg}'")) {
         
         $stmtg->execute();
 
         /* bind variables to prepared statement */
-        $stmtg->bind_result($nivel, $grupo, $carrera, $modalidad);
+        $stmtg->bind_result($nivel, $grupo, $carrera, $modalidad, $periodo);
 
         /* fetch values */
         $stmtg->fetch();
@@ -138,7 +138,7 @@ function grupoID($idg){
         /* close statement */
         //$stmtm->close();
         
-        return $nivel." | ".$grupo." | ".$carrera." | ".$modalidad;
+        return $nivel." | ".$grupo." | ".$carrera." | ".$modalidad." | ".$periodo;
     }
 
 }
@@ -146,8 +146,8 @@ function grupoID($idg){
 //====================================================================================================
 
 
-require_once 'Pago.entidad.php';
-require_once 'Pago.model.php';
+require_once 'utilities/Pago.entidad.php';
+require_once 'utilities/Pago.model.php';
 
 // Logica
 $alm = new Pago();
@@ -379,16 +379,7 @@ if(isset($_REQUEST['action']))
               </div>
               <div class="modal-body" style="padding:35px;">
                   
-                <p>Para actualizar un pago de la inscripción de un alumno:</p>
-                <p>Buscar por número de control y nivel en la caja de texto denominada "Filtro..."</p>
-                <p>Para registrar un pago nuevo en la Base de Datos:</p>
-                <p>Registrar los campos obligatorios marcados con una estrella * </p>
-                  <p>Listado de campos obligatorios:</p>
-                <p>Número de control, nivel, grupo, carrera, modalidad, nombre del maestro y la información de los pagos 
-                  de la inscripción y el libro</p>
-                <p>Datos opcionales:</p>
-                  <P>- Comentario Pagos.</P>
-                  <p>Nota: No es necesario introducir el periodo cuando se hace un registro nuevo, este se registra automáticamente.</p>
+                <p>En la tabla inferior se muestra un listado de alumnos que ya están inscritos en el periodo actual, selecciona alguno dando clic en el botón verde que corresponde a cada alumno para cargar la información en la tabla superior y así podrás modificar la información del pago de inscripción, libro y dejar algún comentario. para guardar la información, presiona el botón azul de guardar cambios.</p>
 
                       
               </div>

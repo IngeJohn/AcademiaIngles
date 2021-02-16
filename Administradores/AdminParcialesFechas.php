@@ -164,8 +164,8 @@ function grupoID($idg){
 
 //====================================================================================================
 
-require_once 'ParciFecha.entidad.php';
-require_once 'ParciFecha.model.php';
+require_once 'utilities/ParciFecha.entidad.php';
+require_once 'utilities/ParciFecha.model.php';
 
 // Logica
 $alm = new ParciFecha();
@@ -403,10 +403,7 @@ if(isset($_REQUEST['action']))
               </div>
               <div class="modal-body" style="padding:35px;">
                   
-                <p>Para registra un nuevo horario:<br>
-                  Elige un Docente y selecciona el nivel, grupo, carrera y modalidad<br>
-                  No es necesario introducir el periodo, este se registrará automaticamente.<br>
-                  Por último, elegir los horarios predefinidos para cada día y presionar el botón de guardar cambios. </p>
+                <p>Esta página te permite definir las fechas de inicio y termino de los parciales. <br>Los parciales ya están predefinidos, solo deberás modificarlos para ajustarlos a el periodo actual. <br>Para hacer los ajustes, en la tabla inferior, dale clic al botón verde que corresponde al número de parcial que quieres modificar, has los ajustes necesario y guarda los cambio dándole clic al botón azul.</p>
 
                       
               </div>

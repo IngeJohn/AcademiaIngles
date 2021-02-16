@@ -1277,26 +1277,26 @@ function modales($mod1, $mod2, $mod3, $idmodal1, $idmodal2, $idmodal3, $numcon, 
 
 
 
-require_once 'califimodi1.php';
-require_once 'califimodi2.php';
-require_once 'califimodi3.php';
-require_once 'califimodi4.php';
-require_once 'califimodi5.php';
-require_once 'califimodi6.php';
-require_once 'califimodi7.php';
-require_once 'califimodi8.php';
-require_once 'califimodi9.php';
-require_once 'califimodi10.php';
-require_once 'califimodi11.php';
-require_once 'califimodi12.php';
+require_once 'funct/califimodi1.php';
+require_once 'funct/califimodi2.php';
+require_once 'funct/califimodi3.php';
+require_once 'funct/califimodi4.php';
+require_once 'funct/califimodi5.php';
+require_once 'funct/califimodi6.php';
+require_once 'funct/califimodi7.php';
+require_once 'funct/califimodi8.php';
+require_once 'funct/califimodi9.php';
+require_once 'funct/califimodi10.php';
+require_once 'funct/califimodi11.php';
+require_once 'funct/califimodi12.php';
 
 //=====================================================================================================================
 
 
 
 
-require_once 'docente.entidad.php';
-require_once 'docente.model.php';
+require_once 'utilities/docente.entidad.php';
+require_once 'utilities/docente.model.php';
 
 // Logica
 $alm = new Docente();

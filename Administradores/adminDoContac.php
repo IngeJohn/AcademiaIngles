@@ -127,8 +127,8 @@ function grupoID($idg){
 
 
 
-require_once 'Docen.entidad.php';
-require_once 'Docen.model.php';
+require_once 'utilities/Docen.entidad.php';
+require_once 'utilities/Docen.model.php';
 
 // Logica
 $alm = new Docen();
@@ -314,6 +314,8 @@ if(isset($_REQUEST['action']))
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
                             <a href="logoutAd.php" class="btn btn-outline-light" role="button">Cerrar Sesión</a>
+                            
+                            <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target=".bd-example-modal-lg"> ? </button>
 
                         </div>    
                     </div>
@@ -325,6 +327,32 @@ if(isset($_REQUEST['action']))
             </div>
         </div>
 </header>
+    
+    
+                <!-- Large modal -->
+        
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="padding:35px;">
+                  
+                <p>En la tabla de la derecha se muestra un listado de Docentes, selecciona alguno dando clic en el botón verde que corresponde a cada uno para cargar la información en el lado izquierdo.</p>
+
+                      
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <div class="container">
         <div class="row"> 

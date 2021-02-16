@@ -164,8 +164,8 @@ function grupoID($idg){
 
 //====================================================================================================
 
-require_once 'Horario.entidad.php';
-require_once 'Horario.model.php';
+require_once 'utilities/Horario.entidad.php';
+require_once 'utilities/Horario.model.php';
 
 // Logica
 $alm = new Horario();
@@ -420,9 +420,7 @@ if(isset($_REQUEST['action']))
               <div class="modal-body" style="padding:35px;">
                   
                 <p>Para registra un nuevo horario:<br>
-                  Elige un Docente y selecciona el nivel, grupo, carrera y modalidad<br>
-                  No es necesario introducir el periodo, este se registrará automaticamente.<br>
-                  Por último, elegir los horarios predefinidos para cada día y presionar el botón de guardar cambios. </p>
+                  Elige un grupo y las horas para cada día, presionar el botón de guardar cambios para terminar. <br>Para modificar un horario, selecciona alguno de entre los listados en la tabla inferior, dándole clic al botón verde correspondiente y se cargará la información en la tabla superior donde podrás modificar la información, Presiona el botón azul para guardar cambios.</p>
 
                       
               </div>

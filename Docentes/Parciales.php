@@ -1,4 +1,4 @@
-<?php
+                                  <?php
 // Initialize the session
 session_start();
  
@@ -298,8 +298,8 @@ function calificaciones($numCon,$idg){
 //========================================================================================================
 
 
-require_once 'parci.entidad.php';
-require_once 'parci.model.php';
+require_once 'utilities/parci.entidad.php';
+require_once 'utilities/parci.model.php';
 
 // Logica
 $alm = new parci();

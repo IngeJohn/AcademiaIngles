@@ -328,8 +328,8 @@ function calificaciones($numCon,$idg){
 //========================================================================================================
 
 
-require_once 'final.entidad.php';
-require_once 'final.model.php';
+require_once 'utilities/final.entidad.php';
+require_once 'utilities/final.model.php';
 
 // Logica
 $alm = new finalP();
@@ -548,6 +548,8 @@ if(isset($_REQUEST['action']))
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
                             <a href="logoutAd.php" class="btn btn-outline-light" role="button">Cerrar Sesión</a>
+                            
+                            <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target=".bd-example-modal-lg"> ? </button>
 
                         </div>    
                     </div>
@@ -559,6 +561,32 @@ if(isset($_REQUEST['action']))
             </div>
         </div>
 </header>
+    
+    
+            <!-- Large modal -->
+        
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="padding:35px;">
+                  
+                <p>En la tabla inferior izquierda se muestra un listado de alumnos que aún no se les ha asignado un promedio final. En la tabla inferior derecha se muestra un listado de los alumnos a los que ya se les asigno una calificación final. <br>El botón verde de editar, correspondiente a cada alumno, te permite cargar la información del alumno en la tabla superior de edición de datos. Una vez cargada la información, el sistema busca las calificaciones de todos los niveles cursados hasta el momento y calculara el promedio. Después podrás llenar los datos de los recuadros de calificación final, fecha, periodo, etc. <br>Para finalizar el proceso deberás dar clic en el botón azul de guardar cambios.</p>
+
+                      
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <div class="container">
         <div class="row"> 

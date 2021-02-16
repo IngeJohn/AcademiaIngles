@@ -16,7 +16,7 @@ if($_SESSION["roll"] !== 1){
  
 // Include config file
 require_once "../Require/config.php";
-
+require_once "estadistica.php";
 
 //=================================================================================================================================================================================
 date_default_timezone_set('America/Mexico_City');
@@ -230,6 +230,67 @@ if ($stmt10 = $link->prepare("SELECT COUNT(niveles.estado) FROM niveles, gruposa
 
 
 
+//=======================================================================================================================
+
+
+
+function maestroID($id){
+    
+    global $link;
+    
+    $nombre = $paterno = $materno = $titulo = "";
+    
+    if ($stmtm = $link->prepare("SELECT nombre, paterno, materno, titulo FROM docentes WHERE idmaestro = '{$id}'")) {
+        
+        $stmtm->execute();
+
+        /* bind variables to prepared statement */
+        $stmtm->bind_result($nombre, $paterno, $materno, $titulo);
+
+        /* fetch values */
+        $stmtm->fetch();
+
+        /* close statement */
+        //$stmtm->close();
+        
+        return $titulo." ".$nombre." ".$paterno." ".$materno;
+    }
+
+}
+
+
+
+$dataRowN = "";
+
+$nombreM = "";
+
+   $queryN = "SELECT  mensaje, fecha, idmaestro, tipomensaje FROM mensajes ORDER BY fecha DESC;";
+    
+    $resultN = mysqli_query($link, $queryN);
+
+    if (!$resultN) {
+        $message  = 'Invalid query: ' . mysqli_error() . "\n";
+        $message .= 'Whole query: ' . $queryN;
+        die($message);
+    }
+    
+    while($rowN = mysqli_fetch_array($resultN)){
+        
+        $nombreM = maestroID($rowN[2]);
+  
+        $dataRowN = $dataRowN."<div>
+                                <p><b>$nombreM </b>@TecNMcampusLoreto · ".$rowN[1]." · Destinatarios: ".$rowN[3]."</p>
+                                
+                                
+                                <p>".$rowN[0]."</p>
+                            </div><hr>";
+        
+
+
+    }
+
+
+
  //===================================================================================================================================================================================
 // Define variables and initialize with empty values
 $new_password = $confirm_password = $old_password = $usuario = $usuario_err = $param_usuario = $usuario_nue = "";
@@ -423,8 +484,8 @@ if(isset($_POST['boton2'])){
 }
 
 //=========================================================================================================
-require_once 'administrador.entidad.php';
-require_once 'administrador.model.php';
+require_once 'utilities/administrador.entidad.php';
+require_once 'utilities/administrador.model.php';
 
 // Logica
 $alm = new Docente();
@@ -903,13 +964,16 @@ if(isset($_REQUEST['action']))
                     <a class="nav-link" id="inf-tab" data-toggle="tab" href="#inf" role="tab" aria-controls="inf" aria-selected="true">Información Personal Administrador</a>
               </li>
               <li class="nav-item">
-                    <a class="nav-link" id="ITSL-tab" data-toggle="tab" href="#ITSL" role="tab" aria-controls="ITSL" aria-selected="false">Academia Inlgés Gráficas</a>
+                    <a class="nav-link" id="ITSL-tab" data-toggle="tab" href="#ITSL" role="tab" aria-controls="ITSL" aria-selected="false">Academia Gráficas</a>
               </li>
              <li class="nav-item">
                     <a class="nav-link" id="CLE-tab" data-toggle="tab" href="#CLE" role="tab" aria-controls="CLE" aria-selected="false">CLE Información</a>
               </li>
               <li class="nav-item">
                     <a class="nav-link active" id="Opciones-tab" data-toggle="tab" href="#Opciones" role="tab" aria-controls="Opciones" aria-selected="false">Herramientas</a>
+              </li>
+              <li class="nav-item">
+                    <a class="nav-link" id="notificaciones-tab" data-toggle="tab" href="#notificaciones" role="tab" aria-controls="notificaciones" aria-selected="false">Notificaciones</a>
               </li>
         </ul>
  
@@ -972,7 +1036,32 @@ if(isset($_REQUEST['action']))
                               <p style="font-size: 18px;"><b>Datos ITSL - Academia de Inglés</b></p>
                               
                               <hr>
-                            
+                            <p style="text-align:center;"><b>Tabla Datos Docentes</b></p>
+                              <table class="table table-bordered table-dark" style="width:100%; font-size: 14px;">
+                                  <thead style="text-align:center;">
+                                    <tr>
+                                    
+                                        <th>Número total de Docentes</th>
+                                        <th>Número total de Docentes Certificados</th>
+                                        <th>Porcentaje de Docentes Certificados</th>
+                                        <th>Número total de Docentes sin certificación</th>
+                                        <th>Porcentaje de Docentes No Certificados</th>
+                                      
+                                   </tr>
+                                  </thead>
+                                  <tbody style="text-align:center;">
+                                      <tr>
+                                          <td><?php echo $totalMaestros; ?></td>
+                                          <td><?php echo $totalMaestrosConCerti; ?></td>
+                                          <td><?php echo $pocentajeMaestrosCertifi."%"; ?></td>
+                                          <td><?php echo $totalMaestrosSinCerti; ?></td>
+                                          <td><?php echo $pocentajeMaestrosSinCertifi."%"; ?></td>
+
+                                      </tr>
+                                    
+                                  </tbody>
+                                  
+                                </table>
                               
                                <p style="text-align:center;"><b>Tabla Datos Generales</b></p>
                               <table class="table table-bordered table-dark" style="width:100%; font-size: 14px;">
@@ -1008,27 +1097,7 @@ if(isset($_REQUEST['action']))
 
                               
                              <hr>
-                              <p style="text-align:center;"><b>Tabla Datos por Nivel Periodo <?php echo $periodoActual; ?></b></p>
-                              <table class="table table-bordered table-dark" style="width:100%; font-size:14px;">
-                                  <thead style="text-align:center;">
-                                    <tr>
-                                    <th>No. Nivel</th>
-                                    <th>No. total alumnos por nivel</th>
-                                      <th>No. total mujeres por nivel</th>
-                                      <th>No. total hombres por nivel</th>
-                                   </tr>
-                                  </thead>
-                                  <tbody style="text-align:center;">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>875</td>
-                                        <td>750</td>
-                                        <td>230</td>
-                                    </tr>
-                                    
-                                  </tbody>
-                                  
-                                </table>
+                             
 
                               
                             </div>
@@ -1156,6 +1225,13 @@ if(isset($_REQUEST['action']))
                                 </a></p>
                         </div>
                         
+                        <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
+
+                             <p><a href="index.html">
+                                <img class="cuadros card"  alt="DB Sistema Anterior" src="../imagenes/DB.png" >
+                                </a></p>
+                        </div>
+                        
                         
                         
                         
@@ -1269,6 +1345,12 @@ if(isset($_REQUEST['action']))
                         
                         <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
 
+                             <p><a href="notificaciones.php">
+                                <img class="cuadros card"  alt="Publicar Notificaciones" src="../imagenes/notifi.png" >
+                                </a></p>
+                        </div>
+                        <div class= "col-7 col-sm-7 col-md-3 col-lg-3">
+
                              <p><a href="EditCLEinfo.php">
                                 <img class="cuadros card"  alt="CLE" src="../imagenes/CLEinformation.png" >
                                 </a></p>
@@ -1279,6 +1361,20 @@ if(isset($_REQUEST['action']))
                     </div>
             
             </div>
+            
+            <div class="tab-pane fade" id="notificaciones" role="tabpanel" aria-labelledby="notificaciones-tab">
+                <p style="font-size:24px;">Anuncios y Notificaciones de la Academia de Inglés del TecNMcampusLoreto</p>
+                              <div class="col-sm-9 ex3" >
+                                  <hr>
+                                    <?php echo $dataRowN; ?>
+                              </div>
+                
+                    
+            </div>
+            
+            
+            
+            
             
         </div>
     

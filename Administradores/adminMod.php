@@ -79,8 +79,8 @@ if( $periActuBD !== $periodoActu ){
 
 
 
-require_once 'roll.entidad.php';
-require_once 'roll.model.php';
+require_once 'utilities/roll.entidad.php';
+require_once 'utilities/roll.model.php';
 
 // Logica
 $alm = new Admin();
@@ -255,6 +255,8 @@ if(isset($_REQUEST['action']))
                             <a href="Administrador.php" class="btn btn-outline-light" role="button">Regresar</a>
                             
                             <a href="logoutAd.php" class="btn btn-outline-light" role="button">Cerrar Sesión</a>
+                            
+                            <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target=".bd-example-modal-lg"> ? </button>
 
                         </div>    
                     </div>
@@ -266,6 +268,33 @@ if(isset($_REQUEST['action']))
             </div>
         </div>
 </header>
+    
+        <!-- Large modal -->
+        
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Instrucciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="padding:35px;">
+                  
+                <p>Esta página te permite asignar roles a algunos de los usuarios del sistema. <br>Los usuarios que califican para el cambio de roles son los Docentes. <br>
+                  Solo existen dos roles que son intercambiables, el rol de docente y el de administrador. Para asignar los roles, se selecciona un docente de la tabla de la derecha, dándole clic al botón verde. Esto cargara la información del docente en la tabla de edición de la derecha en donde podrás seleccionar el tipo de rol que quieras asignar. Presiona el botón azul para guardar cambios. </p>
+
+
+                      
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <div class="container">
         <div class="row"> 

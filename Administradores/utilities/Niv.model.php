@@ -1,13 +1,17 @@
 <?php
+// Include config file
+require_once "../Require/config.php";
+
 class NivModel
 {
 	private $pdo;
 
 	public function __CONSTRUCT()
 	{
+		global $host,$db,$pss,$us;
 		try
 		{
-			$this->pdo = new PDO('mysql:host=localhost;dbname=academia_ingles', 'academia_ingles', 'a98450153_-');
+			$this->pdo = new PDO($host,$us,$pss);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);		        
 		}
 		catch(Exception $e)
@@ -97,7 +101,7 @@ class NivModel
 		{
 			$result = array();
 
-			$stm = $this->pdo->prepare("SELECT alumnos.numeroControl, alumnos.idgrupoActual FROM alumnos, gruposasignados WHERE alumnos.altaBaja = 'Alta' AND gruposasignados.periodo = '".$_SESSION['periodoAnteriorBD']."' AND gruposasignados.idgrupo = alumnos.idgrupoActual;");
+			$stm = $this->pdo->prepare("SELECT alumnos.numeroControl, alumnos.idgrupoActual FROM alumnos, gruposasignados WHERE alumnos.altaBaja = 'Alta' AND gruposasignados.periodo != '".$_SESSION['periodoDB']."' AND gruposasignados.idgrupo = alumnos.idgrupoActual;");
             
 			$stm->execute();
 
